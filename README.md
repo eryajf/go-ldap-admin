@@ -1,3 +1,20 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**目录**
+
+- [Go-Ldap-Admin](#go-ldap-admin)
+  - [缘起](#%E7%BC%98%E8%B5%B7)
+  - [在线体验](#%E5%9C%A8%E7%BA%BF%E4%BD%93%E9%AA%8C)
+  - [项目地址](#%E9%A1%B9%E7%9B%AE%E5%9C%B0%E5%9D%80)
+  - [核心功能](#%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD)
+  - [快速开始](#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
+  - [本地开发](#%E6%9C%AC%E5%9C%B0%E5%BC%80%E5%8F%91)
+  - [生产部署](#%E7%94%9F%E4%BA%A7%E9%83%A8%E7%BD%B2)
+  - [感谢](#%E6%84%9F%E8%B0%A2)
+  - [另外](#%E5%8F%A6%E5%A4%96)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 <h1 align="center">Go-Ldap-Admin</h1>
 
 <div align="center">
