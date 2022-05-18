@@ -36,7 +36,14 @@
 
 > admin / 123456
 
-演示地址：[http://go-ldap-admin.eryajf.net](http://go-ldap-admin.eryajf.net)
+演示地址：[http://demo-go-ldap-admin.eryajf.net](http://demo-go-ldap-admin.eryajf.net)
+
+## 项目地址
+
+| 分类 |                        GitHub                        |                        Gitee                        |
+| :--: | :--------------------------------------------------: | :-------------------------------------------------: |
+| 后端 |  https://github.com/eryajf-world/go-ldap-admin.git   |  https://gitee.com/eryajf-world/go-ldap-admin.git   |
+| 前端 | https://github.com/eryajf-world/go-ldap-admin-ui.git | https://gitee.com/eryajf-world/go-ldap-admin-ui.git |
 
 ## 核心功能
 
@@ -203,4 +210,3 @@ server {
 - 如果觉得项目不错，麻烦动动小手点个⭐️star⭐️!
 - 如果你还有其他想法或者需求，欢迎在issue中交流！
 - 程序还有很多bug，欢迎各位朋友一起协同共建！
-
