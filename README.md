@@ -1,3 +1,15 @@
+<h1 align="center">Go-Ldap-Admin</h1>
+
+<div align="center">
+基于Go+Vue实现的openLDAP后台管理项目。
+<p align="center">
+<img src="https://img.shields.io/github/go-mod/go-version/eryajf-world/go-ldap-admin" alt="Go version"/>
+<img src="https://img.shields.io/badge/Gin-1.6.3-brightgreen" alt="Gin version"/>
+<img src="https://img.shields.io/badge/Gorm-1.20.12-brightgreen" alt="Gorm version"/>
+<img src="https://img.shields.io/github/license/eryajf-world/go-ldap-admin" alt="License"/>
+</p>
+</div>
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **目录**
@@ -14,25 +26,6 @@
   - [另外](#%E5%8F%A6%E5%A4%96)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-<h1 align="center">Go-Ldap-Admin</h1>
-
-<div align="center">
-基于Go+Vue实现的openLDAP后台管理项目。
-<p align="center">
-<img src="https://img.shields.io/github/go-mod/go-version/eryajf-world/go-ldap-admin" alt="Go version"/>
-<img src="https://img.shields.io/badge/Gin-1.6.3-brightgreen" alt="Gin version"/>
-<img src="https://img.shields.io/badge/Gorm-1.20.12-brightgreen" alt="Gorm version"/>
-<img src="https://img.shields.io/github/license/eryajf-world/go-ldap-admin" alt="License"/>
-</p>
-</div>
-
-
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 
 ## 缘起
 
