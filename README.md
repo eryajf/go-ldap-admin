@@ -10,6 +10,13 @@
 </p>
 </div>
 
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+
 ## 缘起
 
 我曾经经历的公司强依赖openLDAP来作为企业内部员工管理的平台，并通过openLDAP进行各平台的认证打通工作。
