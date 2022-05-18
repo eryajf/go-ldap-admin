@@ -1,0 +1,87 @@
+version: '3'
+
+networks:
+  go-ldap-admin:
+    driver: bridge
+
+services:
+  mysql:
+    image: docker.mirrors.sjtug.sjtu.edu.cn/mysql/mysql-server:5.7
+    container_name: go-ldap-admin-mysql # 指定容器名称，如果不设置此参数，则由系统自动生成
+    hostname: go-ldap-admin-mysql
+    restart: always # 设置容器自启模式
+    ports:
+      - '3307:3306'
+    environment:
+      TZ: Asia/Shanghai # 设置容器时区与宿主机保持一致
+      MYSQL_ROOT_PASSWORD: 123456 # 设置root密码
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_DATABASE: go_ldap_admin
+    volumes:
+      # 数据挂载目录自行修改哦！
+      - /etc/localtime:/etc/localtime:ro # 设置容器时区与宿主机保持一致
+      - ./data/mysql:/var/lib/mysql/data # 映射数据库保存目录到宿主机，防止数据丢失
+      - ./config/my.cnf:/etc/mysql/my.cnf # 映射数据库配置文件
+    command: --default-authentication-plugin=mysql_native_password #解决外部无法访问
+    networks:
+      - go-ldap-admin
+
+  openldap:
+    image: docker.mirrors.sjtug.sjtu.edu.cn/osixia/openldap:1.4.0
+    container_name: go-ldap-admin-openldap
+    hostname: go-ldap-admin-openldap
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+      LDAP_ORGANISATION: "eryajf.net"
+      LDAP_DOMAIN: "eryajf.net"
+      LDAP_ADMIN_PASSWORD: "123456"
+    command: [ '--copy-service' ]
+    volumes:
+      - ./data/openldap/database:/var/lib/ldap
+      - ./data/openldap/config:/etc/ldap/slapd.d
+      - ./config/init.ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom/init.ldif
+    ports:
+      - 388:389
+    networks:
+      - go-ldap-admin
+
+  phpldapadmin:
+    image: docker.mirrors.sjtug.sjtu.edu.cn/osixia/phpldapadmin:0.9.0
+    container_name: go-ldap-admin-phpldapadmin
+    hostname: go-ldap-admin-phpldapadmin
+    restart: always
+    environment:
+      TZ: Asia/Shanghai # 设置容器时区与宿主机保持一致
+      PHPLDAPADMIN_HTTPS: "false" # 是否使用https
+      PHPLDAPADMIN_LDAP_HOSTS: go-ldap-admin-openldap # 指定LDAP容器名称
+    ports:
+      - 8091:80
+    volumes:
+      - ./data/phpadmin:/var/www/phpldapadmin
+    depends_on:
+      - openldap
+    links:
+      - openldap:go-ldap-admin-openldap # ldap容器的 service_name:container_name
+    networks:
+      - go-ldap-admin
+
+  go-ldap-admin-server:
+    image: docker.mirrors.sjtug.sjtu.edu.cn/eryajf/go-ldap-admin
+    container_name: go-ldap-admin-server
+    hostname: go-ldap-admin-server
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+      WAIT_HOSTS: mysql:3306, openldap:389
+    ports:
+      - 8090:80
+      - 8888:8888
+    depends_on:
+      - mysql
+      - openldap
+    links:
+      - mysql:go-ldap-admin-mysql # ldap容器的 service_name:container_name
+      - openldap:go-ldap-admin-openldap # ldap容器的 service_name:container_name
+    networks:
+      - go-ldap-admin

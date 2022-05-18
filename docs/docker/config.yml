@@ -1,0 +1,92 @@
+# delelopment
+system:
+  # 设定模式(debug/release/test,正式版改为release)
+  mode: debug
+  # url前缀
+  url-path-prefix: api
+  # 程序监听端口
+  port: 8888
+  # 是否初始化数据(没有初始数据时使用, 已发布正式版改为false)
+  init-data: true
+  # rsa公钥文件路径(config.yml相对路径, 也可以填绝对路径)
+  rsa-public-key: go-web-mini-pub.pem
+  # rsa私钥文件路径(config.yml相对路径, 也可以填绝对路径)
+  rsa-private-key: go-web-mini-priv.pem
+
+logs:
+  # 日志等级(-1:Debug, 0:Info, 1:Warn, 2:Error, 3:DPanic, 4:Panic, 5:Fatal, -1<=level<=5, 参照zap.level源码)
+  level: -1
+  # 日志路径
+  path: logs
+  # 文件最大大小, M
+  max-size: 50
+  # 备份数
+  max-backups: 100
+  # 存放时间, 天
+  max-age: 30
+  # 是否压缩
+  compress: false
+
+mysql:
+  # 用户名
+  username: root
+  # 密码
+  password: 123456
+  # 数据库名
+  database: go_ldap_admin
+  # 主机地址
+  host: mysql
+  # 端口
+  port: 3306
+  # 连接字符串参数
+  query: parseTime=True&loc=Local&timeout=10000ms
+  # 是否打印日志
+  log-mode: true
+  # 数据库表前缀(无需再末尾添加下划线, 程序内部自动处理)
+  table-prefix: tb
+  # 编码方式
+  charset: utf8mb4
+  # 字符集(utf8mb4_general_ci速度比utf8mb4_unicode_ci快些)
+  collation: utf8mb4_general_ci
+
+# casbin配置
+casbin:
+  # 模型配置文件, config.yml相对路径
+  model-path: 'rbac_model.conf'
+
+# jwt配置
+jwt:
+  # jwt标识
+  realm: test jwt
+  # 服务端密钥
+  key: secret key
+  # token过期时间, 小时
+  timeout: 12000
+  # 刷新token最大过期时间, 小时
+  max-refresh: 12000
+
+# 令牌桶限流配置
+rate-limit:
+  # 填充一个令牌需要的时间间隔,毫秒
+  fill-interval: 50
+  # 桶容量
+  capacity: 200
+
+# email configuration
+email:
+  port: '465'
+  user: 'Linuxlql@163.com'
+  from: 'go-ldap-admin后台'
+  host: 'smtp.163.com'
+  # is-ssl: true
+  pass: 'password'
+
+# # ldap 配置
+ldap:
+  # ldap服务器地址
+  ldap-url: ldap://openldap:389
+  ldap-base-dn: "dc=eryajf,dc=net"
+  ldap-admin-dn: "cn=admin,dc=eryajf,dc=net"
+  ldap-admin-pass: "123456"
+  ldap-user-dn: "ou=people,dc=eryajf,dc=net"
+  ldap-group-dn: "ou=group,dc=eryajf,dc=net"
