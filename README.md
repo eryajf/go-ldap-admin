@@ -23,6 +23,7 @@
 - [生产部署](#%E7%94%9F%E4%BA%A7%E9%83%A8%E7%BD%B2)
 - [感谢](#%E6%84%9F%E8%B0%A2)
 - [另外](#%E5%8F%A6%E5%A4%96)
+- [加群](#%E5%8A%A0%E7%BE%A4)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
