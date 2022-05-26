@@ -23,6 +23,7 @@
 - [生产部署](#%E7%94%9F%E4%BA%A7%E9%83%A8%E7%BD%B2)
 - [感谢](#%E6%84%9F%E8%B0%A2)
 - [另外](#%E5%8F%A6%E5%A4%96)
+- [加群](#%E5%8A%A0%E7%BE%A4)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -226,3 +227,11 @@ server {
 - 如果觉得项目不错，麻烦动动小手点个⭐️star⭐️!
 - 如果你还有其他想法或者需求，欢迎在issue中交流！
 - 程序还有很多bug，欢迎各位朋友一起协同共建！
+
+## 加群
+
+如果你对go-ldap-admin项目感兴趣，希望与大家一起交流，欢迎添加微信群：
+
+![](http://t.eryajf.net/imgs/2022/05/4da1e4fe7f712323.jpeg)
+
+如果二维码过期，可通过搜索 eryajf 添加我的微信，备注 ldap 拉你进群。
