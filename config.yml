@@ -31,13 +31,13 @@ mysql:
   # 用户名
   username: root
   # 密码
-  password: 123465
+  password: 123456
   # 数据库名
-  database: go-ldap-admin
+  database: go_ldap_admin
   # 主机地址
-  host: localhost
+  host: 172.30.3.6
   # 端口
-  port: 3306
+  port: 3307
   # 连接字56参数
   query: parseTime=True&loc=Local&timeout=10000ms
   # 是否打印日志
@@ -84,9 +84,9 @@ email:
 # # ldap 配置
 ldap:
   # ldap服务器地址
-  ldap-url: ldap://localhost:389
-  ldap-base-dn: "dc=eryajf,dc=net"
-  ldap-admin-dn: "cn=admin,dc=eryajf,dc=net"
-  ldap-admin-pass: "123456"
-  ldap-user-dn: "ou=people,dc=eryajf,dc=net"
-  ldap-group-dn: "ou=group,dc=eryajf,dc=net"
+  ldap-url: ldap://172.30.3.6:388
+  ldap-base-dn: "dc=leelen,dc=net"
+  ldap-admin-dn: "cn=admin,dc=leelen,dc=net"
+  ldap-admin-pass: "leelen@2022"
+  ldap-user-dn: "ou=people,dc=leelen,dc=net"
+  ldap-group-dn: "ou=group,dc=leelen,dc=net"
