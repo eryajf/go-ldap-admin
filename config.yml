@@ -31,9 +31,9 @@ mysql:
   # 用户名
   username: root
   # 密码
-  password: 123465
+  password: 123456
   # 数据库名
-  database: go-ldap-admin
+  database: go_ldap_admin
   # 主机地址
   host: localhost
   # 端口
@@ -90,3 +90,5 @@ ldap:
   ldap-admin-pass: "123456"
   ldap-user-dn: "ou=people,dc=eryajf,dc=net"
   ldap-group-dn: "ou=group,dc=eryajf,dc=net"
+  ldap-group-name-modify: false
+  ldap-user-name-modify: false

@@ -34,6 +34,44 @@ func (s GroupService) List(req *request.GroupListReq) ([]*model.Group, error) {
 	return list, err
 }
 
+// 拼装dn信息
+func (s GroupService) GetGroupDn(groupId uint, oldDn string) (dn string, e error) {
+	depart := new(model.Group)
+	filter := tools.H{"id": int(groupId)}
+	err := s.Find(filter, depart)
+	if err != nil {
+		return "", tools.NewMySqlError(err)
+	}
+	if oldDn == "" {
+		dn = fmt.Sprintf("%s=%s", depart.GroupType, depart.GroupName)
+	} else {
+		dn = fmt.Sprintf("%s,%s=%s", oldDn, depart.GroupType, depart.GroupName)
+	}
+	if depart.ParentId > 0 {
+		tempDn, err := s.GetGroupDn(depart.ParentId, dn)
+		if err != nil {
+			return dn, err
+		}
+		dn = tempDn
+		fmt.Println(tempDn)
+	}
+	return dn, nil
+}
+
+// GenGroupTree 生成分组树
+func GenGroupTree(parentId uint, groups []*model.Group) []*model.Group {
+	tree := make([]*model.Group, 0)
+
+	for _, g := range groups {
+		if g.ParentId == parentId {
+			children := GenGroupTree(g.ID, groups)
+			g.Children = children
+			tree = append(tree, g)
+		}
+	}
+	return tree
+}
+
 // Count 获取数据总数
 func (s GroupService) Count() (int64, error) {
 	var count int64

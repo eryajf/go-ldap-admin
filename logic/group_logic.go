@@ -2,6 +2,7 @@ package logic
 
 import (
 	"fmt"
+	"github.com/eryajf-world/go-ldap-admin/config"
 	"strings"
 
 	"github.com/eryajf-world/go-ldap-admin/model"
@@ -35,12 +36,20 @@ func (l GroupLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspE
 	}
 
 	group := model.Group{
+		GroupType: r.GroupType,
+		ParentId:  r.ParentId,
 		GroupName: r.GroupName,
 		Remark:    r.Remark,
 		Creator:   ctxUser.Username,
 	}
-
-	err = ildap.Group.Add(&group)
+	pdn := ""
+	if group.ParentId > 0 {
+		pdn, err = isql.Group.GetGroupDn(r.ParentId, "")
+		if err != nil {
+			return nil, err.Error()
+		}
+	}
+	err = ildap.Group.Add(&group, pdn)
 	if err != nil {
 		return nil, tools.NewLdapError(fmt.Errorf("向LDAP创建分组失败" + err.Error()))
 	}
@@ -95,6 +104,29 @@ func (l GroupLogic) List(c *gin.Context, req interface{}) (data interface{}, rsp
 	}, nil
 }
 
+// GetTree 数据树
+func (l GroupLogic) GetTree(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
+	r, ok := req.(*request.GroupGetTreeReq)
+	if !ok {
+		return nil, ReqAssertErr
+	}
+	_ = c
+	rList := request.GroupListReq{}
+	rList.PageNum = r.PageNum
+	rList.PageSize = r.PageSize
+	rList.GroupName = r.GroupName
+	rList.Remark = r.Remark
+	var groups []*model.Group
+	groups, err := isql.Group.List(&rList)
+	if err != nil {
+		return nil, tools.NewMySqlError(fmt.Errorf("获取资源列表失败: " + err.Error()))
+	}
+
+	tree := isql.GenGroupTree(0, groups)
+
+	return tree, nil
+}
+
 // Update 更新数据
 func (l GroupLogic) Update(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
 	r, ok := req.(*request.GroupUpdateReq)
@@ -122,15 +154,26 @@ func (l GroupLogic) Update(c *gin.Context, req interface{}) (data interface{}, r
 
 	group := model.Group{
 		Model:     oldData.Model,
-		GroupName: oldData.GroupName,
+		GroupName: r.GroupName,
 		Remark:    r.Remark,
 		Creator:   ctxUser.Username,
-	}
-	err = ildap.Group.Update(&group)
-	if err != nil {
-		return nil, tools.NewLdapError(fmt.Errorf("向LDAP更新分组失败"))
+		GroupType: oldData.GroupType,
 	}
 
+	oldGroupName := oldData.GroupName
+	oldRemark := oldData.Remark
+	dn, err := isql.Group.GetGroupDn(r.ID, "")
+	if err != nil {
+		return nil, err.Error()
+	}
+	err = ildap.Group.Update(&group, dn, oldGroupName, oldRemark)
+	if err != nil {
+		return nil, tools.NewLdapError(fmt.Errorf("向LDAP更新分组失败：" + err.Error()))
+	}
+	//若配置了不允许修改分组名称，则不更新分组名称
+	if !config.Conf.Ldap.LdapGroupNameModify {
+		group.GroupName = oldGroupName
+	}
 	err = isql.Group.Update(&group)
 	if err != nil {
 		return nil, tools.NewLdapError(fmt.Errorf("向MySQL更新分组失败"))
@@ -158,9 +201,19 @@ func (l GroupLogic) Delete(c *gin.Context, req interface{}) (data interface{}, r
 		return nil, tools.NewMySqlError(fmt.Errorf("获取分组列表失败: %s", err.Error()))
 	}
 	for _, group := range groups {
-		err := ildap.Group.Delete(group.GroupName)
+		// 判断存在子分组，不允许删除
+		filter := tools.H{"parent_id": int(group.ID)}
+		if isql.Group.Exist(filter) {
+			return nil, tools.NewMySqlError(fmt.Errorf("存在子分组，不允许删除！"))
+		}
+		dn, err := isql.Group.GetGroupDn(group.ID, "")
 		if err != nil {
-			return nil, tools.NewLdapError(fmt.Errorf("向LDAP删除分组失败"))
+			return nil, err.Error()
+		}
+		gdn := fmt.Sprintf("%s,%s", dn, config.Conf.Ldap.LdapBaseDN)
+		err = ildap.Group.Delete(gdn)
+		if err != nil {
+			return nil, tools.NewLdapError(fmt.Errorf("向LDAP删除分组失败：" + err.Error()))
 		}
 	}
 	// 删除接口
@@ -168,6 +221,7 @@ func (l GroupLogic) Delete(c *gin.Context, req interface{}) (data interface{}, r
 	if err != nil {
 		return nil, tools.NewMySqlError(fmt.Errorf("删除接口失败: %s", err.Error()))
 	}
+	// TODO: 删除用户组关系
 	return nil, nil
 }
 
@@ -197,7 +251,16 @@ func (l GroupLogic) AddUser(c *gin.Context, req interface{}) (data interface{}, 
 	}
 
 	for _, user := range users {
-		err := ildap.Group.AddUserToGroup(group.GroupName, user.Username)
+		gdn, err := isql.Group.GetGroupDn(group.ID, "")
+		if err != nil {
+			return nil, err.Error()
+		}
+		gdn = fmt.Sprintf("%s,%s", gdn, config.Conf.Ldap.LdapBaseDN)
+		udn := config.Conf.Ldap.LdapAdminDN
+		if user.Username != "admin" {
+			udn = fmt.Sprintf("uid=%s,%s", user.Username, config.Conf.Ldap.LdapUserDN)
+		}
+		err = ildap.Group.AddUserToGroup(gdn, udn)
 
 		if err != nil {
 			return nil, tools.NewLdapError(fmt.Errorf("向LDAP添加用户到分组失败" + err.Error()))
@@ -236,14 +299,17 @@ func (l GroupLogic) RemoveUser(c *gin.Context, req interface{}) (data interface{
 	if err != nil {
 		return nil, tools.NewMySqlError(fmt.Errorf("获取分组失败: %s", err.Error()))
 	}
-
+	gdn, err := isql.Group.GetGroupDn(r.GroupID, "")
+	if err != nil {
+		return nil, tools.NewMySqlError(fmt.Errorf("获取分组失败: %s", err.Error()))
+	}
+	gdn = fmt.Sprintf("%s,%s", gdn, config.Conf.Ldap.LdapBaseDN)
 	for _, user := range users {
-		err := ildap.Group.RemoveUserFromGroup(group.GroupName, user.Username)
+		err := ildap.Group.RemoveUserFromGroup(gdn, user.Username)
 		if err != nil {
 			return nil, tools.NewLdapError(fmt.Errorf("将用户从ldap移除失败" + err.Error()))
 		}
 	}
-
 	err = isql.Group.RemoveUserFromGroup(group, users)
 	if err != nil {
 		return nil, tools.NewMySqlError(fmt.Errorf("将用户从MySQL移除失败: %s", err.Error()))

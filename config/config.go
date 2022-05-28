@@ -128,12 +128,14 @@ type RateLimitConfig struct {
 }
 
 type LdapConfig struct {
-	LdapUrl       string `mapstructure:"ldap-url" json:"ldapUrl"`
-	LdapBaseDN    string `mapstructure:"ldap-base-dn" json:"ldapBaseDN"`
-	LdapAdminDN   string `mapstructure:"ldap-admin-dn" json:"ldapAdminDN"`
-	LdapAdminPass string `mapstructure:"ldap-admin-pass" json:"ldapAdminPass"`
-	LdapUserDN    string `mapstructure:"ldap-user-dn" json:"ldapUserDN"`
-	LdapGroupDN   string `mapstructure:"ldap-group-dn" json:"ldapGroupDN"`
+	LdapUrl             string `mapstructure:"ldap-url" json:"ldapUrl"`
+	LdapBaseDN          string `mapstructure:"ldap-base-dn" json:"ldapBaseDN"`
+	LdapAdminDN         string `mapstructure:"ldap-admin-dn" json:"ldapAdminDN"`
+	LdapAdminPass       string `mapstructure:"ldap-admin-pass" json:"ldapAdminPass"`
+	LdapUserDN          string `mapstructure:"ldap-user-dn" json:"ldapUserDN"`
+	LdapGroupDN         string `mapstructure:"ldap-group-dn" json:"ldapGroupDN"`
+	LdapGroupNameModify bool   `mapstructure:"ldap-group-name-modify" json:"ldapGroupNameModify"`
+	LdapUserNameModify  bool   `mapstructure:"ldap-user-name-modify" json:"ldapUserNameModify"`
 }
 type EmailConfig struct {
 	Host string `mapstructure:"host" json:"host"`
