@@ -65,7 +65,7 @@ func (x UserService) Update(oldusername string, user *model.User) error {
 	if err != nil {
 		return err
 	}
-	if oldusername != user.Username {
+	if config.Conf.Ldap.LdapUserNameModify && oldusername != user.Username {
 		modifyDn := ldap.NewModifyDNRequest(fmt.Sprintf("uid=%s,%s", oldusername, config.Conf.Ldap.LdapUserDN), fmt.Sprintf("uid=%s", user.Username), true, "")
 		return common.LDAP.ModifyDN(modifyDn)
 	}

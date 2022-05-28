@@ -271,6 +271,9 @@ func (l UserLogic) Update(c *gin.Context, req interface{}) (data interface{}, rs
 	}
 
 	// 更新用户
+	if !config.Conf.Ldap.LdapUserNameModify {
+		user.Username = oldData.Username
+	}
 	err = isql.User.Update(&user)
 	if err != nil {
 		return nil, tools.NewMySqlError(fmt.Errorf("在MySQL更新用户失败：" + err.Error()))

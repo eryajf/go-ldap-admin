@@ -7,7 +7,7 @@ system:
   # 程序监听端口
   port: 8888
   # 是否初始化数据(没有初始数据时使用, 已发布正式版改为false)
-  init-data: false
+  init-data: true
   # rsa公钥文件路径(config.yml相对路径, 也可以填绝对路径)
   rsa-public-key: go-web-mini-pub.pem
   # rsa私钥文件路径(config.yml相对路径, 也可以填绝对路径)
@@ -91,3 +91,4 @@ ldap:
   ldap-user-dn: "ou=people,dc=leelen,dc=net"
   ldap-group-dn: "ou=rootGroup,dc=leelen,dc=net"
   ldap-group-name-modify: false
+  ldap-user-name-modify: false

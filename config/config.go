@@ -135,6 +135,7 @@ type LdapConfig struct {
 	LdapUserDN          string `mapstructure:"ldap-user-dn" json:"ldapUserDN"`
 	LdapGroupDN         string `mapstructure:"ldap-group-dn" json:"ldapGroupDN"`
 	LdapGroupNameModify bool   `mapstructure:"ldap-group-name-modify" json:"ldapGroupNameModify"`
+	LdapUserNameModify  bool   `mapstructure:"ldap-user-name-modify" json:"ldapUserNameModify"`
 }
 type EmailConfig struct {
 	Host string `mapstructure:"host" json:"host"`
