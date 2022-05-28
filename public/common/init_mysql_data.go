@@ -332,6 +332,13 @@ func InitData() {
 			Creator:  "系统",
 		},
 		{
+			Method:   "GET",
+			Path:     "/group/tree",
+			Category: "group",
+			Remark:   "获取分组列表树",
+			Creator:  "系统",
+		},
+		{
 			Method:   "POST",
 			Path:     "/group/add",
 			Category: "group",
@@ -549,6 +556,7 @@ func InitData() {
 				"/user/list",
 				"/user/changePwd",
 				"/group/list",
+				"/group/tree",
 				"/group/useringroup",
 				"/group/usernoingroup",
 				"/role/list",

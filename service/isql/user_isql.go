@@ -25,6 +25,8 @@ var userInfoCache = cache.New(24*time.Hour, 48*time.Hour)
 // Add 添加资源
 func (s UserService) Add(user *model.User) error {
 	user.Password = tools.NewGenPasswd(user.Password)
+	//result := common.DB.Create(user)
+	//return user.ID, result.Error
 	return common.DB.Create(user).Error
 }
 
@@ -45,6 +47,14 @@ func (s UserService) List(req *request.UserListReq) ([]*model.User, error) {
 	if mobile != "" {
 		db = db.Where("mobile LIKE ?", fmt.Sprintf("%%%s%%", mobile))
 	}
+	departmentId := req.DepartmentId
+	if departmentId > 0 {
+		db = db.Where("department_id = ?", departmentId)
+	}
+	givenName := strings.TrimSpace(req.GivenName)
+	if givenName != "" {
+		db = db.Where("given_name LIKE ?", fmt.Sprintf("%%%s%%", givenName))
+	}
 	status := req.Status
 	if status != 0 {
 		db = db.Where("status = ?", status)
@@ -53,6 +63,40 @@ func (s UserService) List(req *request.UserListReq) ([]*model.User, error) {
 	pageReq := tools.NewPageOption(req.PageNum, req.PageSize)
 	err := db.Offset(pageReq.PageNum).Limit(pageReq.PageSize).Preload("Roles").Find(&list).Error
 	return list, err
+}
+
+// ListCout 获取符合条件的数据列表条数
+func (s UserService) ListCount(req *request.UserListReq) (int64, error) {
+	var count int64
+	db := common.DB.Model(&model.User{}).Order("id DESC")
+
+	username := strings.TrimSpace(req.Username)
+	if username != "" {
+		db = db.Where("username LIKE ?", fmt.Sprintf("%%%s%%", username))
+	}
+	nickname := strings.TrimSpace(req.Nickname)
+	if nickname != "" {
+		db = db.Where("nickname LIKE ?", fmt.Sprintf("%%%s%%", nickname))
+	}
+	mobile := strings.TrimSpace(req.Mobile)
+	if mobile != "" {
+		db = db.Where("mobile LIKE ?", fmt.Sprintf("%%%s%%", mobile))
+	}
+	departmentId := req.DepartmentId
+	if departmentId > 0 {
+		db = db.Where("department_id = ?", departmentId)
+	}
+	givenName := strings.TrimSpace(req.GivenName)
+	if givenName != "" {
+		db = db.Where("given_name LIKE ?", fmt.Sprintf("%%%s%%", givenName))
+	}
+	status := req.Status
+	if status != 0 {
+		db = db.Where("status = ?", status)
+	}
+
+	err := db.Count(&count).Error
+	return count, err
 }
 
 // List 获取数据列表

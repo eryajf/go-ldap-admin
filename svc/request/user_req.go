@@ -15,12 +15,15 @@ type UserAddReq struct {
 	Avatar        string `json:"avatar"`
 	Introduction  string `json:"introduction" validate:"min=0,max=255"`
 	Status        uint   `json:"status" validate:"oneof=1 2"`
+	DepartmentId  uint   `json:"departmentId" validate:"required"`
+	Source        string `json:"source" validate:"min=0,max=20"`
 	RoleIds       []uint `json:"roleIds" validate:"required"`
 }
 
 // UserUpdateReq 更新资源结构体
 type UserUpdateReq struct {
 	ID            uint   `json:"id" validate:"required"`
+	Username      string `json:"username" validate:"required,min=2,max=20"`
 	Nickname      string `json:"nickname" validate:"min=0,max=20"`
 	GivenName     string `json:"givenName" validate:"min=0,max=20"`
 	Mail          string `json:"mail" validate:"min=0,max=20"`
@@ -31,6 +34,8 @@ type UserUpdateReq struct {
 	Mobile        string `json:"mobile" validate:"checkMobile"`
 	Avatar        string `json:"avatar"`
 	Introduction  string `json:"introduction" validate:"min=0,max=255"`
+	DepartmentId  uint   `json:"departmentId" validate:"required"`
+	Source        string `json:"source" validate:"min=0,max=20"`
 	RoleIds       []uint `json:"roleIds" validate:"required"`
 }
 
@@ -57,12 +62,14 @@ type UserGetUserInfoReq struct {
 
 // UserListReq 获取用户列表结构体
 type UserListReq struct {
-	Username string `json:"username" form:"username"`
-	Mobile   string `json:"mobile" form:"mobile" `
-	Nickname string `json:"nickname" form:"nickname"`
-	Status   uint   `json:"status" form:"status" `
-	PageNum  int    `json:"pageNum" form:"pageNum"`
-	PageSize int    `json:"pageSize" form:"pageSize"`
+	Username     string `json:"username" form:"username"`
+	Mobile       string `json:"mobile" form:"mobile" `
+	Nickname     string `json:"nickname" form:"nickname"`
+	GivenName    string `json:"givenName" form:"givenName"`
+	DepartmentId uint   `json:"departmentId" form:"departmentId"`
+	Status       uint   `json:"status" form:"status" `
+	PageNum      int    `json:"pageNum" form:"pageNum"`
+	PageSize     int    `json:"pageSize" form:"pageSize"`
 }
 
 // RegisterAndLoginReq 用户登录结构体

@@ -29,7 +29,6 @@ func (x UserService) Add(user *model.User) error {
 	if user.Introduction == "" {
 		user.Introduction = user.Nickname
 	}
-
 	add := ldap.NewAddRequest(fmt.Sprintf("uid=%s,%s", user.Username, config.Conf.Ldap.LdapUserDN), nil)
 	add.Attribute("objectClass", []string{"inetOrgPerson"})
 	add.Attribute("cn", []string{user.Nickname})
@@ -62,8 +61,15 @@ func (x UserService) Update(oldusername string, user *model.User) error {
 	modify.Replace("givenName", []string{user.GivenName})
 	modify.Replace("postalAddress", []string{user.PostalAddress})
 	modify.Replace("mobile", []string{user.Mobile})
-	modify.Replace("uid", []string{oldusername})
-	return common.LDAP.Modify(modify)
+	err := common.LDAP.Modify(modify)
+	if err != nil {
+		return err
+	}
+	if config.Conf.Ldap.LdapUserNameModify && oldusername != user.Username {
+		modifyDn := ldap.NewModifyDNRequest(fmt.Sprintf("uid=%s,%s", oldusername, config.Conf.Ldap.LdapUserDN), fmt.Sprintf("uid=%s", user.Username), true, "")
+		return common.LDAP.ModifyDN(modifyDn)
+	}
+	return nil
 }
 
 // Delete 删除资源
