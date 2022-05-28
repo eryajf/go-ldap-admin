@@ -90,4 +90,4 @@ ldap:
   ldap-admin-pass: "leelen@2022"
   ldap-user-dn: "ou=people,dc=leelen,dc=net"
   ldap-group-dn: "ou=rootGroup,dc=leelen,dc=net"
-  ldap-group-name-modify: true
+  ldap-group-name-modify: false
