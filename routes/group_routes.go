@@ -16,6 +16,7 @@ func InitGroupRoutes(r *gin.RouterGroup, authMiddleware *jwt.GinJWTMiddleware) g
 	group.Use(middleware.CasbinMiddleware())
 	{
 		group.GET("/list", controller.Group.List)
+		group.GET("/tree", controller.Group.GetTree)
 		group.POST("/add", controller.Group.Add)
 		group.POST("/update", controller.Group.Update)
 		group.POST("/delete", controller.Group.Delete)
