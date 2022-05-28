@@ -12,8 +12,9 @@ type GroupListReq struct {
 type GroupAddReq struct {
 	GroupType string `json:"groupType" validate:"required,min=1,max=20"`
 	GroupName string `json:"groupName" validate:"required,min=1,max=20"`
-	ParentId  uint   `json:"parentId" validate:"required,min=1"`
-	Remark    string `json:"remark" validate:"min=0,max=100"` // 分组的中文描述
+	//父级Id 大于等于0 必填
+	ParentId uint   `json:"parentId" validate:"omitempty,min=0"`
+	Remark   string `json:"remark" validate:"min=0,max=100"` // 分组的中文描述
 }
 
 // GroupUpdateReq 更新资源结构体
