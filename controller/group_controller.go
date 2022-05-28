@@ -33,13 +33,13 @@ func (m *GroupController) UserNoInGroup(c *gin.Context) {
 	})
 }
 
-// // GetTree 接口树
-// func (m *GroupController) GetTree(c *gin.Context) {
-// 	req := new(request.GroupGetTreeReq)
-// 	Run(c, req, func() (interface{}, interface{}) {
-// 		return logic.Group.GetTree(c, req)
-// 	})
-// }
+// GetTree 接口树
+func (m *GroupController) GetTree(c *gin.Context) {
+	req := new(request.GroupGetTreeReq)
+	Run(c, req, func() (interface{}, interface{}) {
+		return logic.Group.GetTree(c, req)
+	})
+}
 
 // Add 新建记录
 func (m *GroupController) Add(c *gin.Context) {
