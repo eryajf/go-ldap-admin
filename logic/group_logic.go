@@ -42,14 +42,14 @@ func (l GroupLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspE
 		Remark:    r.Remark,
 		Creator:   ctxUser.Username,
 	}
-	pg := new(model.Group)
+	pdn := ""
 	if group.ParentId > 0 {
-		err = isql.Group.Find(tools.H{"id": group.ParentId}, pg)
+		pdn, err = isql.Group.GetGroupDn(r.ParentId, "")
 		if err != nil {
-			return nil, tools.NewLdapError(fmt.Errorf("获取父级分组信息失败" + err.Error()))
+			return nil, err.Error()
 		}
 	}
-	err = ildap.Group.Add(&group, pg)
+	err = ildap.Group.Add(&group, pdn)
 	if err != nil {
 		return nil, tools.NewLdapError(fmt.Errorf("向LDAP创建分组失败" + err.Error()))
 	}

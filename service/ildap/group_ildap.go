@@ -3,7 +3,6 @@ package ildap
 import (
 	"errors"
 	"fmt"
-
 	"github.com/eryajf-world/go-ldap-admin/config"
 	"github.com/eryajf-world/go-ldap-admin/model"
 	"github.com/eryajf-world/go-ldap-admin/public/common"
@@ -14,10 +13,10 @@ import (
 type GroupService struct{}
 
 // Add 添加资源
-func (x GroupService) Add(g *model.Group, pg *model.Group) error { //organizationalUnit
+func (x GroupService) Add(g *model.Group, pdn string) error { //organizationalUnit
 	parentDn := config.Conf.Ldap.LdapBaseDN
-	if g.ParentId > 0 {
-		parentDn = fmt.Sprintf("%s=%s,%s", pg.GroupType, pg.GroupName, config.Conf.Ldap.LdapBaseDN)
+	if pdn != "" {
+		parentDn = fmt.Sprintf("%s,%s", pdn, config.Conf.Ldap.LdapBaseDN)
 	}
 	dn := fmt.Sprintf("%s=%s,%s", g.GroupType, g.GroupName, parentDn)
 	add := ldap.NewAddRequest(dn, nil)
