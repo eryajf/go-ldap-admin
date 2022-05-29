@@ -35,7 +35,7 @@ func (m *GroupController) UserNoInGroup(c *gin.Context) {
 
 // GetTree 接口树
 func (m *GroupController) GetTree(c *gin.Context) {
-	req := new(request.GroupGetTreeReq)
+	req := new(request.GroupListReq)
 	Run(c, req, func() (interface{}, interface{}) {
 		return logic.Group.GetTree(c, req)
 	})

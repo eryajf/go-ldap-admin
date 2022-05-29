@@ -1,7 +1,44 @@
 dn: ou=people,dc=eryajf,dc=net
-objectClass: organizationalUnit
 ou: people
-
-dn: ou=group,dc=eryajf,dc=net
+description: 用户根目录
 objectClass: organizationalUnit
-ou: group
+
+dn: ou=eryajf,dc=eryajf,dc=net
+ou: eryajf
+description: 二丫讲梵有限公司
+objectClass: top
+objectClass: organizationalUnit
+
+dn: ou=jenkins,dc=eryajf,dc=net
+ou: jenkins
+description: Jenkins对应权限组管理
+objectClass: top
+objectClass: organizationalUnit
+
+dn: cn=ceshizu,ou=eryajf,dc=eryajf,dc=net
+cn: ceshizu
+description: 测试组
+objectClass: top
+objectClass: groupOfUniqueNames
+uniquemember: cn=admin,dc=eryajf,dc=net
+
+dn: cn=yunweizu,ou=eryajf,dc=eryajf,dc=net
+cn: yunweizu
+description: 运维组
+objectClass: top
+objectClass: groupOfUniqueNames
+uniquemember: cn=admin,dc=eryajf,dc=net
+
+dn: cn=test-admin,ou=jenkins,dc=eryajf,dc=net
+cn: test-admin
+description: admin测试环境
+objectClass: top
+objectClass: groupOfUniqueNames
+uniquemember: cn=admin,dc=eryajf,dc=net
+
+dn: cn=prod-admin,ou=jenkins,dc=eryajf,dc=net
+cn: prod-admin
+description: admin正式环境
+objectClass: top
+objectClass: groupOfUniqueNames
+uniquemember: cn=admin,dc=eryajf,dc=net

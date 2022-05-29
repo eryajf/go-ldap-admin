@@ -107,18 +107,14 @@ func (l GroupLogic) List(c *gin.Context, req interface{}) (data interface{}, rsp
 
 // GetTree 数据树
 func (l GroupLogic) GetTree(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
-	r, ok := req.(*request.GroupGetTreeReq)
+	r, ok := req.(*request.GroupListReq)
 	if !ok {
 		return nil, ReqAssertErr
 	}
 	_ = c
-	rList := request.GroupListReq{}
-	rList.PageNum = r.PageNum
-	rList.PageSize = r.PageSize
-	rList.GroupName = r.GroupName
-	rList.Remark = r.Remark
+
 	var groups []*model.Group
-	groups, err := isql.Group.List(&rList)
+	groups, err := isql.Group.List(r)
 	if err != nil {
 		return nil, tools.NewMySqlError(fmt.Errorf("获取资源列表失败: " + err.Error()))
 	}

@@ -92,7 +92,7 @@ $ docker-compose up -d
 
 `分组管理：`
 
-![](http://t.eryajf.net/imgs/2022/05/cb7bcd851b2c972f.png)
+![](http://t.eryajf.net/imgs/2022/05/e49632b76a4327ec.png)
 
 `分组内成员管理：`
 

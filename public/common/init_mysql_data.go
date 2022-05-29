@@ -209,8 +209,8 @@ func InitData() {
 	}
 
 	// 3.写入用户
-	newUsers := make([]model.User, 0)
-	users := []model.User{
+	newUsers := make([]*model.User, 0)
+	users := []*model.User{
 		{
 			Model:         gorm.Model{ID: 1},
 			Username:      "admin",
@@ -595,6 +595,76 @@ func InitData() {
 		isAdd, err := CasbinEnforcer.AddPolicies(rules)
 		if !isAdd {
 			Log.Errorf("写入casbin数据失败：%v", err)
+		}
+	}
+
+	// 6.写入分组
+	newGroups := make([]model.Group, 0)
+	groups := []model.Group{
+		{
+			Model:     gorm.Model{ID: 1},
+			GroupName: "eryajf",
+			Remark:    "二丫讲梵有限公司",
+			Creator:   "系统",
+			GroupType: "ou",
+			ParentId:  0,
+		},
+		{
+			Model:     gorm.Model{ID: 2},
+			GroupName: "jenkins",
+			Remark:    "Jenkins对应权限组管理",
+			Creator:   "系统",
+			GroupType: "ou",
+			ParentId:  0,
+		},
+		{
+			Model:     gorm.Model{ID: 3},
+			GroupName: "ceshizu",
+			Remark:    "测试组",
+			Creator:   "系统",
+			GroupType: "cn",
+			Users:     users[:1],
+			ParentId:  1,
+		},
+		{
+			Model:     gorm.Model{ID: 4},
+			GroupName: "yunweizu",
+			Remark:    "运维组",
+			Creator:   "系统",
+			GroupType: "cn",
+			Users:     users[:1],
+			ParentId:  1,
+		},
+		{
+			Model:     gorm.Model{ID: 5},
+			GroupName: "test-admin",
+			Remark:    "admin测试环境",
+			Creator:   "系统",
+			GroupType: "cn",
+			Users:     users[:1],
+			ParentId:  2,
+		},
+		{
+			Model:     gorm.Model{ID: 6},
+			GroupName: "prod-admin",
+			Remark:    "admin正式环境",
+			Creator:   "系统",
+			GroupType: "cn",
+			Users:     users[:1],
+			ParentId:  2,
+		},
+	}
+
+	for _, group := range groups {
+		err := DB.First(&group, group.ID).Error
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			newGroups = append(newGroups, group)
+		}
+	}
+	if len(newGroups) > 0 {
+		err := DB.Create(&newGroups).Error
+		if err != nil {
+			Log.Errorf("写入分组数据失败：%v", err)
 		}
 	}
 }
