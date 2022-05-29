@@ -3,10 +3,10 @@ package logic
 import (
 	"fmt"
 
-	"github.com/eryajf-world/go-ldap-admin/model"
-	"github.com/eryajf-world/go-ldap-admin/public/tools"
-	"github.com/eryajf-world/go-ldap-admin/service/isql"
-	"github.com/eryajf-world/go-ldap-admin/svc/request"
+	"github.com/eryajf/go-ldap-admin/model"
+	"github.com/eryajf/go-ldap-admin/public/tools"
+	"github.com/eryajf/go-ldap-admin/service/isql"
+	"github.com/eryajf/go-ldap-admin/svc/request"
 
 	"github.com/gin-gonic/gin"
 )

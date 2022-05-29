@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/eryajf-world/go-ldap-admin/config"
+	"github.com/eryajf/go-ldap-admin/config"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"

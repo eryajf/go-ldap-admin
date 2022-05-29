@@ -3,9 +3,9 @@ package common
 import (
 	"errors"
 
-	"github.com/eryajf-world/go-ldap-admin/config"
-	"github.com/eryajf-world/go-ldap-admin/model"
-	"github.com/eryajf-world/go-ldap-admin/public/tools"
+	"github.com/eryajf/go-ldap-admin/config"
+	"github.com/eryajf/go-ldap-admin/model"
+	"github.com/eryajf/go-ldap-admin/public/tools"
 
 	"github.com/thoas/go-funk"
 	"gorm.io/gorm"

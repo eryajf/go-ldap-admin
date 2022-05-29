@@ -4,10 +4,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/eryajf-world/go-ldap-admin/config"
-	"github.com/eryajf-world/go-ldap-admin/model"
-	"github.com/eryajf-world/go-ldap-admin/public/tools"
-	"github.com/eryajf-world/go-ldap-admin/service/isql"
+	"github.com/eryajf/go-ldap-admin/config"
+	"github.com/eryajf/go-ldap-admin/model"
+	"github.com/eryajf/go-ldap-admin/public/tools"
+	"github.com/eryajf/go-ldap-admin/service/isql"
 
 	"github.com/gin-gonic/gin"
 )

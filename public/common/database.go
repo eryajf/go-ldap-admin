@@ -3,8 +3,8 @@ package common
 import (
 	"fmt"
 
-	"github.com/eryajf-world/go-ldap-admin/config"
-	"github.com/eryajf-world/go-ldap-admin/model"
+	"github.com/eryajf/go-ldap-admin/config"
+	"github.com/eryajf/go-ldap-admin/model"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

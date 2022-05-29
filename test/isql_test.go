@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/eryajf-world/go-ldap-admin/config"
-	"github.com/eryajf-world/go-ldap-admin/public/common"
-	"github.com/eryajf-world/go-ldap-admin/public/tools"
-	"github.com/eryajf-world/go-ldap-admin/service/isql"
+	"github.com/eryajf/go-ldap-admin/config"
+	"github.com/eryajf/go-ldap-admin/public/common"
+	"github.com/eryajf/go-ldap-admin/public/tools"
+	"github.com/eryajf/go-ldap-admin/service/isql"
 )
 
 func InitConfig() {

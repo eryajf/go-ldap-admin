@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/eryajf-world/go-ldap-admin/config"
-	"github.com/eryajf-world/go-ldap-admin/public/tools"
+	"github.com/eryajf/go-ldap-admin/config"
+	"github.com/eryajf/go-ldap-admin/public/tools"
 )
 
 func TestUnGenPassword(t *testing.T) {

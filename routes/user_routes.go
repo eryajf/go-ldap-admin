@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"github.com/eryajf-world/go-ldap-admin/controller"
-	"github.com/eryajf-world/go-ldap-admin/middleware"
+	"github.com/eryajf/go-ldap-admin/controller"
+	"github.com/eryajf/go-ldap-admin/middleware"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"

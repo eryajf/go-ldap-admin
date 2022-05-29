@@ -5,7 +5,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/eryajf-world/go-ldap-admin/config"
+	"github.com/eryajf/go-ldap-admin/config"
 
 	ldap "github.com/go-ldap/ldap/v3"
 )

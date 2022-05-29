@@ -3,16 +3,16 @@ package middleware
 import (
 	"fmt"
 
-	"github.com/eryajf-world/go-ldap-admin/config"
-	"github.com/eryajf-world/go-ldap-admin/model"
-	"github.com/eryajf-world/go-ldap-admin/public/common"
-	"github.com/eryajf-world/go-ldap-admin/public/tools"
-	"github.com/eryajf-world/go-ldap-admin/service/isql"
+	"github.com/eryajf/go-ldap-admin/config"
+	"github.com/eryajf/go-ldap-admin/model"
+	"github.com/eryajf/go-ldap-admin/public/common"
+	"github.com/eryajf/go-ldap-admin/public/tools"
+	"github.com/eryajf/go-ldap-admin/service/isql"
 
 	"time"
 
-	"github.com/eryajf-world/go-ldap-admin/svc/request"
-	"github.com/eryajf-world/go-ldap-admin/svc/response"
+	"github.com/eryajf/go-ldap-admin/svc/request"
+	"github.com/eryajf/go-ldap-admin/svc/response"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"

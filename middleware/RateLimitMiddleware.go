@@ -3,7 +3,7 @@ package middleware
 import (
 	"time"
 
-	"github.com/eryajf-world/go-ldap-admin/svc/response"
+	"github.com/eryajf/go-ldap-admin/svc/response"
 
 	"github.com/gin-gonic/gin"
 	"github.com/juju/ratelimit"

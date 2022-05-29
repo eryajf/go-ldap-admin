@@ -3,7 +3,7 @@ package logic
 import (
 	"fmt"
 
-	"github.com/eryajf-world/go-ldap-admin/public/tools"
+	"github.com/eryajf/go-ldap-admin/public/tools"
 )
 
 var (

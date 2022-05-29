@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/eryajf-world/go-ldap-admin/config"
-	"github.com/eryajf-world/go-ldap-admin/middleware"
-	"github.com/eryajf-world/go-ldap-admin/public/common"
+	"github.com/eryajf/go-ldap-admin/config"
+	"github.com/eryajf/go-ldap-admin/middleware"
+	"github.com/eryajf/go-ldap-admin/public/common"
 
 	"github.com/gin-gonic/gin"
 )

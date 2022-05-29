@@ -3,7 +3,7 @@ package common
 import (
 	"fmt"
 
-	"github.com/eryajf-world/go-ldap-admin/config"
+	"github.com/eryajf/go-ldap-admin/config"
 
 	"github.com/casbin/casbin/v2"
 	gormadapter "github.com/casbin/gorm-adapter/v3"

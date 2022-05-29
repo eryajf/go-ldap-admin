@@ -3,7 +3,7 @@ package tools
 import (
 	"fmt"
 
-	"github.com/eryajf-world/go-ldap-admin/config"
+	"github.com/eryajf/go-ldap-admin/config"
 
 	"strconv"
 

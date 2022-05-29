@@ -9,9 +9,9 @@ system:
   # 是否初始化数据(没有初始数据时使用, 已发布正式版改为false)
   init-data: true
   # rsa公钥文件路径(config.yml相对路径, 也可以填绝对路径)
-  rsa-public-key: go-web-mini-pub.pem
+  rsa-public-key: go-ldap-admin-pub.pem
   # rsa私钥文件路径(config.yml相对路径, 也可以填绝对路径)
-  rsa-private-key: go-web-mini-priv.pem
+  rsa-private-key: go-ldap-admin-priv.pem
 
 logs:
   # 日志等级(-1:Debug, 0:Info, 1:Warn, 2:Error, 3:DPanic, 4:Panic, 5:Fatal, -1<=level<=5, 参照zap.level源码)

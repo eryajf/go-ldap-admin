@@ -1,7 +1,7 @@
-dn: ou=People,dc=eryajf,dc=net
+dn: ou=people,dc=eryajf,dc=net
 objectClass: organizationalUnit
 ou: people
 
-dn: ou=Group,dc=eryajf,dc=net
+dn: ou=group,dc=eryajf,dc=net
 objectClass: organizationalUnit
 ou: group

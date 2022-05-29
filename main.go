@@ -9,11 +9,11 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/eryajf-world/go-ldap-admin/config"
-	"github.com/eryajf-world/go-ldap-admin/middleware"
-	"github.com/eryajf-world/go-ldap-admin/public/common"
-	"github.com/eryajf-world/go-ldap-admin/routes"
-	"github.com/eryajf-world/go-ldap-admin/service/isql"
+	"github.com/eryajf/go-ldap-admin/config"
+	"github.com/eryajf/go-ldap-admin/middleware"
+	"github.com/eryajf/go-ldap-admin/public/common"
+	"github.com/eryajf/go-ldap-admin/routes"
+	"github.com/eryajf/go-ldap-admin/service/isql"
 )
 
 func main() {

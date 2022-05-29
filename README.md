@@ -27,28 +27,6 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## 缘起
-
-我曾经经历的公司强依赖openLDAP来作为企业内部员工管理的平台，并通过openLDAP进行各平台的认证打通工作。
-
-但成也萧何败也萧何，给运维省力的同时，ldap又是维护不够友好的。
-
-在[godap](https://github.com/bradleypeabody/godap)项目中，作者这样描述对ldap的感受：
-
-> The short version of the story goes like this: I hate LDAP. I used to love it. But I loved it for all the wrong reasons. LDAP is supported as an authentication solution by many different pieces of software. Aside from its de jure standard status, its wide deployment cements it as a de facto standard as well.
->
-> However, just because it is a standard doesn't mean it is a great idea.
->
-> I'll admit that given its age LDAP has had a good run. I'm sure its authors carefully considered how to construct the protocol and chose ASN.1 and its encoding with all of wellest of well meaning intentions.
->
-> The trouble is that with today's Internet, LDAP is just a pain in the ass. You can't call it from your browser. It's not human readable or easy to debug. Tooling is often arcane and confusing. It's way more complicated than what is needed for most simple authentication-only uses. (Yes, I know there are many other uses than authentication - but it's often too complicated for those too.)
->
-> Likely owing to the complexity of the protocol, there seems to be virtually no easy to use library to implement the server side of the LDAP protocol that isn't tied in with some complete directory server system; and certainly not in a language as easy to "make it work" as Go.
-
-他说他对ldap又爱又恨，因为ldap出现的最早，许多的三方软件都兼容支持它，它成了这方面的一个标准。但问题在于，它对于维护者而言，又是复杂麻烦的。就算是有Phpldapadmin这样的平台能够在浏览器维护，但看到那样上古的界面，以及复杂的交互逻辑，仍旧能够把不少人劝退。
-
-鉴于此，我开发了这个现代化的openLDAP管理后台。
-
 ## 在线体验
 
 > admin / 123456
@@ -59,8 +37,8 @@
 
 | 分类 |                        GitHub                        |                        Gitee                        |
 | :--: | :--------------------------------------------------: | :-------------------------------------------------: |
-| 后端 |  https://github.com/eryajf-world/go-ldap-admin.git   |  https://gitee.com/eryajf-world/go-ldap-admin.git   |
-| 前端 | https://github.com/eryajf-world/go-ldap-admin-ui.git | https://gitee.com/eryajf-world/go-ldap-admin-ui.git |
+| 后端 |  https://github.com/eryajf/go-ldap-admin.git   |  https://gitee.com/eryajf-world/go-ldap-admin.git   |
+| 前端 | https://github.com/eryajf/go-ldap-admin-ui.git | https://gitee.com/eryajf-world/go-ldap-admin-ui.git |
 
 ## 核心功能
 
@@ -91,7 +69,7 @@
 拉起之前确认是否有与本地端口冲突的情况。
 
 ```
-$ git clone https://github.com/eryajf-world/go-ldap-admin.git
+$ git clone https://github.com/eryajf/go-ldap-admin.git
 
 $ cd docs/docker-compose
 
@@ -130,10 +108,10 @@ $ docker-compose up -d
 
 ```
 # 后端代码
-$ git clone https://github.com/eryajf-world/go-ldap-admin.git
+$ git clone https://github.com/eryajf/go-ldap-admin.git
 
 # 前端代码
-$ git clone https://github.com/eryajf-world/go-ldap-admin-ui.git
+$ git clone https://github.com/eryajf/go-ldap-admin-ui.git
 ```
 
 后端目录结构：
@@ -235,3 +213,25 @@ server {
 ![](http://t.eryajf.net/imgs/2022/05/4da1e4fe7f712323.jpeg)
 
 如果二维码过期，可通过搜索 eryajf 添加我的微信，备注 ldap 拉你进群。
+
+## 为什么有这个项目
+
+我曾经经历的公司强依赖openLDAP来作为企业内部员工管理的平台，并通过openLDAP进行各平台的认证打通工作。
+
+但成也萧何败也萧何，给运维省力的同时，ldap又是维护不够友好的。
+
+在[godap](https://github.com/bradleypeabody/godap)项目中，作者这样描述对ldap的感受：
+
+> The short version of the story goes like this: I hate LDAP. I used to love it. But I loved it for all the wrong reasons. LDAP is supported as an authentication solution by many different pieces of software. Aside from its de jure standard status, its wide deployment cements it as a de facto standard as well.
+>
+> However, just because it is a standard doesn't mean it is a great idea.
+>
+> I'll admit that given its age LDAP has had a good run. I'm sure its authors carefully considered how to construct the protocol and chose ASN.1 and its encoding with all of wellest of well meaning intentions.
+>
+> The trouble is that with today's Internet, LDAP is just a pain in the ass. You can't call it from your browser. It's not human readable or easy to debug. Tooling is often arcane and confusing. It's way more complicated than what is needed for most simple authentication-only uses. (Yes, I know there are many other uses than authentication - but it's often too complicated for those too.)
+>
+> Likely owing to the complexity of the protocol, there seems to be virtually no easy to use library to implement the server side of the LDAP protocol that isn't tied in with some complete directory server system; and certainly not in a language as easy to "make it work" as Go.
+
+他说他对ldap又爱又恨，因为ldap出现的最早，许多的三方软件都兼容支持它，它成了这方面的一个标准。但问题在于，它对于维护者而言，又是复杂麻烦的。就算是有Phpldapadmin这样的平台能够在浏览器维护，但看到那样上古的界面，以及复杂的交互逻辑，仍旧能够把不少人劝退。
+
+鉴于此，我开发了这个现代化的openLDAP管理后台。
