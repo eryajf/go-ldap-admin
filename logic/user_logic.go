@@ -81,7 +81,7 @@ func (l UserLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspEr
 	if currentRoleSortMin >= reqRoleSortMin {
 		return nil, tools.NewValidatorError(fmt.Errorf("用户不能创建比自己等级高的或者相同等级的用户"))
 	}
-
+	deptIds := tools.SliceToString(r.DepartmentId, ",")
 	user := model.User{
 		Username:      r.Username,
 		Password:      r.Password,
@@ -97,7 +97,7 @@ func (l UserLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspEr
 		Introduction:  r.Introduction,
 		Status:        r.Status,
 		Creator:       ctxUser.Username,
-		DepartmentId:  r.DepartmentId,
+		DepartmentId:  deptIds,
 		Source:        r.Source,
 		Roles:         roles,
 	}
@@ -105,40 +105,50 @@ func (l UserLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspEr
 		user.Source = "platform"
 	}
 	//先识别用户选择的部门是否是OU开头
-	dn, err := isql.Group.GetGroupDn(r.DepartmentId, "")
-	if err != nil {
-		return nil, err.Error()
-	}
-	gdn := fmt.Sprintf("%s,%s", dn, config.Conf.Ldap.LdapBaseDN)
-	if gdn[:3] == "ou=" {
-		return nil, errors.New("不能添加用户到OU组织单元")
+	gdns := make(map[uint]string)
+	for _, deptId := range r.DepartmentId {
+		dn, err := isql.Group.GetGroupDn(deptId, "")
+		if err != nil {
+			return nil, err.Error()
+		}
+		gdn := fmt.Sprintf("%s,%s", dn, config.Conf.Ldap.LdapBaseDN)
+		if gdn[:3] == "ou=" {
+			return nil, errors.New("不能添加用户到OU组织单元")
+		}
+		gdns[deptId] = gdn
 	}
 	//先创建用户到默认分组
 	err = ildap.User.Add(&user)
 	if err != nil {
 		return nil, tools.NewLdapError(fmt.Errorf("向LDAP创建用户失败：" + err.Error()))
 	}
-	//根据选择的部门，添加到部门内
-	err = ildap.Group.AddUserToGroup(gdn, fmt.Sprintf("uid=%s,%s", user.Username, config.Conf.Ldap.LdapUserDN))
-	if err != nil {
-		return nil, err.Error()
-	}
-	err = isql.User.Add(&user)
-	if err != nil {
-		return nil, tools.NewMySqlError(fmt.Errorf("向MySQL创建用户失败：" + err.Error()))
-	}
-	//根据部门分配，将用户和部门信息维护到部门关系表里面
-	users := []model.User{}
-	users = append(users, user)
-	depart := new(model.Group)
-	filter := tools.H{"id": int(r.DepartmentId)}
-	err = isql.Group.Find(filter, depart)
-	if err != nil {
-		return "", tools.NewMySqlError(err)
-	}
-	err = isql.Group.AddUserToGroup(depart, users)
-	if err != nil {
-		return nil, tools.NewMySqlError(fmt.Errorf("向MySQL添加用户到分组关系失败：" + err.Error()))
+	isExistUser := false
+	for deptId, gdn := range gdns {
+		//根据选择的部门，添加到部门内
+		err = ildap.Group.AddUserToGroup(gdn, fmt.Sprintf("uid=%s,%s", user.Username, config.Conf.Ldap.LdapUserDN))
+		if err != nil {
+			return nil, err.Error()
+		}
+		if !isExistUser {
+			err = isql.User.Add(&user)
+			if err != nil {
+				return nil, tools.NewMySqlError(fmt.Errorf("向MySQL创建用户失败：" + err.Error()))
+			}
+			isExistUser = true
+		}
+		//根据部门分配，将用户和部门信息维护到部门关系表里面
+		users := []model.User{}
+		users = append(users, user)
+		depart := new(model.Group)
+		filter := tools.H{"id": deptId}
+		err = isql.Group.Find(filter, depart)
+		if err != nil {
+			return "", tools.NewMySqlError(err)
+		}
+		err = isql.Group.AddUserToGroup(depart, users)
+		if err != nil {
+			return nil, tools.NewMySqlError(fmt.Errorf("向MySQL添加用户到分组关系失败：" + err.Error()))
+		}
 	}
 	return nil, nil
 }
@@ -223,7 +233,7 @@ func (l UserLogic) Update(c *gin.Context, req interface{}) (data interface{}, rs
 	if err != nil {
 		return nil, tools.NewMySqlError(err)
 	}
-
+	deptIds := tools.SliceToString(r.DepartmentId, ",")
 	user := model.User{
 		Model:         oldData.Model,
 		Username:      r.Username,
@@ -238,7 +248,7 @@ func (l UserLogic) Update(c *gin.Context, req interface{}) (data interface{}, rs
 		Position:      r.Position,
 		Introduction:  r.Introduction,
 		Creator:       ctxUser.Username,
-		DepartmentId:  r.DepartmentId,
+		DepartmentId:  deptIds,
 		Source:        oldData.Source,
 		Roles:         roles,
 	}
@@ -279,11 +289,18 @@ func (l UserLogic) Update(c *gin.Context, req interface{}) (data interface{}, rs
 		return nil, tools.NewMySqlError(fmt.Errorf("在MySQL更新用户失败：" + err.Error()))
 	}
 	//判断部门信息是否有变化有变化则更新相应的数据库
-	if oldData.DepartmentId != r.DepartmentId {
+	oldDeptIds := tools.StringToSlice(oldData.DepartmentId, ",")
+	addDeptIds, removeDeptIds := tools.ArrUintCmp(oldDeptIds, r.DepartmentId)
+	for _, deptId := range removeDeptIds {
 		//从旧组中删除
-		err = l.RemoveUserToGroup(oldData.DepartmentId, []uint{r.ID})
+		err = l.RemoveUserToGroup(deptId, []uint{r.ID})
+		if err != nil {
+			return nil, err
+		}
+	}
+	for _, deptId := range addDeptIds {
 		//添加到新分组中
-		err = l.AddUserToGroup(r.DepartmentId, []uint{r.ID})
+		err = l.AddUserToGroup(deptId, []uint{r.ID})
 		if err != nil {
 			return nil, err
 		}

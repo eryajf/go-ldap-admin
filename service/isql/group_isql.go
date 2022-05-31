@@ -90,8 +90,8 @@ func (s GroupService) Update(dataObj *model.Group) error {
 }
 
 // Find 获取单个资源
-func (s GroupService) Find(filter map[string]interface{}, data *model.Group) error {
-	return common.DB.Where(filter).Preload("Users").First(&data).Error
+func (s GroupService) Find(filter map[string]interface{}, data *model.Group, args ...interface{}) error {
+	return common.DB.Where(filter, args).Preload("Users").First(&data).Error
 }
 
 // Exist 判断资源是否存在

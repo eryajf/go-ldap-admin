@@ -15,7 +15,7 @@ type UserAddReq struct {
 	Avatar        string `json:"avatar"`
 	Introduction  string `json:"introduction" validate:"min=0,max=255"`
 	Status        uint   `json:"status" validate:"oneof=1 2"`
-	DepartmentId  uint   `json:"departmentId" validate:"required"`
+	DepartmentId  []uint `json:"departmentId" validate:"required"`
 	Source        string `json:"source" validate:"min=0,max=20"`
 	RoleIds       []uint `json:"roleIds" validate:"required"`
 }
@@ -34,7 +34,7 @@ type UserUpdateReq struct {
 	Mobile        string `json:"mobile" validate:"checkMobile"`
 	Avatar        string `json:"avatar"`
 	Introduction  string `json:"introduction" validate:"min=0,max=255"`
-	DepartmentId  uint   `json:"departmentId" validate:"required"`
+	DepartmentId  []uint `json:"departmentId" validate:"required"`
 	Source        string `json:"source" validate:"min=0,max=20"`
 	RoleIds       []uint `json:"roleIds" validate:"required"`
 }
@@ -66,7 +66,7 @@ type UserListReq struct {
 	Mobile       string `json:"mobile" form:"mobile" `
 	Nickname     string `json:"nickname" form:"nickname"`
 	GivenName    string `json:"givenName" form:"givenName"`
-	DepartmentId uint   `json:"departmentId" form:"departmentId"`
+	DepartmentId []uint `json:"departmentId" form:"departmentId"`
 	Status       uint   `json:"status" form:"status" `
 	PageNum      int    `json:"pageNum" form:"pageNum"`
 	PageSize     int    `json:"pageSize" form:"pageSize"`
