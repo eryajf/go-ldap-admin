@@ -168,9 +168,16 @@ func (l MenuLogic) GetTree(c *gin.Context, req interface{}) (data interface{}, r
 		return nil, ReqAssertErr
 	}
 	_ = c
-
+	ctxUser, err := isql.User.GetCurrentLoginUser(c)
+	if err != nil {
+		return nil, tools.NewMySqlError(fmt.Errorf("获取当前登陆用户信息失败"))
+	}
+	roleIds := []uint{}
+	for _, role := range ctxUser.Roles {
+		roleIds = append(roleIds, role.ID)
+	}
 	var menus []*model.Menu
-	menus, err := isql.Menu.List()
+	menus, err = isql.Menu.ListUserMenus(roleIds)
 	if err != nil {
 		return nil, tools.NewMySqlError(fmt.Errorf("获取资源列表失败: " + err.Error()))
 	}

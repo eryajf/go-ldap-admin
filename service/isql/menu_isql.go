@@ -47,6 +47,12 @@ func (s MenuService) List() (menus []*model.Menu, err error) {
 	return menus, err
 }
 
+// List 获取数据列表
+func (s MenuService) ListUserMenus(roleIds []uint) (menus []*model.Menu, err error) {
+	err = common.DB.Where("id IN (select menu_id as id from role_menus where role_id IN (?))", roleIds).Order("sort").Find(&menus).Error
+	return menus, err
+}
+
 // 批量删除资源
 func (s MenuService) Delete(menuIds []uint) error {
 	return common.DB.Where("id IN (?)", menuIds).Select("Roles").Unscoped().Delete(&model.Menu{}).Error
