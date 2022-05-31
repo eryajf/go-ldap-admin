@@ -63,11 +63,7 @@ func (x GroupService) Update(g *model.Group, pdn string, oldGroupName, oldRemark
 
 // Delete 删除资源
 func (x GroupService) Delete(pdn string) error {
-	parentDn := "," + config.Conf.Ldap.LdapBaseDN
-	if pdn != "" {
-		parentDn = fmt.Sprintf("%s,%s", pdn, config.Conf.Ldap.LdapBaseDN)
-	}
-	del := ldap.NewDelRequest(parentDn, nil)
+	del := ldap.NewDelRequest(pdn, nil)
 	return common.LDAP.Del(del)
 }
 
