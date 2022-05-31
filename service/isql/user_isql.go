@@ -48,7 +48,7 @@ func (s UserService) List(req *request.UserListReq) ([]*model.User, error) {
 		db = db.Where("mobile LIKE ?", fmt.Sprintf("%%%s%%", mobile))
 	}
 	departmentId := req.DepartmentId
-	if departmentId > 0 {
+	if len(departmentId) > 0 {
 		db = db.Where("department_id = ?", departmentId)
 	}
 	givenName := strings.TrimSpace(req.GivenName)
@@ -83,7 +83,7 @@ func (s UserService) ListCount(req *request.UserListReq) (int64, error) {
 		db = db.Where("mobile LIKE ?", fmt.Sprintf("%%%s%%", mobile))
 	}
 	departmentId := req.DepartmentId
-	if departmentId > 0 {
+	if len(departmentId) > 0 {
 		db = db.Where("department_id = ?", departmentId)
 	}
 	givenName := strings.TrimSpace(req.GivenName)
