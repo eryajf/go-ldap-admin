@@ -122,15 +122,19 @@ func (l UserLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspEr
 	if err != nil {
 		return nil, tools.NewLdapError(fmt.Errorf("向LDAP创建用户失败：" + err.Error()))
 	}
+	isExistUser := false
 	for deptId, gdn := range gdns {
 		//根据选择的部门，添加到部门内
 		err = ildap.Group.AddUserToGroup(gdn, fmt.Sprintf("uid=%s,%s", user.Username, config.Conf.Ldap.LdapUserDN))
 		if err != nil {
 			return nil, err.Error()
 		}
-		err = isql.User.Add(&user)
-		if err != nil {
-			return nil, tools.NewMySqlError(fmt.Errorf("向MySQL创建用户失败：" + err.Error()))
+		if !isExistUser {
+			err = isql.User.Add(&user)
+			if err != nil {
+				return nil, tools.NewMySqlError(fmt.Errorf("向MySQL创建用户失败：" + err.Error()))
+			}
+			isExistUser = true
 		}
 		//根据部门分配，将用户和部门信息维护到部门关系表里面
 		users := []model.User{}
