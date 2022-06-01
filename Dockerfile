@@ -1,11 +1,13 @@
 FROM golang:1.17.10 AS builder
 
-ENV GOPROXY      https://goproxy.io
+# ENV GOPROXY      https://goproxy.io
 
 RUN mkdir /app
 ADD . /app/
 WORKDIR /app
-RUN go build -o go-ldap-admin .
+RUN sed -i 's@host: localhost@host: mysql@g'  config.yml \
+    && sed -i 's@localhost:389@openldap:389@g' config.yml \
+    && go build -o go-ldap-admin .
 
 FROM centos:centos7
 RUN mkdir /app

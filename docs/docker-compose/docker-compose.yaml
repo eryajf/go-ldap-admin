@@ -67,7 +67,7 @@ services:
       - go-ldap-admin
 
   go-ldap-admin-server:
-    image: docker.mirrors.sjtug.sjtu.edu.cn/eryajf/go-ldap-admin
+    image: docker.mirrors.sjtug.sjtu.edu.cn/eryajf/go-ldap-admin-server
     container_name: go-ldap-admin-server
     hostname: go-ldap-admin-server
     restart: always
@@ -75,7 +75,6 @@ services:
       TZ: Asia/Shanghai
       WAIT_HOSTS: mysql:3306, openldap:389
     ports:
-      - 8090:80
       - 8888:8888
     depends_on:
       - mysql

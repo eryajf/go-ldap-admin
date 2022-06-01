@@ -38,7 +38,7 @@ mysql:
   host: localhost
   # 端口
   port: 3306
-  # 连接字56参数
+  # 连接字符串参数
   query: parseTime=True&loc=Local&timeout=10000ms
   # 是否打印日志
   log-mode: true
