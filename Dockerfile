@@ -15,4 +15,5 @@ WORKDIR /app
 COPY --from=builder /app/wait .
 COPY --from=builder /app/ .
 RUN chmod +x wait go-ldap-admin && yum -y install vim net-tools telnet wget curl && yum clean all
+
 CMD ./wait && ./go-ldap-admin

@@ -9,7 +9,7 @@ on:
       - main
 
 # Allows you to run this workflow manually from the Actions tab
-# 可以手动触发
+  # 可以手动触发
   workflow_dispatch:
     inputs:
       logLevel:
@@ -51,11 +51,11 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-# 所需要的体系结构，可以在 Available platforms 步骤中获取所有的可用架构
+          # 所需要的体系结构，可以在 Available platforms 步骤中获取所有的可用架构
           platforms: linux/amd64,linux/arm64/v8
-# 镜像推送时间
+          # 镜像推送时间
           push: ${{ github.event_name != 'pull_request' }}
-# 给清单打上多个标签
+          # 给清单打上多个标签
           tags: |
             eryajf/go-ldap-admin-server:${{ steps.date.outputs.today }}
             eryajf/go-ldap-admin-server:latest

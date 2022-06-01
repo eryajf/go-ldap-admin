@@ -84,3 +84,19 @@ services:
       - openldap:go-ldap-admin-openldap # ldap容器的 service_name:container_name
     networks:
       - go-ldap-admin
+
+  go-ldap-admin-ui:
+    image: docker.mirrors.sjtug.sjtu.edu.cn/eryajf/go-ldap-admin-ui
+    container_name: go-ldap-admin-ui
+    hostname: go-ldap-admin-ui
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+    ports:
+      - 8090:80
+    depends_on:
+      - go-ldap-admin-server
+    links:
+      - go-ldap-admin-server:go-ldap-admin-server
+    networks:
+      - go-ldap-admin
