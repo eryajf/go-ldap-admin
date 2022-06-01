@@ -22,6 +22,7 @@
 - [生产部署](#%E7%94%9F%E4%BA%A7%E9%83%A8%E7%BD%B2)
 - [感谢](#%E6%84%9F%E8%B0%A2)
 - [另外](#%E5%8F%A6%E5%A4%96)
+- [贡献者](#%E8%B4%A1%E7%8C%AE%E8%80%85)
 - [加群](#%E5%8A%A0%E7%BE%A4)
 - [为什么有这个项目](#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE)
 
@@ -205,6 +206,29 @@ server {
 - 如果觉得项目不错，麻烦动动小手点个⭐️star⭐️!
 - 如果你还有其他想法或者需求，欢迎在issue中交流！
 - 程序还有很多bug，欢迎各位朋友一起协同共建！
+
+## 贡献者
+
+<!-- readme: collaborators,contributors -start -->
+<table>
+<tr>
+    <td align="center">
+        <a href="https://github.com/eryajf">
+            <img src="https://avatars.githubusercontent.com/u/33259379?v=4" width="100;" alt="eryajf"/>
+            <br />
+            <sub><b>二丫讲梵</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/xinyuandd">
+            <img src="https://avatars.githubusercontent.com/u/3397848?v=4" width="100;" alt="xinyuandd"/>
+            <br />
+            <sub><b>Xinyuandd</b></sub>
+        </a>
+    </td></tr>
+</table>
+<!-- readme: collaborators,contributors -end -->
+
 
 ## 加群
 
