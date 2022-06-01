@@ -1,5 +1,7 @@
-on: push
 name: Automatic Generation TOC
+
+on: push
+
 jobs:
   generateTOC:
     name: TOC Generator
