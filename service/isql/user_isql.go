@@ -135,7 +135,9 @@ func (s UserService) Update(user *model.User) error {
 
 	// 如果更新成功就更新用户信息缓存
 	if err == nil {
-		userInfoCache.Set(user.Username, *user, cache.DefaultExpiration)
+		userDb := &model.User{}
+		common.DB.Where("username = ?", user.Username).Preload("Roles").First(&userDb)
+		userInfoCache.Set(user.Username, *userDb, cache.DefaultExpiration)
 	}
 	return err
 }
