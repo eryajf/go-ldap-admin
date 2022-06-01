@@ -17,7 +17,7 @@ require (
 	github.com/robfig/cron/v3 v3.0.0
 	github.com/spf13/viper v1.7.1
 	github.com/thoas/go-funk v0.7.0
-	github.com/zhaoyunxing92/dingtalk/v2 v2.0.6
+	github.com/zhaoyunxing92/dingtalk/v2 v2.0.7-0.20220601083444-173c10c3f835
 	go.uber.org/zap v1.19.1
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
