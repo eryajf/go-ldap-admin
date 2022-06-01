@@ -223,7 +223,7 @@ server {
         <a href="https://github.com/xinyuandd">
             <img src="https://avatars.githubusercontent.com/u/3397848?v=4" width="100;" alt="xinyuandd"/>
             <br />
-            <sub><b>xinyuandd</b></sub>
+            <sub><b>Xinyuandd</b></sub>
         </a>
     </td></tr>
 </table>
