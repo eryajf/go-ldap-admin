@@ -206,6 +206,12 @@ server {
 - 如果你还有其他想法或者需求，欢迎在issue中交流！
 - 程序还有很多bug，欢迎各位朋友一起协同共建！
 
+## 贡献者
+
+<!-- readme: collaborators,contributors -start -->
+<!-- readme: collaborators,contributors -end -->
+
+
 ## 加群
 
 如果你对go-ldap-admin项目感兴趣，希望与大家一起交流，欢迎添加微信群：
