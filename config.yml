@@ -92,3 +92,12 @@ ldap:
   ldap-group-dn: "ou=group,dc=eryajf,dc=net"
   ldap-group-name-modify: false
   ldap-user-name-modify: false
+dingtalk:
+  ding-talk-app-key: "xxxxxx"
+  ding-talk-app-secret: "xxxxxxxxxxxxxxxxxxxxxxxxxxx-vhIGL"
+  ding-talk-agent-id: "12121212"
+  ding-talk-root-ou-name: "钉钉首个部门的名称"
+  #为了方便数据库存储，防止第三方id重复，故而增加一个前缀（用于用户表和分组表中第三方id存储,加上此处配置的source字段进行区分来源，判断唯一）。长度不超过10.
+  #因为分组表不可能成为性能瓶颈，故而不再拆分到新的关系表去维护第三方信息，用户表设计同理
+  ding-talk-id-source: "dingtalk"
+  ding-talk-user-init-password: "dingding@123"

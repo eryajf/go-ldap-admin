@@ -21,4 +21,6 @@ type User struct {
 	Source        string  `gorm:"type:varchar(50);comment:'用户来源：dingTalk、weCom、ldap、platform'" json:"source"` // 来源
 	DepartmentId  string  `gorm:"type:varchar(100);not null;comment:'部门id'" json:"departmentId"`              // 部门id
 	Roles         []*Role `gorm:"many2many:user_roles" json:"roles"`                                          // 角色
+	SourceUserId  string  `gorm:"type:varchar(100);not null;comment:'第三方用户id'" json:"sourceUserId"`           // 第三方用户id
+	SourceUnionId string  `gorm:"type:varchar(100);not null;comment:'第三方唯一unionId'" json:"sourceUnionId"`     // 第三方唯一unionId
 }

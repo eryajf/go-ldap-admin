@@ -25,6 +25,7 @@ func InitGroupRoutes(r *gin.RouterGroup, authMiddleware *jwt.GinJWTMiddleware) g
 
 		group.GET("/useringroup", controller.Group.UserInGroup)
 		group.GET("/usernoingroup", controller.Group.UserNoInGroup)
+		group.POST("/syncDingTalkDepts", controller.Group.SyncDingTalkDepts)
 	}
 
 	return r

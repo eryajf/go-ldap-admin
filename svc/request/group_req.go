@@ -8,6 +8,16 @@ type GroupListReq struct {
 	PageSize  int    `json:"pageSize" form:"pageSize"`
 }
 
+// GroupListAllReq 获取资源列表结构体，不分页
+type GroupListAllReq struct {
+	GroupName          string `json:"groupName" form:"groupName"`
+	GroupType          string `json:"groupType" form:"groupType"`
+	Remark             string `json:"remark" form:"remark"`
+	Source             string `json:"source" form:"source"`
+	SourceDeptId       string `json:"sourceDeptId"`
+	SourceDeptParentId string `json:"SourceDeptParentId"`
+}
+
 // GroupAddReq 添加资源结构体
 type GroupAddReq struct {
 	GroupType string `json:"groupType" validate:"required,min=1,max=20"`
@@ -15,6 +25,19 @@ type GroupAddReq struct {
 	//父级Id 大于等于0 必填
 	ParentId uint   `json:"parentId" validate:"omitempty,min=0"`
 	Remark   string `json:"remark" validate:"min=0,max=100"` // 分组的中文描述
+}
+
+// DingTalkGroupAddReq 添加钉钉资源结构体
+type DingGroupAddReq struct {
+	GroupType string `json:"groupType" validate:"required,min=1,max=20"`
+	GroupName string `json:"groupName" validate:"required,min=1,max=20"`
+	//父级Id 大于等于0 必填
+	ParentId           uint   `json:"parentId" validate:"omitempty,min=0"`
+	Remark             string `json:"remark" validate:"min=0,max=100"` // 分组的中文描述
+	SourceDeptId       string `json:"sourceDeptId"`
+	Source             string `json:"source"`
+	SourceDeptParentId string `json:"SourceDeptParentId"`
+	SourceUserNum      int    `json:"sourceUserNum"`
 }
 
 // GroupUpdateReq 更新资源结构体
@@ -57,4 +80,8 @@ type UserInGroupReq struct {
 type UserNoInGroupReq struct {
 	GroupID  uint   `json:"groupId" form:"groupId" validate:"required"`
 	Nickname string `json:"nickname" form:"nickname"`
+}
+
+// SyncDingTalkDeptsReq 同步钉钉部门信息
+type SyncDingTalkDeptsReq struct {
 }
