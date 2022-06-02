@@ -335,15 +335,15 @@ func (d DingTalkLogic) AddUser(r *request.DingUserAddReq) (data *model.User, rsp
 			isExist = true
 		}
 	}
-	if !isExist {
-		if r.Mail != "" && isql.User.Exist(tools.H{"mail": r.Mail}) {
-			err := isql.User.Find(tools.H{"mail": r.Mail}, oldData)
-			if err != nil {
-				return nil, errors.New(fmt.Sprintf("AddUser根据钉钉用户mail获取用户失败：%s", err.Error()))
-			}
-			isExist = true
-		}
-	}
+	//if !isExist {
+	//	if r.Mail != "" && isql.User.Exist(tools.H{"mail": r.Mail}) {
+	//		err := isql.User.Find(tools.H{"mail": r.Mail}, oldData)
+	//		if err != nil {
+	//			return nil, errors.New(fmt.Sprintf("AddUser根据钉钉用户mail获取用户失败：%s", err.Error()))
+	//		}
+	//		isExist = true
+	//	}
+	//}
 	if !isExist {
 		if isql.User.Exist(tools.H{"job_number": r.JobNumber}) {
 			err := isql.User.Find(tools.H{"job_number": r.JobNumber}, oldData)
