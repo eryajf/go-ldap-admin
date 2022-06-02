@@ -1,9 +1,9 @@
+name: Generate a list of contributors
+
 on:
   push:
     branches:
       - main
-
-name: Generate a list of contributors
 
 jobs:
   contrib-readme-en-job:

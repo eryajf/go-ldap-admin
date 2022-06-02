@@ -56,7 +56,7 @@
 
 你可以通过docker-compose在本地快速拉起进行体验。
 
-快速拉起的容器包括：MySQL-5.7，openLDAP-1.4.0，phpldapadmin-0.9.0，go-ldap-admin。
+快速拉起的容器包括：MySQL-5.7，openLDAP-1.4.0，phpldapadmin-0.9.0，go-ldap-admin-server，go-ldap-admin-ui。
 
 服务端口映射如下：
 
@@ -77,7 +77,8 @@ $ cd docs/docker-compose
 $ docker-compose up -d
 ```
 
-当看到容器都正常运行之后，可以在本地访问：http://localhost:8090，用户名/密码：admin/123456
+当看到容器都正常运行之后，可以在本地进行访问：http://localhost:8090，用户名/密码：admin/123456
+如果想要访问PhpLdapAdmin，则可访问：http://localhost:8091，用户名/密码：cn=admin,dc=eryajf,dc=net/123456
 
 `登录页：`
 
@@ -139,7 +140,7 @@ $ cd go-ldap-admin
 # 文件路径 config.yml
 $ vim config.yml
 
-# 根据自己本地的情况，调整数据库以及openLDAP的配置信息。
+# 根据自己本地的情况，调整数据库以及openLDAP等配置信息。
 ```
 
 ### 启动服务
@@ -153,7 +154,8 @@ $ make run
 
 # 启动前端
 $ cd go-ldap-admin-ui
-$ yarn
+$ git config --global url."https://".insteadOf git://
+$ npm install --registry=http://registry.npmmirror.com
 $ yarn dev
 ```
 
@@ -166,7 +168,7 @@ $ yarn dev
 ```nginx
 server {
     listen 80;
-    server_name go-ldap-admin.eryajf.net;
+    server_name demo-go-ldap-admin.eryajf.net;
 
     root /data/www/web/dist;
 
@@ -232,11 +234,7 @@ server {
 
 ## 加群
 
-如果你对go-ldap-admin项目感兴趣，希望与大家一起交流，欢迎添加微信群：
-
-![](http://t.eryajf.net/imgs/2022/05/4da1e4fe7f712323.jpeg)
-
-如果二维码过期，可通过搜索 eryajf 添加我的微信，备注 ldap 拉你进群。
+可通过搜索 eryajf 添加我的微信，备注 ldap 拉你进群。
 
 ## 为什么有这个项目
 
