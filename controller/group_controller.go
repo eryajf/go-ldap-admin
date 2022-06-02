@@ -80,3 +80,11 @@ func (m *GroupController) RemoveUser(c *gin.Context) {
 		return logic.Group.RemoveUser(c, req)
 	})
 }
+
+//同步钉钉部门信息
+func (m *GroupController) SyncDingTalkDepts(c *gin.Context) {
+	req := new(request.SyncDingTalkDeptsReq)
+	Run(c, req, func() (interface{}, interface{}) {
+		return logic.DingTalk.DsyncDingTalkDepts(c, req)
+	})
+}

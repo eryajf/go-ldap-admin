@@ -31,8 +31,8 @@ func (x UserService) Add(user *model.User) error {
 	}
 	add := ldap.NewAddRequest(fmt.Sprintf("uid=%s,%s", user.Username, config.Conf.Ldap.LdapUserDN), nil)
 	add.Attribute("objectClass", []string{"inetOrgPerson"})
-	add.Attribute("cn", []string{user.Nickname})
-	add.Attribute("sn", []string{user.Username})
+	add.Attribute("cn", []string{user.Username})
+	add.Attribute("sn", []string{user.Nickname})
 	add.Attribute("businessCategory", []string{user.Departments})
 	add.Attribute("departmentNumber", []string{user.Position})
 	add.Attribute("description", []string{user.Introduction})

@@ -24,6 +24,7 @@ type config struct {
 	RateLimit *RateLimitConfig `mapstructure:"rate-limit" json:"rateLimit"`
 	Ldap      *LdapConfig      `mapstructure:"ldap" json:"ldap"`
 	Email     *EmailConfig     `mapstructure:"email" json:"email"`
+	DingTalk  *DingTalkConfig  `mapstructure:"dingtalk" json:"dingTalk"`
 }
 
 // 设置读取配置信息
@@ -143,4 +144,13 @@ type EmailConfig struct {
 	User string `mapstructure:"user" json:"user"`
 	Pass string `mapstructure:"pass" json:"pass"`
 	From string `mapstructure:"from" json:"from"`
+}
+
+type DingTalkConfig struct {
+	DingTalkAppKey           string `mapstructure:"ding-talk-app-key" json:"dingTalkAppKey"`
+	DingTalkAppSecret        string `mapstructure:"ding-talk-app-secret" json:"dingTalkAppSecret"`
+	DingTalkAgentId          string `mapstructure:"ding-talk-agent-id" json:"dingTalkAgentId"`
+	DingTalkRootOuName       string `mapstructure:"ding-talk-root-ou-name" json:"dingTalkRootOuName"`
+	DingTalkIdSource         string `mapstructure:"ding-talk-id-source" json:"dingTalkIdSource"`
+	DingTalkUserInitPassword string `mapstructure:"ding-talk-user-init-password" json:"dingTalkUserInitPassword"`
 }

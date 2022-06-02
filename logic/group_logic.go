@@ -37,11 +37,14 @@ func (l GroupLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspE
 	}
 
 	group := model.Group{
-		GroupType: r.GroupType,
-		ParentId:  r.ParentId,
-		GroupName: r.GroupName,
-		Remark:    r.Remark,
-		Creator:   ctxUser.Username,
+		GroupType:          r.GroupType,
+		ParentId:           r.ParentId,
+		GroupName:          r.GroupName,
+		Remark:             r.Remark,
+		Creator:            ctxUser.Username,
+		Source:             "platform", //默认是平台添加
+		SourceDeptId:       "platform_0",
+		SourceDeptParentId: "platform_0",
 	}
 	pdn := ""
 	if group.ParentId > 0 {
@@ -114,7 +117,7 @@ func (l GroupLogic) GetTree(c *gin.Context, req interface{}) (data interface{}, 
 	_ = c
 
 	var groups []*model.Group
-	groups, err := isql.Group.List(r)
+	groups, err := isql.Group.ListTree(r)
 	if err != nil {
 		return nil, tools.NewMySqlError(fmt.Errorf("获取资源列表失败: " + err.Error()))
 	}
@@ -219,6 +222,7 @@ func (l GroupLogic) Delete(c *gin.Context, req interface{}) (data interface{}, r
 		return nil, tools.NewMySqlError(fmt.Errorf("删除接口失败: %s", err.Error()))
 	}
 	// TODO: 删除用户组关系
+
 	return nil, nil
 }
 

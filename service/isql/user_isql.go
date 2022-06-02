@@ -232,7 +232,7 @@ func (s UserService) ChangePwd(username string, hashNewPasswd string) error {
 		} else {
 			// 没有缓存就获取用户信息缓存
 			var user model.User
-			common.DB.Where("username = ?", username).First(&user)
+			common.DB.Where("username = ?", username).Preload("Roles").First(&user)
 			userInfoCache.Set(username, user, cache.DefaultExpiration)
 		}
 	}

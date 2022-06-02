@@ -64,3 +64,11 @@ func (uc UserController) GetUserInfo(c *gin.Context) {
 		return logic.User.GetUserInfo(c, req)
 	})
 }
+
+// 同步钉钉用户信息
+func (uc UserController) SyncDingTalkUsers(c *gin.Context) {
+	req := new(request.SyncDingUserReq)
+	Run(c, req, func() (interface{}, interface{}) {
+		return logic.DingTalk.SyncDingTalkUsers(c, req)
+	})
+}
