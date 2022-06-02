@@ -10,6 +10,7 @@ import (
 	"github.com/eryajf/go-ldap-admin/service/isql"
 	"github.com/eryajf/go-ldap-admin/svc/request"
 	"github.com/gin-gonic/gin"
+	"github.com/mozillazg/go-pinyin"
 	"github.com/zhaoyunxing92/dingtalk/v2"
 	dingreq "github.com/zhaoyunxing92/dingtalk/v2/request"
 	"gorm.io/gorm"
@@ -158,9 +159,16 @@ func (d DingTalkLogic) AddDeptUser(client *dingtalk.DingTalk, dept *model.Group,
 		// 获取人员信息
 		fmt.Println("钉钉人员详情：", detail)
 		userName := detail.Mobile
-		if detail.OrgEmail != "" {
+		if detail.Name != "" {
+			name := pinyin.LazyConvert(detail.Name, nil)
+			userName = strings.Join(name, "")
+		}
+		if userName == "" && detail.OrgEmail != "" {
 			emailstr := strings.Split(detail.OrgEmail, "@")
 			userName = emailstr[0]
+		}
+		if detail.JobNumber == "" {
+			detail.JobNumber = userName
 		}
 		//钉钉部门ids,转换为内部部门id
 		sourceDeptIds := []string{}
@@ -317,6 +325,16 @@ func (d DingTalkLogic) UpdateDept(r *request.DingGroupAddReq) error {
 
 // AddUser 添加用户数据
 func (d DingTalkLogic) AddUser(r *request.DingUserAddReq) (data *model.User, rspError error) {
+	// 兼容处理钉钉异常人员信息，若username，mail，mobile都没有的直接跳过
+	if r.Username == "" && r.Mail == "" && r.Mobile == "" {
+		emptyData := new(model.User)
+		emptyData.Introduction = fmt.Sprintf("此用户：%s，username，mail，mobile皆为空，跳过入库，请手动置后台添加", r.Nickname)
+		emptyData.Nickname = r.Nickname
+		emptyData.SourceUserId = r.SourceUserId
+		emptyData.Source = r.Source
+		emptyData.GivenName = r.GivenName
+		return emptyData, nil
+	}
 	isExist := false
 	oldData := new(model.User)
 	if isql.User.Exist(tools.H{"source_user_id": r.SourceUserId}) {
@@ -335,15 +353,15 @@ func (d DingTalkLogic) AddUser(r *request.DingUserAddReq) (data *model.User, rsp
 			isExist = true
 		}
 	}
-	if !isExist {
-		if r.Mail != "" && isql.User.Exist(tools.H{"mail": r.Mail}) {
-			err := isql.User.Find(tools.H{"mail": r.Mail}, oldData)
-			if err != nil {
-				return nil, errors.New(fmt.Sprintf("AddUser根据钉钉用户mail获取用户失败：%s", err.Error()))
-			}
-			isExist = true
-		}
-	}
+	//if !isExist {
+	//	if r.Mail != "" && isql.User.Exist(tools.H{"mail": r.Mail}) {
+	//		err := isql.User.Find(tools.H{"mail": r.Mail}, oldData)
+	//		if err != nil {
+	//			return nil, errors.New(fmt.Sprintf("AddUser根据钉钉用户mail获取用户失败：%s", err.Error()))
+	//		}
+	//		isExist = true
+	//	}
+	//}
 	if !isExist {
 		if isql.User.Exist(tools.H{"job_number": r.JobNumber}) {
 			err := isql.User.Find(tools.H{"job_number": r.JobNumber}, oldData)

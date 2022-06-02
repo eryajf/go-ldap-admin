@@ -153,4 +153,5 @@ type DingTalkConfig struct {
 	DingTalkRootOuName       string `mapstructure:"ding-talk-root-ou-name" json:"dingTalkRootOuName"`
 	DingTalkIdSource         string `mapstructure:"ding-talk-id-source" json:"dingTalkIdSource"`
 	DingTalkUserInitPassword string `mapstructure:"ding-talk-user-init-password" json:"dingTalkUserInitPassword"`
+	DingTalkEnableSync       bool   `mapstructure:"ding-talk-enable-sync" json:"dingTalkEnableSync"`
 }
