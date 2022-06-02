@@ -10,6 +10,7 @@ import (
 	"github.com/eryajf/go-ldap-admin/service/isql"
 	"github.com/eryajf/go-ldap-admin/svc/request"
 	"github.com/gin-gonic/gin"
+	"github.com/mozillazg/go-pinyin"
 	"github.com/zhaoyunxing92/dingtalk/v2"
 	dingreq "github.com/zhaoyunxing92/dingtalk/v2/request"
 	"gorm.io/gorm"
@@ -158,7 +159,11 @@ func (d DingTalkLogic) AddDeptUser(client *dingtalk.DingTalk, dept *model.Group,
 		// 获取人员信息
 		fmt.Println("钉钉人员详情：", detail)
 		userName := detail.Mobile
-		if detail.OrgEmail != "" {
+		if detail.Name != "" {
+			name := pinyin.LazyConvert(detail.Name, nil)
+			userName = strings.Join(name, "")
+		}
+		if userName == "" && detail.OrgEmail != "" {
 			emailstr := strings.Split(detail.OrgEmail, "@")
 			userName = emailstr[0]
 		}
