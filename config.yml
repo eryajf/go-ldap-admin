@@ -104,3 +104,5 @@ dingtalk:
   #因为分组表不可能成为性能瓶颈，故而不再拆分到新的关系表去维护第三方信息，用户表设计同理
   ding-talk-id-source: "dingtalk"
   ding-talk-user-init-password: "dingding@123"
+  # 是否开启定时同步钉钉的任务
+  ding-talk-enable-sync: false

@@ -162,6 +162,9 @@ func (d DingTalkLogic) AddDeptUser(client *dingtalk.DingTalk, dept *model.Group,
 			emailstr := strings.Split(detail.OrgEmail, "@")
 			userName = emailstr[0]
 		}
+		if detail.JobNumber == "" {
+			detail.JobNumber = userName
+		}
 		//钉钉部门ids,转换为内部部门id
 		sourceDeptIds := []string{}
 		for _, deptId := range detail.DeptIds {
@@ -317,6 +320,16 @@ func (d DingTalkLogic) UpdateDept(r *request.DingGroupAddReq) error {
 
 // AddUser 添加用户数据
 func (d DingTalkLogic) AddUser(r *request.DingUserAddReq) (data *model.User, rspError error) {
+	// 兼容处理钉钉异常人员信息，若username，mail，mobile都没有的直接跳过
+	if r.Username == "" && r.Mail == "" && r.Mobile == "" {
+		emptyData := new(model.User)
+		emptyData.Introduction = fmt.Sprintf("此用户：%s，username，mail，mobile皆为空，跳过入库，请手动置后台添加", r.Nickname)
+		emptyData.Nickname = r.Nickname
+		emptyData.SourceUserId = r.SourceUserId
+		emptyData.Source = r.Source
+		emptyData.GivenName = r.GivenName
+		return emptyData, nil
+	}
 	isExist := false
 	oldData := new(model.User)
 	if isql.User.Exist(tools.H{"source_user_id": r.SourceUserId}) {
