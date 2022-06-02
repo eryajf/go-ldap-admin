@@ -34,6 +34,59 @@ func (s GroupService) List(req *request.GroupListReq) ([]*model.Group, error) {
 	return list, err
 }
 
+// List 获取数据列表
+func (s GroupService) ListTree(req *request.GroupListReq) ([]*model.Group, error) {
+	var list []*model.Group
+	db := common.DB.Model(&model.Group{}).Order("created_at DESC")
+
+	groupName := strings.TrimSpace(req.GroupName)
+	if groupName != "" {
+		db = db.Where("group_name LIKE ?", fmt.Sprintf("%%%s%%", groupName))
+	}
+	groupRemark := strings.TrimSpace(req.Remark)
+	if groupRemark != "" {
+		db = db.Where("remark LIKE ?", fmt.Sprintf("%%%s%%", groupRemark))
+	}
+
+	pageReq := tools.NewPageOption(req.PageNum, req.PageSize)
+	err := db.Offset(pageReq.PageNum).Limit(pageReq.PageSize).Find(&list).Error
+	return list, err
+}
+
+// List 获取数据列表
+func (s GroupService) ListAll(req *request.GroupListAllReq) ([]*model.Group, error) {
+	var list []*model.Group
+	db := common.DB.Model(&model.Group{}).Order("created_at DESC")
+
+	groupName := strings.TrimSpace(req.GroupName)
+	if groupName != "" {
+		db = db.Where("group_name LIKE ?", fmt.Sprintf("%%%s%%", groupName))
+	}
+	groupRemark := strings.TrimSpace(req.Remark)
+	if groupRemark != "" {
+		db = db.Where("remark LIKE ?", fmt.Sprintf("%%%s%%", groupRemark))
+	}
+	groupType := strings.TrimSpace(req.GroupType)
+	if groupType != "" {
+		db = db.Where("group_type = ?", groupType)
+	}
+	source := strings.TrimSpace(req.Source)
+	if source != "" {
+		db = db.Where("source = ?", source)
+	}
+	sourceDeptId := strings.TrimSpace(req.SourceDeptId)
+	if sourceDeptId != "" {
+		db = db.Where("source_dept_id = ?", sourceDeptId)
+	}
+	sourceDeptParentId := strings.TrimSpace(req.SourceDeptParentId)
+	if sourceDeptParentId != "" {
+		db = db.Where("source_dept_parent_id = ?", sourceDeptParentId)
+	}
+
+	err := db.Find(&list).Error
+	return list, err
+}
+
 // 拼装dn信息
 func (s GroupService) GetGroupDn(groupId uint, oldDn string) (dn string, e error) {
 	depart := new(model.Group)
@@ -120,4 +173,18 @@ func (s GroupService) AddUserToGroup(group *model.Group, users []model.User) err
 // RemoveUserFromGroup 将用户从分组移除
 func (s GroupService) RemoveUserFromGroup(group *model.Group, users []model.User) error {
 	return common.DB.Model(&group).Association("Users").Delete(users)
+}
+
+// DingTalkDeptIdsToGroupIds 将钉钉部门id转换为分组id
+func (s GroupService) DingTalkDeptIdsToGroupIds(dingTalkIds []string) (groupIds []uint, err error) {
+	tempGroups := []model.Group{}
+	err = common.DB.Model(&model.Group{}).Where("source_dept_id IN (?)", dingTalkIds).Find(&tempGroups).Error
+	if err != nil {
+		return nil, err
+	}
+	tempGroupIds := []uint{}
+	for _, g := range tempGroups {
+		tempGroupIds = append(tempGroupIds, g.ID)
+	}
+	return tempGroupIds, nil
 }

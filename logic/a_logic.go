@@ -15,5 +15,6 @@ var (
 	Role         = &RoleLogic{}
 	Menu         = &MenuLogic{}
 	OperationLog = &OperationLogLogic{}
+	DingTalk     = &DingTalkLogic{}
 	Base         = &BaseLogic{}
 )
