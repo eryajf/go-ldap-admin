@@ -14,6 +14,7 @@ import (
 	"github.com/zhaoyunxing92/dingtalk/v2"
 	dingreq "github.com/zhaoyunxing92/dingtalk/v2/request"
 	"gorm.io/gorm"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -158,15 +159,19 @@ func (d DingTalkLogic) AddDeptUser(client *dingtalk.DingTalk, dept *model.Group,
 		//	}
 		// 获取人员信息
 		fmt.Println("钉钉人员详情：", detail)
-		userName := detail.Mobile
-		if detail.Name != "" {
-			name := pinyin.LazyConvert(detail.Name, nil)
-			userName = strings.Join(name, "")
-		}
-		if userName == "" && detail.OrgEmail != "" {
+		userName := ""
+		if detail.OrgEmail != "" {
 			emailstr := strings.Split(detail.OrgEmail, "@")
 			userName = emailstr[0]
 		}
+		if userName == "" && detail.Name != "" {
+			name := pinyin.LazyConvert(detail.Name, nil)
+			userName = strings.Join(name, "")
+		}
+		if userName == "" && detail.Mobile != "" {
+			userName = detail.Mobile
+		}
+
 		if detail.JobNumber == "" {
 			detail.JobNumber = userName
 		}
@@ -335,6 +340,7 @@ func (d DingTalkLogic) AddUser(r *request.DingUserAddReq) (data *model.User, rsp
 		emptyData.GivenName = r.GivenName
 		return emptyData, nil
 	}
+
 	isExist := false
 	oldData := new(model.User)
 	if isql.User.Exist(tools.H{"source_user_id": r.SourceUserId}) {
@@ -372,15 +378,6 @@ func (d DingTalkLogic) AddUser(r *request.DingUserAddReq) (data *model.User, rsp
 		}
 	}
 	if !isExist {
-		if isql.User.Exist(tools.H{"username": r.Username}) {
-			err := isql.User.Find(tools.H{"username": r.Username}, oldData)
-			if err != nil {
-				return nil, errors.New(fmt.Sprintf("AddUser根据钉钉用户username获取用户失败：%s", err.Error()))
-			}
-			isExist = true
-		}
-	}
-	if !isExist {
 		if isql.User.Exist(tools.H{"mobile": r.Mobile}) {
 			err := isql.User.Find(tools.H{"mobile": r.Mobile}, oldData)
 			if err != nil {
@@ -389,7 +386,31 @@ func (d DingTalkLogic) AddUser(r *request.DingUserAddReq) (data *model.User, rsp
 			isExist = true
 		}
 	}
+	if !isExist {
+		//组装用户名
+		//先根据钉钉唯一id获取，查看数据库中是否存在
+		//不存在，则根据用户名 like 用户名获取尾号最大的账号
+		//重新设定用户名
+		userData := new(model.User)
+		err := isql.User.FindTheSameUserName(r.Username, userData)
+		if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
+		} else {
+			// 找到重名用户，
+			re := regexp.MustCompile("[0-9]+")
+			num := re.FindString(userData.Username)
+			n := 1
+			if num != "" {
+				m, err := strconv.Atoi(num)
+				if err != nil {
+					return
+				}
+				n = m + 1
+			}
+			r.Username = fmt.Sprintf("%s%d", r.Username, n)
+		}
+	}
 	if isExist {
+		r.Username = oldData.Username
 		user, err := d.UpdateUser(r, oldData)
 		if err != nil {
 			return nil, errors.New(fmt.Sprintf("AddUser用户已存在，更新用户失败：%s", err.Error()))
