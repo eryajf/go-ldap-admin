@@ -58,9 +58,9 @@ func (d *DingTalkLogic) GetSubDepts(client *dingtalk.DingTalk, req *dingreq.Dept
 	fmt.Println("GetSubDepts获取到的钉钉部门列表：", depts)
 	// 遍历并处理当前部门信息
 	for _, dept := range depts.Depts {
-		//先判断分组类型
+		//先判断分组类型,默认为cn，方便应对钉钉动态调整原本没有成员的部门加入成员后，导致我们无法增加
 		localDept := request.DingGroupAddReq{
-			GroupType:          "ou",
+			GroupType:          "cn",
 			ParentId:           pgId,
 			GroupName:          dept.Name,
 			Remark:             dept.Name,
@@ -70,17 +70,17 @@ func (d *DingTalkLogic) GetSubDepts(client *dingtalk.DingTalk, req *dingreq.Dept
 			SourceUserNum:      0,
 		}
 		//获取钉钉方，若部门存在人员信息，则设置为cn类型
-		reqTemp := &dingreq.DeptUserId{}
-		reqTemp.DeptId = dept.Id
-		repTemp, err := client.GetDeptUserIds(reqTemp)
-		if err != nil {
-			return errors.New(fmt.Sprintf("GetSubDepts获取部门用户Id列表失败：%s", err.Error()))
-		}
-		fmt.Println("钉钉部门人员列表：", repTemp)
-		if len(repTemp.UserIds) > 0 {
-			localDept.GroupType = "cn"
-			localDept.SourceUserNum = len(repTemp.UserIds)
-		}
+		//reqTemp := &dingreq.DeptUserId{}
+		//reqTemp.DeptId = dept.Id
+		//repTemp, err := client.GetDeptUserIds(reqTemp)
+		//if err != nil {
+		//	return errors.New(fmt.Sprintf("GetSubDepts获取部门用户Id列表失败：%s", err.Error()))
+		//}
+		//fmt.Println("钉钉部门人员列表：", repTemp)
+		//if len(repTemp.UserIds) > 0 {
+		//	localDept.GroupType = "cn"
+		//	localDept.SourceUserNum = len(repTemp.UserIds)
+		//}
 		// 处理部门入库
 		deptTemp, err := d.AddDept(&localDept)
 		if err != nil {
