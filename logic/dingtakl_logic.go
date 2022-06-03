@@ -14,6 +14,7 @@ import (
 	"github.com/zhaoyunxing92/dingtalk/v2"
 	dingreq "github.com/zhaoyunxing92/dingtalk/v2/request"
 	"gorm.io/gorm"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -58,9 +59,9 @@ func (d *DingTalkLogic) GetSubDepts(client *dingtalk.DingTalk, req *dingreq.Dept
 	fmt.Println("GetSubDepts获取到的钉钉部门列表：", depts)
 	// 遍历并处理当前部门信息
 	for _, dept := range depts.Depts {
-		//先判断分组类型
+		//先判断分组类型,默认为cn，方便应对钉钉动态调整原本没有成员的部门加入成员后，导致我们无法增加
 		localDept := request.DingGroupAddReq{
-			GroupType:          "ou",
+			GroupType:          "cn",
 			ParentId:           pgId,
 			GroupName:          dept.Name,
 			Remark:             dept.Name,
@@ -70,17 +71,17 @@ func (d *DingTalkLogic) GetSubDepts(client *dingtalk.DingTalk, req *dingreq.Dept
 			SourceUserNum:      0,
 		}
 		//获取钉钉方，若部门存在人员信息，则设置为cn类型
-		reqTemp := &dingreq.DeptUserId{}
-		reqTemp.DeptId = dept.Id
-		repTemp, err := client.GetDeptUserIds(reqTemp)
-		if err != nil {
-			return errors.New(fmt.Sprintf("GetSubDepts获取部门用户Id列表失败：%s", err.Error()))
-		}
-		fmt.Println("钉钉部门人员列表：", repTemp)
-		if len(repTemp.UserIds) > 0 {
-			localDept.GroupType = "cn"
-			localDept.SourceUserNum = len(repTemp.UserIds)
-		}
+		//reqTemp := &dingreq.DeptUserId{}
+		//reqTemp.DeptId = dept.Id
+		//repTemp, err := client.GetDeptUserIds(reqTemp)
+		//if err != nil {
+		//	return errors.New(fmt.Sprintf("GetSubDepts获取部门用户Id列表失败：%s", err.Error()))
+		//}
+		//fmt.Println("钉钉部门人员列表：", repTemp)
+		//if len(repTemp.UserIds) > 0 {
+		//	localDept.GroupType = "cn"
+		//	localDept.SourceUserNum = len(repTemp.UserIds)
+		//}
 		// 处理部门入库
 		deptTemp, err := d.AddDept(&localDept)
 		if err != nil {
@@ -158,15 +159,19 @@ func (d DingTalkLogic) AddDeptUser(client *dingtalk.DingTalk, dept *model.Group,
 		//	}
 		// 获取人员信息
 		fmt.Println("钉钉人员详情：", detail)
-		userName := detail.Mobile
-		if detail.Name != "" {
-			name := pinyin.LazyConvert(detail.Name, nil)
-			userName = strings.Join(name, "")
-		}
-		if userName == "" && detail.OrgEmail != "" {
+		userName := ""
+		if detail.OrgEmail != "" {
 			emailstr := strings.Split(detail.OrgEmail, "@")
 			userName = emailstr[0]
 		}
+		if userName == "" && detail.Name != "" {
+			name := pinyin.LazyConvert(detail.Name, nil)
+			userName = strings.Join(name, "")
+		}
+		if userName == "" && detail.Mobile != "" {
+			userName = detail.Mobile
+		}
+
 		if detail.JobNumber == "" {
 			detail.JobNumber = userName
 		}
@@ -335,6 +340,7 @@ func (d DingTalkLogic) AddUser(r *request.DingUserAddReq) (data *model.User, rsp
 		emptyData.GivenName = r.GivenName
 		return emptyData, nil
 	}
+
 	isExist := false
 	oldData := new(model.User)
 	if isql.User.Exist(tools.H{"source_user_id": r.SourceUserId}) {
@@ -372,15 +378,6 @@ func (d DingTalkLogic) AddUser(r *request.DingUserAddReq) (data *model.User, rsp
 		}
 	}
 	if !isExist {
-		if isql.User.Exist(tools.H{"username": r.Username}) {
-			err := isql.User.Find(tools.H{"username": r.Username}, oldData)
-			if err != nil {
-				return nil, errors.New(fmt.Sprintf("AddUser根据钉钉用户username获取用户失败：%s", err.Error()))
-			}
-			isExist = true
-		}
-	}
-	if !isExist {
 		if isql.User.Exist(tools.H{"mobile": r.Mobile}) {
 			err := isql.User.Find(tools.H{"mobile": r.Mobile}, oldData)
 			if err != nil {
@@ -389,7 +386,31 @@ func (d DingTalkLogic) AddUser(r *request.DingUserAddReq) (data *model.User, rsp
 			isExist = true
 		}
 	}
+	if !isExist {
+		//组装用户名
+		//先根据钉钉唯一id获取，查看数据库中是否存在
+		//不存在，则根据用户名 like 用户名获取尾号最大的账号
+		//重新设定用户名
+		userData := new(model.User)
+		err := isql.User.FindTheSameUserName(r.Username, userData)
+		if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
+		} else {
+			// 找到重名用户，
+			re := regexp.MustCompile("[0-9]+")
+			num := re.FindString(userData.Username)
+			n := 1
+			if num != "" {
+				m, err := strconv.Atoi(num)
+				if err != nil {
+					return
+				}
+				n = m + 1
+			}
+			r.Username = fmt.Sprintf("%s%d", r.Username, n)
+		}
+	}
 	if isExist {
+		r.Username = oldData.Username
 		user, err := d.UpdateUser(r, oldData)
 		if err != nil {
 			return nil, errors.New(fmt.Sprintf("AddUser用户已存在，更新用户失败：%s", err.Error()))

@@ -120,6 +120,11 @@ func (s UserService) Exist(filter map[string]interface{}) bool {
 	return !errors.Is(err, gorm.ErrRecordNotFound)
 }
 
+// Find 获取同名用户已入库的序号最大的用户信息
+func (s UserService) FindTheSameUserName(username string, data *model.User) error {
+	return common.DB.Where("username REGEXP ? ", fmt.Sprintf("^%s[0-9]{0,3}$", username)).Order("username desc").First(&data).Error
+}
+
 // Find 获取单个资源
 func (s UserService) Find(filter map[string]interface{}, data *model.User) error {
 	return common.DB.Where(filter).Preload("Roles").First(&data).Error
