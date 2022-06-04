@@ -65,19 +65,21 @@ func main() {
 			common.Log.Fatalf("listen: %s\n", err)
 		}
 	}()
-	//启动定时任务
-	c := cron.New(cron.WithSeconds())
-	c.AddFunc("0 1 0 * * *", func() {
-		common.Log.Info("每天0点1分0秒执行一次同步钉钉部门和用户信息到ldap")
-		logic.DingTalk.DsyncDingTalkDepts(nil, nil)
-	})
-	//每天凌晨1点执行一次
-	c.AddFunc("0 15 0 * * *", func() {
-		common.Log.Info("每天凌晨00点15分执行一次同步钉钉部门和用户信息到ldap")
-		logic.DingTalk.SyncDingTalkUsers(nil, nil)
-	})
+	if config.Conf.DingTalk.DingTalkEnableSync {
+		//启动定时任务
+		c := cron.New(cron.WithSeconds())
+		c.AddFunc("0 1 0 * * *", func() {
+			common.Log.Info("每天0点1分0秒执行一次同步钉钉部门和用户信息到ldap")
+			logic.DingTalk.DsyncDingTalkDepts(nil, nil)
+		})
+		//每天凌晨1点执行一次
+		c.AddFunc("0 15 0 * * *", func() {
+			common.Log.Info("每天凌晨00点15分执行一次同步钉钉部门和用户信息到ldap")
+			logic.DingTalk.SyncDingTalkUsers(nil, nil)
+		})
 
-	c.Start()
+		c.Start()
+	}
 
 	common.Log.Info(fmt.Sprintf("Server is running at %s:%d/%s", host, port, config.Conf.System.UrlPathPrefix))
 
