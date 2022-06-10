@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/eryajf/go-ldap-admin/model"
+	"github.com/eryajf/go-ldap-admin/model/request"
 	"github.com/eryajf/go-ldap-admin/public/common"
 	"github.com/eryajf/go-ldap-admin/public/tools"
-	"github.com/eryajf/go-ldap-admin/svc/request"
 
 	"github.com/gin-gonic/gin"
 	"github.com/patrickmn/go-cache"

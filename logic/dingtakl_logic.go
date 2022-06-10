@@ -9,10 +9,10 @@ import (
 
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/model"
+	"github.com/eryajf/go-ldap-admin/model/request"
 	"github.com/eryajf/go-ldap-admin/public/tools"
 	"github.com/eryajf/go-ldap-admin/service/ildap"
 	"github.com/eryajf/go-ldap-admin/service/isql"
-	"github.com/eryajf/go-ldap-admin/svc/request"
 	"github.com/gin-gonic/gin"
 	"github.com/mozillazg/go-pinyin"
 	"github.com/zhaoyunxing92/dingtalk/v2"

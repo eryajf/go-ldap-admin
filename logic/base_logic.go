@@ -4,11 +4,11 @@ import (
 	"fmt"
 
 	"github.com/eryajf/go-ldap-admin/model"
+	"github.com/eryajf/go-ldap-admin/model/request"
+	"github.com/eryajf/go-ldap-admin/model/response"
 	"github.com/eryajf/go-ldap-admin/public/tools"
 	"github.com/eryajf/go-ldap-admin/service/ildap"
 	"github.com/eryajf/go-ldap-admin/service/isql"
-	"github.com/eryajf/go-ldap-admin/svc/request"
-	"github.com/eryajf/go-ldap-admin/svc/response"
 
 	"github.com/gin-gonic/gin"
 )
