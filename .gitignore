@@ -6,10 +6,13 @@
 *.dylib
 .idea
 .vscode
+.token
+
 build.sh
 logs
 go-web-mini
 go-ldap-admin
+
 # Test binary, built with `go test -c`
 *.test
 

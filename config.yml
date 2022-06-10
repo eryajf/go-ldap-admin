@@ -90,6 +90,7 @@ ldap:
   ldap-admin-pass: "123456"
   ldap-user-dn: "ou=people,dc=eryajf,dc=net"
   ldap-group-dn: "ou=group,dc=eryajf,dc=net"
+  ldap-user-init-password: "123456"
   ldap-group-name-modify: false
   ldap-user-name-modify: false
 dingtalk:

@@ -228,6 +228,7 @@ func InitData() {
 			Status:        1,
 			Creator:       "系统",
 			Roles:         roles[:1],
+			UserDN:        config.Conf.Ldap.LdapAdminDN,
 		},
 	}
 

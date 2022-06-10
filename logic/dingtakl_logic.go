@@ -3,6 +3,10 @@ package logic
 import (
 	"errors"
 	"fmt"
+	"regexp"
+	"strconv"
+	"strings"
+
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/model"
 	"github.com/eryajf/go-ldap-admin/public/tools"
@@ -14,9 +18,6 @@ import (
 	"github.com/zhaoyunxing92/dingtalk/v2"
 	dingreq "github.com/zhaoyunxing92/dingtalk/v2/request"
 	"gorm.io/gorm"
-	"regexp"
-	"strconv"
-	"strings"
 )
 
 type DingTalkLogic struct {
@@ -244,14 +245,14 @@ func (d DingTalkLogic) AddDept(r *request.DingGroupAddReq) (data *model.Group, r
 			SourceDeptId:       r.SourceDeptId,
 			SourceUserNum:      r.SourceUserNum,
 		}
-		pdn := ""
-		if group.ParentId > 0 {
-			pdn, err = isql.Group.GetGroupDn(r.ParentId, "")
-			if err != nil {
-				return nil, errors.New(fmt.Sprintf("AddDept获取父级部门dn失败：%s", err.Error()))
-			}
-		}
-		err = ildap.Group.Add(&group, pdn)
+		// pdn := ""
+		// if group.ParentId > 0 {
+		// 	pdn, err = isql.Group.GetGroupDn(r.ParentId, "")
+		// 	if err != nil {
+		// 		return nil, errors.New(fmt.Sprintf("AddDept获取父级部门dn失败：%s", err.Error()))
+		// 	}
+		// }
+		err = ildap.Group.Add(&group)
 		if err != nil {
 			return nil, tools.NewLdapError(fmt.Errorf("AddDept向LDAP创建分组失败" + err.Error()))
 		}
@@ -307,19 +308,19 @@ func (d DingTalkLogic) UpdateDept(r *request.DingGroupAddReq) error {
 		SourceUserNum:      r.SourceUserNum,
 	}
 
-	oldGroupName := oldData.GroupName
-	oldRemark := oldData.Remark
-	dn, err := isql.Group.GetGroupDn(oldData.ID, "")
-	if err != nil {
-		return errors.New(fmt.Sprintf("UpdateDept不去部门dn失败:%s", tools.NewMySqlError(err).Error()))
-	}
-	err = ildap.Group.Update(&dept, dn, oldGroupName, oldRemark)
+	// oldGroupName := oldData.GroupName
+	// oldRemark := oldData.Remark
+	// dn, err := isql.Group.GetGroupDn(oldData.ID, "")
+	// if err != nil {
+	// 	return errors.New(fmt.Sprintf("UpdateDept不去部门dn失败:%s", tools.NewMySqlError(err).Error()))
+	// }
+	err = ildap.Group.Update(oldData, &dept)
 	if err != nil {
 		return tools.NewLdapError(fmt.Errorf("UpdateDept向LDAP更新分组失败：" + err.Error()))
 	}
 	//若配置了不允许修改分组名称，则不更新分组名称
 	if !config.Conf.Ldap.LdapGroupNameModify {
-		dept.GroupName = oldGroupName
+		dept.GroupName = oldData.GroupName
 	}
 	err = isql.Group.Update(&dept)
 	if err != nil {
@@ -477,7 +478,7 @@ func (d DingTalkLogic) AddUser(r *request.DingUserAddReq) (data *model.User, rsp
 	isExistUser := false
 	for deptId, gdn := range gdns {
 		//根据选择的部门，添加到部门内
-		err = ildap.Group.AddUserToGroup(gdn, fmt.Sprintf("uid=%s,%s", user.Username, config.Conf.Ldap.LdapUserDN))
+		err = ildap.Group.AddUserToGroup(gdn, user.UserDN)
 		if err != nil {
 			return nil, errors.New(fmt.Sprintf("AddUser向部门添加用户失败：%s", err.Error()))
 		}
@@ -554,21 +555,22 @@ func (d DingTalkLogic) UpdateUser(r *request.DingUserAddReq, oldData *model.User
 		return nil, tools.NewMySqlError(fmt.Errorf("UpdateUser在MySQL更新用户失败：" + err.Error()))
 	}
 	//判断部门信息是否有变化有变化则更新相应的数据库
-	oldDeptIds := tools.StringToSlice(oldData.DepartmentId, ",")
-	addDeptIds, removeDeptIds := tools.ArrUintCmp(oldDeptIds, r.DepartmentId)
-	for _, deptId := range removeDeptIds {
-		//从旧组中删除
-		err = User.RemoveUserToGroup(deptId, []uint{oldData.ID})
-		if err != nil {
-			return nil, errors.New(fmt.Sprintf("UpdateUser将用户从分组移除失败：%s", err.Error()))
-		}
-	}
-	for _, deptId := range addDeptIds {
-		//添加到新分组中
-		err = User.AddUserToGroup(deptId, []uint{oldData.ID})
-		if err != nil {
-			return nil, errors.New(fmt.Sprintf("UpdateUser将用户添加至分组失败：%s", err.Error()))
-		}
-	}
+	// todo 此处往下的内容需要重新处理
+	// oldDeptIds := tools.StringToSlice(oldData.DepartmentId, ",")
+	// addDeptIds, removeDeptIds := tools.ArrUintCmp(oldDeptIds, r.DepartmentId)
+	// for _, deptId := range removeDeptIds {
+	// 	//从旧组中删除
+	// 	err = User.RemoveUserToGroup(deptId, []uint{oldData.ID})
+	// 	if err != nil {
+	// 		return nil, errors.New(fmt.Sprintf("UpdateUser将用户从分组移除失败：%s", err.Error()))
+	// 	}
+	// }
+	// for _, deptId := range addDeptIds {
+	// 	//添加到新分组中
+	// 	err = User.AddUserToGroup(deptId, []uint{oldData.ID})
+	// 	if err != nil {
+	// 		return nil, errors.New(fmt.Sprintf("UpdateUser将用户添加至分组失败：%s", err.Error()))
+	// 	}
+	// }
 	return &user, nil
 }

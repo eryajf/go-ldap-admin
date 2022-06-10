@@ -73,21 +73,17 @@ func (x UserService) Update(oldusername string, user *model.User) error {
 }
 
 // Delete 删除资源
-func (x UserService) Delete(username string) error {
-	del := ldap.NewDelRequest(fmt.Sprintf("uid=%s,%s", username, config.Conf.Ldap.LdapUserDN), nil)
+func (x UserService) Delete(udn string) error {
+	del := ldap.NewDelRequest(udn, nil)
 	return common.LDAP.Del(del)
 }
 
 // ChangePwd 修改用户密码，此处旧密码也可以为空，ldap可以直接通过用户DN加上新密码来进行修改
-func (u UserService) ChangePwd(username, oldpasswd, newpasswd string) error {
-	udn := fmt.Sprintf("uid=%s,%s", username, config.Conf.Ldap.LdapUserDN)
-	if username == "admin" {
-		udn = config.Conf.Ldap.LdapAdminDN
-	}
+func (x UserService) ChangePwd(udn, oldpasswd, newpasswd string) error {
 	modifyPass := ldap.NewPasswordModifyRequest(udn, oldpasswd, newpasswd)
 	_, err := common.LDAP.PasswordModify(modifyPass)
 	if err != nil {
-		return fmt.Errorf("password modify failed for %s, err: %v", username, err)
+		return fmt.Errorf("password modify failed for %s, err: %v", udn, err)
 	}
 	return nil
 }

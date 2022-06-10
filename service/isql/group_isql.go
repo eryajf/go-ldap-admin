@@ -155,8 +155,8 @@ func (s GroupService) Exist(filter map[string]interface{}) bool {
 }
 
 // Delete 批量删除
-func (s GroupService) Delete(ids []uint) error {
-	return common.DB.Where("id IN (?)", ids).Select("Users").Unscoped().Delete(&model.Group{}).Error
+func (s GroupService) Delete(groups []*model.Group) error {
+	return common.DB.Debug().Select("Users").Unscoped().Delete(&groups).Error
 }
 
 // GetApisById 根据接口ID获取接口列表

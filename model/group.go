@@ -15,4 +15,5 @@ type Group struct {
 	SourceDeptParentId string   `gorm:"type:varchar(100);comment:'父部门编号'" json:"sourceDeptParentId"`
 	SourceUserNum      int      `gorm:"default:0;comment:'部门下的用户数量，从第三方获取的数据'" json:"source_user_num"`
 	Children           []*Group `gorm:"-" json:"children"`
+	GroupDN            string   `gorm:"type:varchar(255);not null;comment:'分组dn'" json:"groupDn"` // 分组在ldap的dn
 }
