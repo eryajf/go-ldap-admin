@@ -14,22 +14,7 @@ type UserService struct{}
 
 // 创建资源
 func (x UserService) Add(user *model.User) error {
-	if user.Departments == "" {
-		user.Departments = "研发中心"
-	}
-	if user.GivenName == "" {
-		user.GivenName = user.Nickname
-	}
-	if user.PostalAddress == "" {
-		user.PostalAddress = "没有填写地址"
-	}
-	if user.Position == "" {
-		user.Position = "技术"
-	}
-	if user.Introduction == "" {
-		user.Introduction = user.Nickname
-	}
-	add := ldap.NewAddRequest(fmt.Sprintf("uid=%s,%s", user.Username, config.Conf.Ldap.LdapUserDN), nil)
+	add := ldap.NewAddRequest(user.UserDN, nil)
 	add.Attribute("objectClass", []string{"inetOrgPerson"})
 	add.Attribute("cn", []string{user.Username})
 	add.Attribute("sn", []string{user.Nickname})
@@ -49,7 +34,7 @@ func (x UserService) Add(user *model.User) error {
 
 // Update 更新资源
 func (x UserService) Update(oldusername string, user *model.User) error {
-	modify := ldap.NewModifyRequest(fmt.Sprintf("uid=%s,%s", oldusername, config.Conf.Ldap.LdapUserDN), nil)
+	modify := ldap.NewModifyRequest(user.UserDN, nil)
 	modify.Replace("cn", []string{user.Nickname})
 	modify.Replace("sn", []string{oldusername})
 	modify.Replace("businessCategory", []string{user.Departments})

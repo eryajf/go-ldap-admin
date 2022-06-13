@@ -87,30 +87,6 @@ func (s GroupService) ListAll(req *request.GroupListAllReq) ([]*model.Group, err
 	return list, err
 }
 
-// 拼装dn信息
-func (s GroupService) GetGroupDn(groupId uint, oldDn string) (dn string, e error) {
-	depart := new(model.Group)
-	filter := tools.H{"id": int(groupId)}
-	err := s.Find(filter, depart)
-	if err != nil {
-		return "", tools.NewMySqlError(err)
-	}
-	if oldDn == "" {
-		dn = fmt.Sprintf("%s=%s", depart.GroupType, depart.GroupName)
-	} else {
-		dn = fmt.Sprintf("%s,%s=%s", oldDn, depart.GroupType, depart.GroupName)
-	}
-	if depart.ParentId > 0 {
-		tempDn, err := s.GetGroupDn(depart.ParentId, dn)
-		if err != nil {
-			return dn, err
-		}
-		dn = tempDn
-		fmt.Println(tempDn)
-	}
-	return dn, nil
-}
-
 // GenGroupTree 生成分组树
 func GenGroupTree(parentId uint, groups []*model.Group) []*model.Group {
 	tree := make([]*model.Group, 0)
@@ -177,12 +153,12 @@ func (s GroupService) RemoveUserFromGroup(group *model.Group, users []model.User
 
 // DingTalkDeptIdsToGroupIds 将钉钉部门id转换为分组id
 func (s GroupService) DingTalkDeptIdsToGroupIds(dingTalkIds []string) (groupIds []uint, err error) {
-	tempGroups := []model.Group{}
+	var tempGroups []model.Group
 	err = common.DB.Model(&model.Group{}).Where("source_dept_id IN (?)", dingTalkIds).Find(&tempGroups).Error
 	if err != nil {
 		return nil, err
 	}
-	tempGroupIds := []uint{}
+	var tempGroupIds []uint
 	for _, g := range tempGroups {
 		tempGroupIds = append(tempGroupIds, g.ID)
 	}

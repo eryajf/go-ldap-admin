@@ -3,13 +3,14 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/eryajf/go-ldap-admin/logic"
-	"github.com/robfig/cron/v3"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/eryajf/go-ldap-admin/logic"
+	"github.com/robfig/cron/v3"
 
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/middleware"
@@ -70,7 +71,7 @@ func main() {
 		c := cron.New(cron.WithSeconds())
 		c.AddFunc("0 1 0 * * *", func() {
 			common.Log.Info("每天0点1分0秒执行一次同步钉钉部门和用户信息到ldap")
-			logic.DingTalk.DsyncDingTalkDepts(nil, nil)
+			logic.DingTalk.SyncDingTalkDepts(nil, nil)
 		})
 		//每天凌晨1点执行一次
 		c.AddFunc("0 15 0 * * *", func() {
