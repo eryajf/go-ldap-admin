@@ -124,7 +124,7 @@ func (s ApiService) Delete(ids []uint) error {
 		api := new(model.Api)
 		err := s.Find(tools.H{"id": id}, api)
 		if err != nil {
-			return errors.New(fmt.Sprintf("未获取到ID为%d的用户", id))
+			return fmt.Errorf("根据ID获取接口信息失败: %v", err)
 		}
 		apis = append(apis, *api)
 	}

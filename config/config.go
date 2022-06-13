@@ -77,7 +77,10 @@ func RSAReadKeyFromFile(filename string) []byte {
 	defer f.Close()
 	fileInfo, _ := f.Stat()
 	b = make([]byte, fileInfo.Size())
-	f.Read(b)
+	_, err = f.Read(b)
+	if err != nil {
+		return b
+	}
 	return b
 }
 

@@ -202,7 +202,7 @@ func (s UserService) Delete(ids []uint) error {
 		user := new(model.User)
 		err := s.Find(filter, user)
 		if err != nil {
-			return errors.New(fmt.Sprintf("未获取到ID为%d的用户", id))
+			return fmt.Errorf("获取用户信息失败，err: %v", err)
 		}
 		users = append(users, *user)
 	}

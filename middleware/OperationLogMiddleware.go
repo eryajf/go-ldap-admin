@@ -31,15 +31,13 @@ func OperationLogMiddleware() gin.HandlerFunc {
 
 		// 获取当前登录用户
 		var username string
-		ctxUser, exists := c.Get("user")
-		if !exists {
-			username = "未登录"
-		}
+		ctxUser, _ := c.Get("user")
 		user, ok := ctxUser.(model.User)
 		if !ok {
 			username = "未登录"
+		} else {
+			username = user.Username
 		}
-		username = user.Username
 
 		// 获取访问路径
 		path := strings.TrimPrefix(c.FullPath(), "/"+config.Conf.System.UrlPathPrefix)
