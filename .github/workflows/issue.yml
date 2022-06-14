@@ -1,0 +1,21 @@
+name: Issue Reply
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  reply-helper:
+    runs-on: ubuntu-latest
+    steps:
+      - name: help wanted
+        if: github.event.label.name == 'help wanted' || github.event.label.name == 'enhancement' || github.event.label.name == 'bug' || github.event.label.name == 'question'
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.ACCESS_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            您好 @${{ github.event.issue.user.login }}👋，我已收到您的反馈，我将安排时间考虑您提交的信息并进行回复。-- 这条信息是由自动回复的机器人发出的。
+
+            Hello @${{ github.event.issue.user.login }}. I have received your feedback, and I will arrange time to consider the information you submitted and reply. -- This message is sent by an automatic reply robot.

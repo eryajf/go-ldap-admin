@@ -16,15 +16,17 @@ import (
 var Conf = new(config)
 
 type config struct {
-	System    *SystemConfig    `mapstructure:"system" json:"system"`
-	Logs      *LogsConfig      `mapstructure:"logs" json:"logs"`
-	Mysql     *MysqlConfig     `mapstructure:"mysql" json:"mysql"`
-	Casbin    *CasbinConfig    `mapstructure:"casbin" json:"casbin"`
-	Jwt       *JwtConfig       `mapstructure:"jwt" json:"jwt"`
-	RateLimit *RateLimitConfig `mapstructure:"rate-limit" json:"rateLimit"`
-	Ldap      *LdapConfig      `mapstructure:"ldap" json:"ldap"`
-	Email     *EmailConfig     `mapstructure:"email" json:"email"`
-	DingTalk  *DingTalkConfig  `mapstructure:"dingtalk" json:"dingTalk"`
+	System       *SystemConfig    `mapstructure:"system" json:"system"`
+	Logs         *LogsConfig      `mapstructure:"logs" json:"logs"`
+	Mysql        *MysqlConfig     `mapstructure:"mysql" json:"mysql"`
+	Casbin       *CasbinConfig    `mapstructure:"casbin" json:"casbin"`
+	Jwt          *JwtConfig       `mapstructure:"jwt" json:"jwt"`
+	RateLimit    *RateLimitConfig `mapstructure:"rate-limit" json:"rateLimit"`
+	Ldap         *LdapConfig      `mapstructure:"ldap" json:"ldap"`
+	Email        *EmailConfig     `mapstructure:"email" json:"email"`
+	DingTalk     *DingTalkConfig  `mapstructure:"dingtalk" json:"dingTalk"`
+	WeComConfig  *WeComConfig     `mapstructure:"wecom" json:"weCom"`
+	FeiShuConfig *FeiShuConfig    `mapstructure:"feishu" json:"feiShu"`
 }
 
 // 设置读取配置信息
@@ -75,7 +77,10 @@ func RSAReadKeyFromFile(filename string) []byte {
 	defer f.Close()
 	fileInfo, _ := f.Stat()
 	b = make([]byte, fileInfo.Size())
-	f.Read(b)
+	_, err = f.Read(b)
+	if err != nil {
+		return b
+	}
 	return b
 }
 
@@ -129,14 +134,14 @@ type RateLimitConfig struct {
 }
 
 type LdapConfig struct {
-	LdapUrl             string `mapstructure:"ldap-url" json:"ldapUrl"`
-	LdapBaseDN          string `mapstructure:"ldap-base-dn" json:"ldapBaseDN"`
-	LdapAdminDN         string `mapstructure:"ldap-admin-dn" json:"ldapAdminDN"`
-	LdapAdminPass       string `mapstructure:"ldap-admin-pass" json:"ldapAdminPass"`
-	LdapUserDN          string `mapstructure:"ldap-user-dn" json:"ldapUserDN"`
-	LdapGroupDN         string `mapstructure:"ldap-group-dn" json:"ldapGroupDN"`
-	LdapGroupNameModify bool   `mapstructure:"ldap-group-name-modify" json:"ldapGroupNameModify"`
-	LdapUserNameModify  bool   `mapstructure:"ldap-user-name-modify" json:"ldapUserNameModify"`
+	LdapUrl              string `mapstructure:"ldap-url" json:"ldapUrl"`
+	LdapBaseDN           string `mapstructure:"ldap-base-dn" json:"ldapBaseDN"`
+	LdapAdminDN          string `mapstructure:"ldap-admin-dn" json:"ldapAdminDN"`
+	LdapAdminPass        string `mapstructure:"ldap-admin-pass" json:"ldapAdminPass"`
+	LdapUserDN           string `mapstructure:"ldap-user-dn" json:"ldapUserDN"`
+	LdapUserInitPassword string `mapstructure:"ldap-user-init-password" json:"ldapUserInitPassword"`
+	LdapGroupNameModify  bool   `mapstructure:"ldap-group-name-modify" json:"ldapGroupNameModify"`
+	LdapUserNameModify   bool   `mapstructure:"ldap-user-name-modify" json:"ldapUserNameModify"`
 }
 type EmailConfig struct {
 	Host string `mapstructure:"host" json:"host"`
@@ -147,11 +152,18 @@ type EmailConfig struct {
 }
 
 type DingTalkConfig struct {
-	DingTalkAppKey           string `mapstructure:"ding-talk-app-key" json:"dingTalkAppKey"`
-	DingTalkAppSecret        string `mapstructure:"ding-talk-app-secret" json:"dingTalkAppSecret"`
-	DingTalkAgentId          string `mapstructure:"ding-talk-agent-id" json:"dingTalkAgentId"`
-	DingTalkRootOuName       string `mapstructure:"ding-talk-root-ou-name" json:"dingTalkRootOuName"`
-	DingTalkIdSource         string `mapstructure:"ding-talk-id-source" json:"dingTalkIdSource"`
-	DingTalkUserInitPassword string `mapstructure:"ding-talk-user-init-password" json:"dingTalkUserInitPassword"`
-	DingTalkEnableSync       bool   `mapstructure:"ding-talk-enable-sync" json:"dingTalkEnableSync"`
+	DingTalkAppKey     string `mapstructure:"ding-talk-app-key" json:"dingTalkAppKey"`
+	DingTalkAppSecret  string `mapstructure:"ding-talk-app-secret" json:"dingTalkAppSecret"`
+	DingTalkAgentId    string `mapstructure:"ding-talk-agent-id" json:"dingTalkAgentId"`
+	DingTalkRootOuName string `mapstructure:"ding-talk-root-ou-name" json:"dingTalkRootOuName"`
+	DingTalkFlag       string `mapstructure:"ding-talk-flag" json:"dingTalkFlag"`
+	DingTalkEnableSync bool   `mapstructure:"ding-talk-enable-sync" json:"dingTalkEnableSync"`
+}
+
+type WeComConfig struct {
+	Flag string `mapstructure:"flag" json:"flag"`
+}
+
+type FeiShuConfig struct {
+	Flag string `mapstructure:"flag" json:"flag"`
 }

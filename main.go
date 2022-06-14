@@ -3,13 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/eryajf/go-ldap-admin/logic"
-	"github.com/robfig/cron/v3"
 	"net/http"
 	"os"
 	"os/signal"
-	"syscall"
 	"time"
+
+	"github.com/eryajf/go-ldap-admin/logic"
+	"github.com/robfig/cron/v3"
 
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/middleware"
@@ -68,16 +68,21 @@ func main() {
 	if config.Conf.DingTalk.DingTalkEnableSync {
 		//启动定时任务
 		c := cron.New(cron.WithSeconds())
-		c.AddFunc("0 1 0 * * *", func() {
+		_, err := c.AddFunc("0 1 0 * * *", func() {
 			common.Log.Info("每天0点1分0秒执行一次同步钉钉部门和用户信息到ldap")
-			logic.DingTalk.DsyncDingTalkDepts(nil, nil)
+			logic.DingTalk.SyncDingTalkDepts(nil, nil)
 		})
+		if err != nil {
+			common.Log.Errorf("启动同步部门的定时任务失败: %v", err)
+		}
 		//每天凌晨1点执行一次
-		c.AddFunc("0 15 0 * * *", func() {
+		_, err = c.AddFunc("0 15 0 * * *", func() {
 			common.Log.Info("每天凌晨00点15分执行一次同步钉钉部门和用户信息到ldap")
 			logic.DingTalk.SyncDingTalkUsers(nil, nil)
 		})
-
+		if err != nil {
+			common.Log.Errorf("启动同步用户的定时任务失败: %v", err)
+		}
 		c.Start()
 	}
 
@@ -85,11 +90,12 @@ func main() {
 
 	// Wait for interrupt signal to gracefully shutdown the server with
 	// a timeout of 5 seconds.
-	quit := make(chan os.Signal)
+	quit := make(chan os.Signal, 1)
 	// kill (no param) default send syscall.SIGTERM
 	// kill -2 is syscall.SIGINT
 	// kill -9 is syscall.SIGKILL but can't be catch, so don't need add it
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	// signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(quit, os.Interrupt)
 	<-quit
 	common.Log.Info("Shutting down server...")
 

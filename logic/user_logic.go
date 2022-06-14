@@ -1,16 +1,15 @@
 package logic
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/model"
+	"github.com/eryajf/go-ldap-admin/model/request"
+	"github.com/eryajf/go-ldap-admin/model/response"
 	"github.com/eryajf/go-ldap-admin/public/tools"
 	"github.com/eryajf/go-ldap-admin/service/ildap"
 	"github.com/eryajf/go-ldap-admin/service/isql"
-	"github.com/eryajf/go-ldap-admin/svc/request"
-	"github.com/eryajf/go-ldap-admin/svc/response"
 
 	"github.com/gin-gonic/gin"
 	"github.com/thoas/go-funk"
@@ -51,7 +50,7 @@ func (l UserLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspEr
 			return nil, tools.NewValidatorError(fmt.Errorf("密码长度至少为6位"))
 		}
 	} else {
-		r.Password = "123456"
+		r.Password = config.Conf.Ldap.LdapUserInitPassword
 	}
 
 	// 当前登陆用户角色排序最小值（最高等级角色）以及当前登陆的用户
@@ -81,7 +80,7 @@ func (l UserLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspEr
 	if currentRoleSortMin >= reqRoleSortMin {
 		return nil, tools.NewValidatorError(fmt.Errorf("用户不能创建比自己等级高的或者相同等级的用户"))
 	}
-	deptIds := tools.SliceToString(r.DepartmentId, ",")
+
 	user := model.User{
 		Username:      r.Username,
 		Password:      r.Password,
@@ -97,58 +96,19 @@ func (l UserLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspEr
 		Introduction:  r.Introduction,
 		Status:        r.Status,
 		Creator:       ctxUser.Username,
-		DepartmentId:  deptIds,
+		DepartmentId:  tools.SliceToString(r.DepartmentId, ","),
 		Source:        r.Source,
 		Roles:         roles,
+		UserDN:        fmt.Sprintf("uid=%s,%s", r.Username, config.Conf.Ldap.LdapUserDN),
 	}
+
 	if user.Source == "" {
 		user.Source = "platform"
 	}
-	//先识别用户选择的部门是否是OU开头
-	gdns := make(map[uint]string)
-	for _, deptId := range r.DepartmentId {
-		dn, err := isql.Group.GetGroupDn(deptId, "")
-		if err != nil {
-			return nil, err.Error()
-		}
-		gdn := fmt.Sprintf("%s,%s", dn, config.Conf.Ldap.LdapBaseDN)
-		if gdn[:3] == "ou=" {
-			return nil, errors.New("不能添加用户到OU组织单元")
-		}
-		gdns[deptId] = gdn
-	}
-	//先创建用户到默认分组
-	err = ildap.User.Add(&user)
+
+	err = CommonAddUser(&user, r.DepartmentId)
 	if err != nil {
-		return nil, tools.NewLdapError(fmt.Errorf("向LDAP创建用户失败：" + err.Error()))
-	}
-	isExistUser := false
-	for deptId, gdn := range gdns {
-		//根据选择的部门，添加到部门内
-		err = ildap.Group.AddUserToGroup(gdn, fmt.Sprintf("uid=%s,%s", user.Username, config.Conf.Ldap.LdapUserDN))
-		if err != nil {
-			return nil, err.Error()
-		}
-		if !isExistUser {
-			err = isql.User.Add(&user)
-			if err != nil {
-				return nil, tools.NewMySqlError(fmt.Errorf("向MySQL创建用户失败：" + err.Error()))
-			}
-			isExistUser = true
-		}
-		//根据部门分配，将用户和部门信息维护到部门关系表里面
-		users := []model.User{}
-		users = append(users, user)
-		depart := new(model.Group)
-		filter := tools.H{"id": deptId}
-		err = isql.Group.Find(filter, depart)
-		if err != nil {
-			return "", tools.NewMySqlError(err)
-		}
-		err = isql.Group.AddUserToGroup(depart, users)
-		if err != nil {
-			return nil, tools.NewMySqlError(fmt.Errorf("向MySQL添加用户到分组关系失败：" + err.Error()))
-		}
+		return nil, tools.NewOperationError(fmt.Errorf("添加用户失败" + err.Error()))
 	}
 	return nil, nil
 }
@@ -233,7 +193,7 @@ func (l UserLogic) Update(c *gin.Context, req interface{}) (data interface{}, rs
 	if err != nil {
 		return nil, tools.NewMySqlError(err)
 	}
-	deptIds := tools.SliceToString(r.DepartmentId, ",")
+
 	user := model.User{
 		Model:         oldData.Model,
 		Username:      r.Username,
@@ -248,9 +208,10 @@ func (l UserLogic) Update(c *gin.Context, req interface{}) (data interface{}, rs
 		Position:      r.Position,
 		Introduction:  r.Introduction,
 		Creator:       ctxUser.Username,
-		DepartmentId:  deptIds,
+		DepartmentId:  tools.SliceToString(r.DepartmentId, ","),
 		Source:        oldData.Source,
 		Roles:         roles,
+		UserDN:        oldData.UserDN,
 	}
 
 	// 判断是更新自己还是更新别人,如果操作的ID与登陆用户的ID一致，则说明操作的是自己
@@ -275,115 +236,11 @@ func (l UserLogic) Update(c *gin.Context, req interface{}) (data interface{}, rs
 			return nil, tools.NewValidatorError(fmt.Errorf("用户不能把别的用户角色等级更新得比自己高或相等"))
 		}
 	}
-	err = ildap.User.Update(oldData.Username, &user)
-	if err != nil {
-		return nil, tools.NewLdapError(fmt.Errorf("在LDAP更新用户失败：" + err.Error()))
+	if err = CommonUpdateUser(oldData, &user, r.DepartmentId); err != nil {
+		return nil, tools.NewOperationError(fmt.Errorf("更新用户失败" + err.Error()))
 	}
 
-	// 更新用户
-	if !config.Conf.Ldap.LdapUserNameModify {
-		user.Username = oldData.Username
-	}
-	err = isql.User.Update(&user)
-	if err != nil {
-		return nil, tools.NewMySqlError(fmt.Errorf("在MySQL更新用户失败：" + err.Error()))
-	}
-	//判断部门信息是否有变化有变化则更新相应的数据库
-	oldDeptIds := tools.StringToSlice(oldData.DepartmentId, ",")
-	addDeptIds, removeDeptIds := tools.ArrUintCmp(oldDeptIds, r.DepartmentId)
-	for _, deptId := range removeDeptIds {
-		//从旧组中删除
-		err = l.RemoveUserToGroup(deptId, []uint{r.ID})
-		if err != nil {
-			return nil, err
-		}
-	}
-	for _, deptId := range addDeptIds {
-		//添加到新分组中
-		err = l.AddUserToGroup(deptId, []uint{r.ID})
-		if err != nil {
-			return nil, err
-		}
-	}
 	return nil, nil
-}
-
-// RemoveUser 移除用户
-func (l UserLogic) RemoveUserToGroup(groupId uint, userIds []uint) error {
-	filter := tools.H{"id": groupId}
-
-	if !isql.Group.Exist(filter) {
-		return tools.NewMySqlError(fmt.Errorf("分组不存在"))
-	}
-
-	users, err := isql.User.GetUserByIds(userIds)
-	if err != nil {
-		return tools.NewMySqlError(fmt.Errorf("获取用户列表失败: %s", err.Error()))
-	}
-
-	group := new(model.Group)
-	err = isql.Group.Find(filter, group)
-	if err != nil {
-		return tools.NewMySqlError(fmt.Errorf("获取分组失败: %s", err.Error()))
-	}
-	gdn, err := isql.Group.GetGroupDn(groupId, "")
-	if err != nil {
-		return tools.NewMySqlError(fmt.Errorf("获取分组失败: %s", err.Error()))
-	}
-	gdn = fmt.Sprintf("%s,%s", gdn, config.Conf.Ldap.LdapBaseDN)
-	for _, user := range users {
-		err := ildap.Group.RemoveUserFromGroup(gdn, user.Username)
-		if err != nil {
-			return tools.NewLdapError(fmt.Errorf("将用户从ldap移除失败" + err.Error()))
-		}
-	}
-	err = isql.Group.RemoveUserFromGroup(group, users)
-	if err != nil {
-		return tools.NewMySqlError(fmt.Errorf("将用户从MySQL移除失败: %s", err.Error()))
-	}
-
-	return nil
-}
-
-//将用户添加到分组中
-func (l UserLogic) AddUserToGroup(groupId uint, userIds []uint) error {
-	filter := tools.H{"id": groupId}
-
-	if !isql.Group.Exist(filter) {
-		return tools.NewMySqlError(fmt.Errorf("分组不存在"))
-	}
-
-	users, err := isql.User.GetUserByIds(userIds)
-	if err != nil {
-		return tools.NewMySqlError(fmt.Errorf("获取用户列表失败: %s", err.Error()))
-	}
-
-	group := new(model.Group)
-	err = isql.Group.Find(filter, group)
-	if err != nil {
-		return tools.NewMySqlError(fmt.Errorf("获取分组失败: %s", err.Error()))
-	}
-	for _, user := range users {
-		gdn, err := isql.Group.GetGroupDn(group.ID, "")
-		if err != nil {
-			return err
-		}
-		gdn = fmt.Sprintf("%s,%s", gdn, config.Conf.Ldap.LdapBaseDN)
-		udn := config.Conf.Ldap.LdapAdminDN
-		if user.Username != "admin" {
-			udn = fmt.Sprintf("uid=%s,%s", user.Username, config.Conf.Ldap.LdapUserDN)
-		}
-		err = ildap.Group.AddUserToGroup(gdn, udn)
-
-		if err != nil {
-			return tools.NewLdapError(fmt.Errorf("向LDAP添加用户到分组失败" + err.Error()))
-		}
-	}
-	err = isql.Group.AddUserToGroup(group, users)
-	if err != nil {
-		return tools.NewMySqlError(fmt.Errorf("添加用户到分组失败: %s", err.Error()))
-	}
-	return nil
 }
 
 // Delete 删除数据
@@ -393,6 +250,13 @@ func (l UserLogic) Delete(c *gin.Context, req interface{}) (data interface{}, rs
 		return nil, ReqAssertErr
 	}
 	_ = c
+
+	for _, id := range r.UserIds {
+		filter := tools.H{"id": int(id)}
+		if !isql.User.Exist(filter) {
+			return nil, tools.NewMySqlError(fmt.Errorf("有用户不存在"))
+		}
+	}
 
 	// 根据用户ID获取用户角色排序最小值
 	roleMinSortList, err := isql.User.GetUserMinRoleSortsByIds(r.UserIds) // TODO: 这里应该复用下边的 GetUserByIds 方法
@@ -423,13 +287,16 @@ func (l UserLogic) Delete(c *gin.Context, req interface{}) (data interface{}, rs
 	if err != nil {
 		return nil, tools.NewMySqlError(fmt.Errorf("获取用户信息失败: " + err.Error()))
 	}
+
+	// 先将用户从ldap中删除
 	for _, user := range users {
-		err := ildap.User.Delete(user.Username)
+		err := ildap.User.Delete(user.UserDN)
 		if err != nil {
 			return nil, tools.NewLdapError(fmt.Errorf("在LDAP删除用户失败" + err.Error()))
 		}
 	}
 
+	// 再将用户从MySQL中删除
 	err = isql.User.Delete(r.UserIds)
 	if err != nil {
 		return nil, tools.NewMySqlError(fmt.Errorf("在MySQL删除用户失败: " + err.Error()))
@@ -473,7 +340,7 @@ func (l UserLogic) ChangePwd(c *gin.Context, req interface{}) (data interface{},
 		return nil, tools.NewValidatorError(fmt.Errorf("原密码错误"))
 	}
 	// ldap更新密码时可以直接指定用户DN和新密码即可更改成功
-	err = ildap.User.ChangePwd(user.Username, "", r.NewPassword)
+	err = ildap.User.ChangePwd(user.UserDN, "", r.NewPassword)
 	if err != nil {
 		return nil, tools.NewLdapError(fmt.Errorf("在LDAP更新密码失败" + err.Error()))
 	}
@@ -524,7 +391,7 @@ func (l UserLogic) ChangeUserStatus(c *gin.Context, req interface{}) (data inter
 	}
 
 	if r.Status == 2 {
-		err = ildap.User.Delete(user.Username)
+		err = ildap.User.Delete(user.UserDN)
 		if err != nil {
 			return nil, tools.NewLdapError(fmt.Errorf("在LDAP删除用户失败" + err.Error()))
 		}

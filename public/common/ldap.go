@@ -10,7 +10,7 @@ import (
 	ldap "github.com/go-ldap/ldap/v3"
 )
 
-// 全局mysql数据库变量
+// 全局ldap数据库变量
 var LDAP *ldap.Conn
 
 // Init 初始化连接

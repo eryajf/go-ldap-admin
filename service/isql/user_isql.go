@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/eryajf/go-ldap-admin/model"
+	"github.com/eryajf/go-ldap-admin/model/request"
 	"github.com/eryajf/go-ldap-admin/public/common"
 	"github.com/eryajf/go-ldap-admin/public/tools"
-	"github.com/eryajf/go-ldap-admin/svc/request"
 
 	"github.com/gin-gonic/gin"
 	"github.com/patrickmn/go-cache"
@@ -197,21 +197,32 @@ func (s UserService) Delete(ids []uint) error {
 	var users []model.User
 	for _, id := range ids {
 		// 根据ID获取用户
+		filter := tools.H{"id": id}
+
 		user := new(model.User)
-		err := s.Find(map[string]interface{}{"id": id}, user)
+		err := s.Find(filter, user)
 		if err != nil {
-			return errors.New(fmt.Sprintf("未获取到ID为%d的用户", id))
+			return fmt.Errorf("获取用户信息失败，err: %v", err)
 		}
 		users = append(users, *user)
 	}
 
-	err := common.DB.Select("Roles").Unscoped().Delete(&users).Error
-	// 删除用户成功，则删除用户信息缓存
-	if err == nil {
+	err := common.DB.Debug().Select("Roles").Unscoped().Delete(&users).Error
+	if err != nil {
+		return err
+	} else {
+		// 删除用户成功，则删除用户信息缓存
 		for _, user := range users {
 			userInfoCache.Delete(user.Username)
 		}
 	}
+
+	// 删除用户在group的关联
+	err = common.DB.Debug().Exec("DELETE FROM group_users WHERE user_id IN (?)", ids).Error
+	if err != nil {
+		return err
+	}
+
 	return err
 }
 
