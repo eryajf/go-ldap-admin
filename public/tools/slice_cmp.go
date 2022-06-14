@@ -18,8 +18,13 @@ func ArrStrCmp(src []string, dest []string) ([]string, []string) {
 	}
 	//2.目数组中，存不进去，即重复元素，所有存不进去的集合就是并集
 	for _, v := range dest {
+		l := len(mall)
 		mall[v] = 1
-		set = append(set, v)
+		if l != len(mall) {
+			continue
+		} else {
+			set = append(set, v)
+		}
 	}
 	//3.遍历交集，在并集中找，找到就从并集中删，删完后就是补集（即并-交=所有变化的元素）
 	for _, v := range set {
@@ -50,8 +55,13 @@ func ArrUintCmp(src []uint, dest []uint) ([]uint, []uint) {
 	}
 	//2.目数组中，存不进去，即重复元素，所有存不进去的集合就是并集
 	for _, v := range dest {
+		l := len(mall)
 		mall[v] = 1
-		set = append(set, v)
+		if l != len(mall) {
+			continue
+		} else {
+			set = append(set, v)
+		}
 	}
 	//3.遍历交集，在并集中找，找到就从并集中删，删完后就是补集（即并-交=所有变化的元素）
 	for _, v := range set {
