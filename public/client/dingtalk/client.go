@@ -7,7 +7,7 @@ import (
 )
 
 func InitDingTalkClient() *dingtalk.DingTalk {
-	dingTalk, err := dingtalk.NewClient(config.Conf.DingTalk.DingTalkAppKey, config.Conf.DingTalk.DingTalkAppSecret)
+	dingTalk, err := dingtalk.NewClient(config.Conf.DingTalk.AppKey, config.Conf.DingTalk.AppSecret)
 	if err != nil {
 		common.Log.Error("init dingding client failed, err:%v\n", err)
 	}

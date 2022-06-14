@@ -215,7 +215,7 @@ func InitData() {
 		{
 			Model:         gorm.Model{ID: 1},
 			Username:      "admin",
-			Password:      tools.NewGenPasswd(config.Conf.Ldap.LdapAdminPass),
+			Password:      tools.NewGenPasswd(config.Conf.Ldap.AdminPass),
 			Nickname:      "管理员",
 			GivenName:     "最强后台",
 			Mail:          "admin@eryajf.net",
@@ -229,7 +229,7 @@ func InitData() {
 			Status:        1,
 			Creator:       "系统",
 			Roles:         roles[:1],
-			UserDN:        config.Conf.Ldap.LdapAdminDN,
+			UserDN:        config.Conf.Ldap.AdminDN,
 		},
 	}
 
@@ -621,15 +621,15 @@ func InitData() {
 	groups := []model.Group{
 		{
 			Model:              gorm.Model{ID: 1},
-			GroupName:          config.Conf.DingTalk.DingTalkFlag + "root",
+			GroupName:          config.Conf.DingTalk.Flag + "root",
 			Remark:             "钉钉根部门",
 			Creator:            "system",
 			GroupType:          "ou",
 			ParentId:           0,
-			SourceDeptId:       fmt.Sprintf("%s_%d", config.Conf.DingTalk.DingTalkFlag, 1),
-			Source:             config.Conf.DingTalk.DingTalkFlag,
-			SourceDeptParentId: fmt.Sprintf("%s_%d", config.Conf.DingTalk.DingTalkFlag, 0),
-			GroupDN:            fmt.Sprintf("ou=%s,%s", config.Conf.DingTalk.DingTalkFlag+"root", config.Conf.Ldap.LdapBaseDN),
+			SourceDeptId:       fmt.Sprintf("%s_%d", config.Conf.DingTalk.Flag, 1),
+			Source:             config.Conf.DingTalk.Flag,
+			SourceDeptParentId: fmt.Sprintf("%s_%d", config.Conf.DingTalk.Flag, 0),
+			GroupDN:            fmt.Sprintf("ou=%s,%s", config.Conf.DingTalk.Flag+"root", config.Conf.Ldap.BaseDN),
 		},
 		{
 			Model:              gorm.Model{ID: 2},
@@ -641,7 +641,7 @@ func InitData() {
 			SourceDeptId:       "wechatwork_1",
 			Source:             "wechatwork",
 			SourceDeptParentId: "wechatwork_0",
-			GroupDN:            fmt.Sprintf("ou=%s,%s", "wechatworkroot", config.Conf.Ldap.LdapBaseDN),
+			GroupDN:            fmt.Sprintf("ou=%s,%s", "wechatworkroot", config.Conf.Ldap.BaseDN),
 		},
 		{
 			Model:              gorm.Model{ID: 3},
@@ -653,7 +653,7 @@ func InitData() {
 			SourceDeptId:       "feishu_1",
 			Source:             "feishu",
 			SourceDeptParentId: "feishu_0",
-			GroupDN:            fmt.Sprintf("ou=%s,%s", "feishuroot", config.Conf.Ldap.LdapBaseDN),
+			GroupDN:            fmt.Sprintf("ou=%s,%s", "feishuroot", config.Conf.Ldap.BaseDN),
 		},
 		// {
 		// 	Model:     gorm.Model{ID: 2},

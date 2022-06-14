@@ -23,7 +23,7 @@ func (x GroupService) Add(g *model.Group) error { //organizationalUnit
 	}
 	if g.GroupType == "cn" {
 		add.Attribute("objectClass", []string{"groupOfUniqueNames", "top"})
-		add.Attribute("uniqueMember", []string{config.Conf.Ldap.LdapAdminDN}) // 所以这里创建组的时候，默认将admin加入其中，以免创建时没有人员而报上边的错误
+		add.Attribute("uniqueMember", []string{config.Conf.Ldap.AdminDN}) // 所以这里创建组的时候，默认将admin加入其中，以免创建时没有人员而报上边的错误
 	}
 	add.Attribute(g.GroupType, []string{g.GroupName})
 	add.Attribute("description", []string{g.Remark})
@@ -40,7 +40,7 @@ func (x GroupService) Update(oldGroup, newGroup *model.Group) error {
 		return err
 	}
 	// 如果配置文件允许修改分组名称，且分组名称发生了变化，那么执行修改分组名称
-	if config.Conf.Ldap.LdapGroupNameModify && newGroup.GroupName != oldGroup.GroupName {
+	if config.Conf.Ldap.GroupNameModify && newGroup.GroupName != oldGroup.GroupName {
 		modify := ldap.NewModifyDNRequest(oldGroup.GroupDN, newGroup.GroupDN, true, "")
 		err := common.LDAP.ModifyDN(modify)
 		if err != nil {

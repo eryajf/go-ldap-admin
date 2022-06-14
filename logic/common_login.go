@@ -40,7 +40,7 @@ func CommonAddGroup(group *model.Group) error {
 
 func CommonUpdateGroup(oldGroup, newGroup *model.Group) error {
 	//若配置了不允许修改分组名称，则不更新分组名称
-	if !config.Conf.Ldap.LdapGroupNameModify {
+	if !config.Conf.Ldap.GroupNameModify {
 		newGroup.GroupName = oldGroup.GroupName
 	}
 
@@ -106,7 +106,7 @@ func CommonAddUser(user *model.User, groupId []uint) error {
 
 func CommonUpdateUser(oldUser, newUser *model.User, groupId []uint) error {
 	// 更新用户
-	if !config.Conf.Ldap.LdapUserNameModify {
+	if !config.Conf.Ldap.UserNameModify {
 		newUser.Username = oldUser.Username
 	}
 

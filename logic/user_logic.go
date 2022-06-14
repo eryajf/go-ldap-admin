@@ -50,7 +50,7 @@ func (l UserLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspEr
 			return nil, tools.NewValidatorError(fmt.Errorf("密码长度至少为6位"))
 		}
 	} else {
-		r.Password = config.Conf.Ldap.LdapUserInitPassword
+		r.Password = config.Conf.Ldap.UserInitPassword
 	}
 
 	// 当前登陆用户角色排序最小值（最高等级角色）以及当前登陆的用户
@@ -99,7 +99,7 @@ func (l UserLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspEr
 		DepartmentId:  tools.SliceToString(r.DepartmentId, ","),
 		Source:        r.Source,
 		Roles:         roles,
-		UserDN:        fmt.Sprintf("uid=%s,%s", r.Username, config.Conf.Ldap.LdapUserDN),
+		UserDN:        fmt.Sprintf("uid=%s,%s", r.Username, config.Conf.Ldap.UserDN),
 	}
 
 	if user.Source == "" {
