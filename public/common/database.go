@@ -63,7 +63,7 @@ func InitMysql() {
 
 // 自动迁移表结构
 func dbAutoMigrate() {
-	DB.AutoMigrate(
+	_ = DB.AutoMigrate(
 		&model.User{},
 		&model.Role{},
 		&model.Group{},

@@ -11,8 +11,8 @@ import (
 
 	"time"
 
-	"github.com/eryajf/go-ldap-admin/svc/request"
-	"github.com/eryajf/go-ldap-admin/svc/response"
+	"github.com/eryajf/go-ldap-admin/model/request"
+	"github.com/eryajf/go-ldap-admin/model/response"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"

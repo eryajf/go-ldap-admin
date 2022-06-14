@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/eryajf/go-ldap-admin/logic"
-	"github.com/eryajf/go-ldap-admin/svc/request"
+	"github.com/eryajf/go-ldap-admin/model/request"
 
 	"github.com/gin-gonic/gin"
 )
@@ -85,6 +85,6 @@ func (m *GroupController) RemoveUser(c *gin.Context) {
 func (m *GroupController) SyncDingTalkDepts(c *gin.Context) {
 	req := new(request.SyncDingTalkDeptsReq)
 	Run(c, req, func() (interface{}, interface{}) {
-		return logic.DingTalk.DsyncDingTalkDepts(c, req)
+		return logic.DingTalk.SyncDingTalkDepts(c, req)
 	})
 }

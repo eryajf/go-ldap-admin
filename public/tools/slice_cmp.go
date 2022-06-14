@@ -20,9 +20,9 @@ func ArrStrCmp(src []string, dest []string) ([]string, []string) {
 	for _, v := range dest {
 		l := len(mall)
 		mall[v] = 1
-		if l != len(mall) { //长度变化，即可以存
-			l = len(mall)
-		} else { //存不了，进并集
+		if l != len(mall) {
+			continue
+		} else {
 			set = append(set, v)
 		}
 	}
@@ -32,7 +32,7 @@ func ArrStrCmp(src []string, dest []string) ([]string, []string) {
 	}
 	//4.此时，mall是补集，所有元素去源中找，找到就是删除的，找不到的必定能在目数组中找到，即新加的
 	var added, deleted []string
-	for v, _ := range mall {
+	for v := range mall {
 		_, exist := msrc[v]
 		if exist {
 			deleted = append(deleted, v)
@@ -57,9 +57,9 @@ func ArrUintCmp(src []uint, dest []uint) ([]uint, []uint) {
 	for _, v := range dest {
 		l := len(mall)
 		mall[v] = 1
-		if l != len(mall) { //长度变化，即可以存
-			l = len(mall)
-		} else { //存不了，进并集
+		if l != len(mall) {
+			continue
+		} else {
 			set = append(set, v)
 		}
 	}
@@ -69,7 +69,7 @@ func ArrUintCmp(src []uint, dest []uint) ([]uint, []uint) {
 	}
 	//4.此时，mall是补集，所有元素去源中找，找到就是删除
 	var added, deleted []uint
-	for v, _ := range mall {
+	for v := range mall {
 		_, exist := msrc[v]
 		if exist {
 			deleted = append(deleted, v)
