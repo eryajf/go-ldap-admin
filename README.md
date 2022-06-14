@@ -105,7 +105,6 @@
 ## 贡献者
 
 <!-- readme: collaborators,contributors -start -->
-
 <table>
 <tr>
     <td align="center">
@@ -123,7 +122,6 @@
         </a>
     </td></tr>
 </table>
-
 <!-- readme: collaborators,contributors -end -->
 
 ## 使用登记
