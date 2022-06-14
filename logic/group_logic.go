@@ -47,7 +47,7 @@ func (l GroupLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspE
 	if r.ParentId == 0 {
 		group.SourceDeptId = "platform_0"
 		group.SourceDeptParentId = "platform_0"
-		group.GroupDN = fmt.Sprintf("%s=%s,%s", r.GroupType, r.GroupName, config.Conf.Ldap.LdapBaseDN)
+		group.GroupDN = fmt.Sprintf("%s=%s,%s", r.GroupType, r.GroupName, config.Conf.Ldap.BaseDN)
 	} else {
 		parentGroup := new(model.Group)
 		err := isql.Group.Find(tools.H{"id": r.ParentId}, parentGroup)
@@ -168,7 +168,7 @@ func (l GroupLogic) Update(c *gin.Context, req interface{}) (data interface{}, r
 	}
 
 	//若配置了不允许修改分组名称，则不更新分组名称
-	if !config.Conf.Ldap.LdapGroupNameModify {
+	if !config.Conf.Ldap.GroupNameModify {
 		newGroup.GroupName = oldGroup.GroupName
 	}
 

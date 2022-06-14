@@ -43,9 +43,9 @@ func (d *DingTalkLogic) SyncDingTalkDepts(c *gin.Context, req interface{}) (data
 			GroupType:          "cn",
 			GroupName:          dept.Name,
 			Remark:             dept.Remark,
-			SourceDeptId:       fmt.Sprintf("%s_%d", config.Conf.DingTalk.DingTalkFlag, dept.Id),
-			Source:             config.Conf.DingTalk.DingTalkFlag,
-			SourceDeptParentId: fmt.Sprintf("%s_%d", config.Conf.DingTalk.DingTalkFlag, 1),
+			SourceDeptId:       fmt.Sprintf("%s_%d", config.Conf.DingTalk.Flag, dept.Id),
+			Source:             config.Conf.DingTalk.Flag,
+			SourceDeptParentId: fmt.Sprintf("%s_%d", config.Conf.DingTalk.Flag, 1),
 		})
 		if err != nil {
 			return nil, tools.NewOperationError(fmt.Errorf("DsyncDingTalkDepts添加根部门失败：%s", err.Error()))
@@ -56,9 +56,9 @@ func (d *DingTalkLogic) SyncDingTalkDepts(c *gin.Context, req interface{}) (data
 			GroupType:          "cn",
 			GroupName:          dept.Name,
 			Remark:             dept.Remark,
-			SourceDeptId:       fmt.Sprintf("%s_%d", config.Conf.DingTalk.DingTalkFlag, dept.Id),
-			Source:             config.Conf.DingTalk.DingTalkFlag,
-			SourceDeptParentId: fmt.Sprintf("%s_%d", config.Conf.DingTalk.DingTalkFlag, dept.ParentId),
+			SourceDeptId:       fmt.Sprintf("%s_%d", config.Conf.DingTalk.Flag, dept.Id),
+			Source:             config.Conf.DingTalk.Flag,
+			SourceDeptParentId: fmt.Sprintf("%s_%d", config.Conf.DingTalk.Flag, dept.ParentId),
 		})
 		if err != nil {
 			return nil, tools.NewOperationError(fmt.Errorf("DsyncDingTalkDepts添加根部门失败：%s", err.Error()))
@@ -133,7 +133,7 @@ func (d DingTalkLogic) SyncDingTalkUsers(c *gin.Context, req interface{}) (data 
 		//钉钉部门ids,转换为内部部门id
 		var sourceDeptIds []string
 		for _, deptId := range detail.DeptIds {
-			sourceDeptIds = append(sourceDeptIds, fmt.Sprintf("%s_%d", config.Conf.DingTalk.DingTalkFlag, deptId))
+			sourceDeptIds = append(sourceDeptIds, fmt.Sprintf("%s_%d", config.Conf.DingTalk.Flag, deptId))
 		}
 		groupIds, err := isql.Group.DingTalkDeptIdsToGroupIds(sourceDeptIds)
 		if err != nil {
@@ -143,7 +143,7 @@ func (d DingTalkLogic) SyncDingTalkUsers(c *gin.Context, req interface{}) (data 
 		// 写入用户
 		user := request.DingUserAddReq{
 			Username:      userName,
-			Password:      config.Conf.Ldap.LdapUserInitPassword,
+			Password:      config.Conf.Ldap.UserInitPassword,
 			Nickname:      detail.Name,
 			GivenName:     detail.Name,
 			Mail:          detail.OrgEmail,
@@ -156,9 +156,9 @@ func (d DingTalkLogic) SyncDingTalkUsers(c *gin.Context, req interface{}) (data 
 			Introduction:  detail.Remark,
 			Status:        1,
 			DepartmentId:  groupIds,
-			Source:        config.Conf.DingTalk.DingTalkFlag,
-			SourceUserId:  fmt.Sprintf("%s_%s", config.Conf.DingTalk.DingTalkFlag, detail.UserId),
-			SourceUnionId: fmt.Sprintf("%s_%s", config.Conf.DingTalk.DingTalkFlag, detail.UnionId),
+			Source:        config.Conf.DingTalk.Flag,
+			SourceUserId:  fmt.Sprintf("%s_%s", config.Conf.DingTalk.Flag, detail.UserId),
+			SourceUnionId: fmt.Sprintf("%s_%s", config.Conf.DingTalk.Flag, detail.UnionId),
 		}
 		// 入库
 		err = d.AddUsers(&user)
@@ -175,7 +175,7 @@ func (d DingTalkLogic) SyncDingTalkUsers(c *gin.Context, req interface{}) (data 
 	// 4.遍历id，开始处理
 	for _, uid := range userIds {
 		user := new(model.User)
-		err = isql.User.Find(tools.H{"source_user_id": fmt.Sprintf("%s_%s", config.Conf.DingTalk.DingTalkFlag, uid)}, user)
+		err = isql.User.Find(tools.H{"source_user_id": fmt.Sprintf("%s_%s", config.Conf.DingTalk.Flag, uid)}, user)
 		if err != nil {
 			return nil, tools.NewMySqlError(fmt.Errorf("在MySQL查询用户失败: " + err.Error()))
 		}
@@ -226,7 +226,7 @@ func (d DingTalkLogic) AddUsers(r *request.DingUserAddReq) error {
 			Source:        r.Source,
 			SourceUserId:  r.SourceUserId,
 			SourceUnionId: r.SourceUnionId,
-			UserDN:        fmt.Sprintf("uid=%s,%s", r.Username, config.Conf.Ldap.LdapUserDN),
+			UserDN:        fmt.Sprintf("uid=%s,%s", r.Username, config.Conf.Ldap.UserDN),
 		}
 		err = CommonAddUser(&user, r.DepartmentId)
 		if err != nil {

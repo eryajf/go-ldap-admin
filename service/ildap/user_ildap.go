@@ -50,8 +50,8 @@ func (x UserService) Update(oldusername string, user *model.User) error {
 	if err != nil {
 		return err
 	}
-	if config.Conf.Ldap.LdapUserNameModify && oldusername != user.Username {
-		modifyDn := ldap.NewModifyDNRequest(fmt.Sprintf("uid=%s,%s", oldusername, config.Conf.Ldap.LdapUserDN), fmt.Sprintf("uid=%s", user.Username), true, "")
+	if config.Conf.Ldap.UserNameModify && oldusername != user.Username {
+		modifyDn := ldap.NewModifyDNRequest(fmt.Sprintf("uid=%s,%s", oldusername, config.Conf.Ldap.UserDN), fmt.Sprintf("uid=%s", user.Username), true, "")
 		return common.LDAP.ModifyDN(modifyDn)
 	}
 	return nil
@@ -75,9 +75,9 @@ func (x UserService) ChangePwd(udn, oldpasswd, newpasswd string) error {
 
 // NewPwd 新旧密码都是空，通过管理员可以修改成功并返回新的密码
 func (x UserService) NewPwd(username string) (string, error) {
-	udn := fmt.Sprintf("uid=%s,%s", username, config.Conf.Ldap.LdapUserDN)
+	udn := fmt.Sprintf("uid=%s,%s", username, config.Conf.Ldap.UserDN)
 	if username == "admin" {
-		udn = config.Conf.Ldap.LdapAdminDN
+		udn = config.Conf.Ldap.AdminDN
 	}
 	modifyPass := ldap.NewPasswordModifyRequest(udn, "", "")
 	newpass, err := common.LDAP.PasswordModify(modifyPass)
