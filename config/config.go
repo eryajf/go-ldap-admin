@@ -16,17 +16,17 @@ import (
 var Conf = new(config)
 
 type config struct {
-	System       *SystemConfig    `mapstructure:"system" json:"system"`
-	Logs         *LogsConfig      `mapstructure:"logs" json:"logs"`
-	Mysql        *MysqlConfig     `mapstructure:"mysql" json:"mysql"`
-	Casbin       *CasbinConfig    `mapstructure:"casbin" json:"casbin"`
-	Jwt          *JwtConfig       `mapstructure:"jwt" json:"jwt"`
-	RateLimit    *RateLimitConfig `mapstructure:"rate-limit" json:"rateLimit"`
-	Ldap         *LdapConfig      `mapstructure:"ldap" json:"ldap"`
-	Email        *EmailConfig     `mapstructure:"email" json:"email"`
-	DingTalk     *DingTalkConfig  `mapstructure:"dingtalk" json:"dingTalk"`
-	WeComConfig  *WeComConfig     `mapstructure:"wecom" json:"weCom"`
-	FeiShuConfig *FeiShuConfig    `mapstructure:"feishu" json:"feiShu"`
+	System    *SystemConfig    `mapstructure:"system" json:"system"`
+	Logs      *LogsConfig      `mapstructure:"logs" json:"logs"`
+	Mysql     *MysqlConfig     `mapstructure:"mysql" json:"mysql"`
+	Casbin    *CasbinConfig    `mapstructure:"casbin" json:"casbin"`
+	Jwt       *JwtConfig       `mapstructure:"jwt" json:"jwt"`
+	RateLimit *RateLimitConfig `mapstructure:"rate-limit" json:"rateLimit"`
+	Ldap      *LdapConfig      `mapstructure:"ldap" json:"ldap"`
+	Email     *EmailConfig     `mapstructure:"email" json:"email"`
+	DingTalk  *DingTalkConfig  `mapstructure:"dingtalk" json:"dingTalk"`
+	WeCom     *WeComConfig     `mapstructure:"wecom" json:"weCom"`
+	FeiShu    *FeiShuConfig    `mapstructure:"feishu" json:"feiShu"`
 }
 
 // 设置读取配置信息
@@ -46,7 +46,7 @@ func InitConfig() {
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		// 将读取的配置信息保存至全局变量Conf
 		if err := viper.Unmarshal(Conf); err != nil {
-			panic(fmt.Errorf("初始化配置文件失败:%s \n", err))
+			panic(fmt.Errorf("初始化配置文件失败:%s", err))
 		}
 		// 读取rsa key
 		Conf.System.RSAPublicBytes = RSAReadKeyFromFile(Conf.System.RSAPublicKey)
@@ -54,11 +54,11 @@ func InitConfig() {
 	})
 
 	if err != nil {
-		panic(fmt.Errorf("读取配置文件失败:%s \n", err))
+		panic(fmt.Errorf("读取配置文件失败:%s", err))
 	}
 	// 将读取的配置信息保存至全局变量Conf
 	if err := viper.Unmarshal(Conf); err != nil {
-		panic(fmt.Errorf("初始化配置文件失败:%s \n", err))
+		panic(fmt.Errorf("初始化配置文件失败:%s", err))
 	}
 	// 读取rsa key
 	Conf.System.RSAPublicBytes = RSAReadKeyFromFile(Conf.System.RSAPublicKey)
@@ -134,14 +134,14 @@ type RateLimitConfig struct {
 }
 
 type LdapConfig struct {
-	LdapUrl              string `mapstructure:"ldap-url" json:"ldapUrl"`
-	LdapBaseDN           string `mapstructure:"ldap-base-dn" json:"ldapBaseDN"`
-	LdapAdminDN          string `mapstructure:"ldap-admin-dn" json:"ldapAdminDN"`
-	LdapAdminPass        string `mapstructure:"ldap-admin-pass" json:"ldapAdminPass"`
-	LdapUserDN           string `mapstructure:"ldap-user-dn" json:"ldapUserDN"`
-	LdapUserInitPassword string `mapstructure:"ldap-user-init-password" json:"ldapUserInitPassword"`
-	LdapGroupNameModify  bool   `mapstructure:"ldap-group-name-modify" json:"ldapGroupNameModify"`
-	LdapUserNameModify   bool   `mapstructure:"ldap-user-name-modify" json:"ldapUserNameModify"`
+	Url              string `mapstructure:"url" json:"url"`
+	BaseDN           string `mapstructure:"base-dn" json:"baseDN"`
+	AdminDN          string `mapstructure:"admin-dn" json:"adminDN"`
+	AdminPass        string `mapstructure:"admin-pass" json:"adminPass"`
+	UserDN           string `mapstructure:"user-dn" json:"userDN"`
+	UserInitPassword string `mapstructure:"user-init-password" json:"userInitPassword"`
+	GroupNameModify  bool   `mapstructure:"group-name-modify" json:"groupNameModify"`
+	UserNameModify   bool   `mapstructure:"user-name-modify" json:"userNameModify"`
 }
 type EmailConfig struct {
 	Host string `mapstructure:"host" json:"host"`
@@ -152,12 +152,12 @@ type EmailConfig struct {
 }
 
 type DingTalkConfig struct {
-	DingTalkAppKey     string `mapstructure:"ding-talk-app-key" json:"dingTalkAppKey"`
-	DingTalkAppSecret  string `mapstructure:"ding-talk-app-secret" json:"dingTalkAppSecret"`
-	DingTalkAgentId    string `mapstructure:"ding-talk-agent-id" json:"dingTalkAgentId"`
-	DingTalkRootOuName string `mapstructure:"ding-talk-root-ou-name" json:"dingTalkRootOuName"`
-	DingTalkFlag       string `mapstructure:"ding-talk-flag" json:"dingTalkFlag"`
-	DingTalkEnableSync bool   `mapstructure:"ding-talk-enable-sync" json:"dingTalkEnableSync"`
+	AppKey     string `mapstructure:"app-key" json:"appKey"`
+	AppSecret  string `mapstructure:"app-secret" json:"appSecret"`
+	AgentId    string `mapstructure:"agent-id" json:"agentId"`
+	RootOuName string `mapstructure:"root-ou-name" json:"rootOuName"`
+	Flag       string `mapstructure:"flag" json:"flag"`
+	EnableSync bool   `mapstructure:"enable-sync" json:"enableSync"`
 }
 
 type WeComConfig struct {

@@ -65,7 +65,7 @@ func main() {
 			common.Log.Fatalf("listen: %s\n", err)
 		}
 	}()
-	if config.Conf.DingTalk.DingTalkEnableSync {
+	if config.Conf.DingTalk.EnableSync {
 		//启动定时任务
 		c := cron.New(cron.WithSeconds())
 		_, err := c.AddFunc("0 1 0 * * *", func() {
