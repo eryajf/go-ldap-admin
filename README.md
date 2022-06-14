@@ -1,6 +1,6 @@
 <p align="center">
   <a href="" rel="noopener">
- <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220607_174313.png" alt="Project logo"></a>
+ <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220614_131521.jpg" alt="Project logo"></a>
 </p>
 <h1 align="center">Go Ldap Admin</h1>
 
