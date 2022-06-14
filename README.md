@@ -37,8 +37,8 @@
 - [另外](#%E5%8F%A6%E5%A4%96)
 - [加群](#%E5%8A%A0%E7%BE%A4)
 - [捐赠](#%E6%8D%90%E8%B5%A0)
-- [贡献者](#%E8%B4%A1%E7%8C%AE%E8%80%85)
 - [使用登记](#%E4%BD%BF%E7%94%A8%E7%99%BB%E8%AE%B0)
+- [贡献者](#%E8%B4%A1%E7%8C%AE%E8%80%85)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
