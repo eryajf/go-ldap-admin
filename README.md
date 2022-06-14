@@ -23,7 +23,7 @@
 ---
 
 <p align="center"> 🌉 基于Go+Vue实现的openLDAP后台管理项目。
-    <br> 
+    <br>
 </p>
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -102,6 +102,10 @@
 
 如果你觉得这个项目对你有帮助，你可以请作者喝杯咖啡 ☕️ [点我](http://ldapdoc.eryajf.net/pages/2b6725/)
 
+## 使用登记
+
+如果你所在公司使用了该项目，烦请在这里留下脚印，感谢支持🥳 [点我](https://github.com/eryajf/go-ldap-admin/issues/18)
+
 ## 贡献者
 
 <!-- readme: collaborators,contributors -start -->
@@ -123,7 +127,3 @@
     </td></tr>
 </table>
 <!-- readme: collaborators,contributors -end -->
-
-## 使用登记
-
-如果你所在公司使用了该项目，烦请在这里留下脚印，感谢支持🥳 [点我](https://github.com/eryajf/go-ldap-admin/issues/18)
