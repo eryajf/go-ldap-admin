@@ -85,3 +85,7 @@ type UserNoInGroupReq struct {
 // SyncDingTalkDeptsReq 同步钉钉部门信息
 type SyncDingTalkDeptsReq struct {
 }
+
+// SyncWeComDeptsReq 同步企业微信部门信息
+type SyncWeComDeptsReq struct {
+}

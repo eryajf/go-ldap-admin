@@ -11,12 +11,13 @@ require (
 	github.com/go-ldap/ldap/v3 v3.4.2
 	github.com/go-playground/locales v0.14.0
 	github.com/go-playground/universal-translator v0.18.0
-	github.com/go-playground/validator/v10 v10.9.0
+	github.com/go-playground/validator/v10 v10.10.0
 	github.com/juju/ratelimit v1.0.1
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/robfig/cron/v3 v3.0.0
 	github.com/spf13/viper v1.11.0
 	github.com/thoas/go-funk v0.7.0
+	github.com/wenerme/go-wecom v0.0.0-20220123104505-8a1577192bbb
 	github.com/zhaoyunxing92/dingtalk/v2 v2.0.7-0.20220601083444-173c10c3f835
 	go.uber.org/zap v1.19.1
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
@@ -33,6 +34,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.8.1 // indirect
+	github.com/wenerme/go-req v0.0.0-20210907160348-d822e81276bb // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
 

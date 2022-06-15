@@ -82,8 +82,12 @@ type UserChangeUserStatusReq struct {
 type UserGetUserInfoReq struct {
 }
 
-// 同步钉钉用户信息
+// SyncDingUserReq 同步钉钉用户信息
 type SyncDingUserReq struct {
+}
+
+// SyncWeComUserReq 同步企业微信用户信息
+type SyncWeComUserReq struct {
 }
 
 // UserListReq 获取用户列表结构体

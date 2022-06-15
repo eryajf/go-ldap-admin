@@ -72,3 +72,11 @@ func (uc UserController) SyncDingTalkUsers(c *gin.Context) {
 		return logic.DingTalk.SyncDingTalkUsers(c, req)
 	})
 }
+
+// 同步企业微信用户信息
+func (uc UserController) SyncWeComUsers(c *gin.Context) {
+	req := new(request.SyncWeComUserReq)
+	Run(c, req, func() (interface{}, interface{}) {
+		return logic.WeCom.SyncWeComUsers(c, req)
+	})
+}
