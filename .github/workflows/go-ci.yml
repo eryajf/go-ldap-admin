@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   golangci:
-    name: lint
+    name: golang-lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-go@v3
@@ -15,3 +15,14 @@ jobs:
         uses: golangci/golangci-lint-action@v3
         with:
           version: v1.46.2
+  build:
+    name: go-build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.17
+    - name: Build
+      run: go build -v ./...

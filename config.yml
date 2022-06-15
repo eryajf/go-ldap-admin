@@ -100,18 +100,12 @@ ldap:
   # 是否允许更改用户DN
   user-name-modify: false
 dingtalk:
-  #为了方便数据库存储，防止第三方id重复，故而增加一个前缀（用于用户表和分组表中第三方id存储,加上此处配置的source字段进行区分来源，判断唯一）。长度不超过10.
-  #因为分组表不可能成为性能瓶颈，故而不再拆分到新的关系表去维护第三方信息，用户表设计同理
-  flag: "dingtalk"
-  # 使用之前是需要在钉钉开发者后台(https://open-dev.dingtalk.com/#/index) 创建一个小程序或应用.获取appkey和appsecret，agentId
-  # 目前agent-id尚未使用，先存着后续功能可能会用到
-  # 由于获取钉钉第一个部门的id默认为1，故而这边需要配置一下钉钉的第一个部门的名称，不去钉钉获取
-  app-key: "xxxxxxxxxxxxxxx"
-  app-secret: "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-  agent-id: "12121212"
-  root-ou-name: "钉钉首个部门的名称"
-  # 是否开启定时同步钉钉的任务
-  enable-sync: false
+  # 配置获取详细文档参考： http://ldapdoc.eryajf.net/pages/94f43a/
+  flag: "dingtalk" # 作为钉钉在平台的标识
+  app-key: "xxxxxxxxxxxxxxx" # 应用的key
+  app-secret: "xxxxxxxxxxxxxxxxxxxxxxxxxxxx" # 应用的secret
+  agent-id: "12121212" # 目前agent-id未使用到，可忽略
+  enable-sync: false  # 是否开启定时同步钉钉的任务
 wecom:
   flag: "wecom"
 feishu:
