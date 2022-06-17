@@ -520,8 +520,8 @@ github.com/ugorji/go/codec v1.2.3 h1:/mVYEV+Jo3IZKeA5gBngN0AvNnQltEDkR+eQikkWQu0
 github.com/ugorji/go/codec v1.2.3/go.mod h1:5FxzDJIgeiWJZslYHPj+LS1dq1ZBQVelZFnjsFGI/Uc=
 github.com/wenerme/go-req v0.0.0-20210907160348-d822e81276bb h1:4/6Qqg+E8z98SCi21dFnhL6goSWOYMunJkMc+YanrEw=
 github.com/wenerme/go-req v0.0.0-20210907160348-d822e81276bb/go.mod h1:aQUkMiMp1qZkuSsdu2Vy2ZQK33cPNVmyWFzXatfP+Y4=
-github.com/wenerme/go-wecom v0.0.0-20220123104505-8a1577192bbb h1:y1pn4W8X44YRAZm6FPvSQYQXuue3s5bsgX2uVvLIk5c=
-github.com/wenerme/go-wecom v0.0.0-20220123104505-8a1577192bbb/go.mod h1:Jz7prkOPdCbWbT5bOQOFkZUQp7pqEc8yiWaCgOVWPH0=
+github.com/wenerme/go-wecom v0.0.0-20220617125121-2ee950da3e63 h1:wRIOQxBR5XbUZVMKziAjCnlnDhdAjVjBmLsUSn/j/+M=
+github.com/wenerme/go-wecom v0.0.0-20220617125121-2ee950da3e63/go.mod h1:Jz7prkOPdCbWbT5bOQOFkZUQp7pqEc8yiWaCgOVWPH0=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=

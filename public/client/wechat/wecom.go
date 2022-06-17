@@ -6,6 +6,7 @@ import (
 	"github.com/wenerme/go-wecom/wecom"
 )
 
+// GetAllDepts 获取所有部门
 func GetAllDepts() ([]wecom.ListDepartmentResponseItem, error) {
 	depts, err := InitWeComClient().ListDepartment(
 		&wecom.ListDepartmentRequest{},
@@ -16,6 +17,7 @@ func GetAllDepts() ([]wecom.ListDepartmentResponseItem, error) {
 	return depts.Department, nil
 }
 
+// GetAllDepts 获取所有部门
 func GetAllUsers() ([]wecom.ListUserResponseItem, error) {
 	depts, err := GetAllDepts()
 	if err != nil {
@@ -35,4 +37,27 @@ func GetAllUsers() ([]wecom.ListUserResponseItem, error) {
 		us = append(us, users.UserList...)
 	}
 	return us, nil
+}
+
+// GetLeaveUserIds 获取离职人员列表
+func GetLeaveUserIds() ([]string, error) {
+	req := &wecom.GetUnassignedListRequest{
+		PageSize: "1000",
+		Cursor:   "",
+	}
+	ids := []string{}
+	for {
+		rst, err := InitWeComClient().GetUnassignedList(req)
+		if err != nil {
+			return nil, err
+		}
+		for _, info := range rst.Info {
+			ids = append(ids, info.HandoverUserID)
+		}
+		if !rst.IsLast {
+			break
+		}
+		req.Cursor = rst.NextCursor
+	}
+	return ids, nil
 }

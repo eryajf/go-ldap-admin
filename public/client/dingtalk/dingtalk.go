@@ -7,7 +7,7 @@ import (
 	"github.com/zhaoyunxing92/dingtalk/v2/request"
 )
 
-func GetDingTalkAllDepts(deptId int) (result []*DingTalkDept, err error) {
+func GetAllDepts(deptId int) (result []*DingTalkDept, err error) {
 	depts, err := InitDingTalkClient().FetchDeptList(deptId, true, "zh_CN")
 	if err != nil {
 		return result, err
@@ -24,8 +24,8 @@ func GetDingTalkAllDepts(deptId int) (result []*DingTalkDept, err error) {
 	return
 }
 
-func GetDingTalkAllUsers() (result []*DingTalkUser, err error) {
-	depts, err := GetDingTalkAllDepts(1)
+func GetAllUsers() (result []*DingTalkUser, err error) {
+	depts, err := GetAllDepts(1)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func GetDingTalkAllUsers() (result []*DingTalkUser, err error) {
 	return
 }
 
-func GetDingTalkLeaveUserIds() ([]string, error) {
+func GetLeaveUserIds() ([]string, error) {
 	var ids []string
 	ReqParm := struct {
 		Cursor int `json:"cursor"`

@@ -17,7 +17,6 @@ require (
 	github.com/robfig/cron/v3 v3.0.0
 	github.com/spf13/viper v1.11.0
 	github.com/thoas/go-funk v0.7.0
-	github.com/wenerme/go-wecom v0.0.0-20220123104505-8a1577192bbb
 	github.com/zhaoyunxing92/dingtalk/v2 v2.0.7-0.20220601083444-173c10c3f835
 	go.uber.org/zap v1.19.1
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
@@ -25,6 +24,8 @@ require (
 	gorm.io/driver/mysql v1.0.4
 	gorm.io/gorm v1.20.12
 )
+
+require github.com/wenerme/go-wecom v0.0.0-20220617125121-2ee950da3e63
 
 require (
 	github.com/BurntSushi/toml v1.1.0 // indirect

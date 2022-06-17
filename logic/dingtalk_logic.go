@@ -23,7 +23,7 @@ type DingTalkLogic struct {
 //通过钉钉获取部门信息
 func (d *DingTalkLogic) SyncDingTalkDepts(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
 	// 1.获取所有部门
-	depts, err := dingtalk.GetDingTalkAllDepts(1)
+	depts, err := dingtalk.GetAllDepts(1)
 	if err != nil {
 		return nil, tools.NewOperationError(fmt.Errorf("获取钉钉部门列表失败：%s", err.Error()))
 	}
@@ -100,7 +100,7 @@ func (d DingTalkLogic) AddDepts(r *request.DingGroupAddReq) error {
 //根据现有数据库同步到的部门信息，开启用户同步
 func (d DingTalkLogic) SyncDingTalkUsers(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
 	// 1.获取钉钉用户列表
-	users, err := dingtalk.GetDingTalkAllUsers()
+	users, err := dingtalk.GetAllUsers()
 	if err != nil {
 		return nil, tools.NewOperationError(fmt.Errorf("SyncDingTalkUsers获取钉钉用户列表失败：%s", err.Error()))
 	}
@@ -135,7 +135,7 @@ func (d DingTalkLogic) SyncDingTalkUsers(c *gin.Context, req interface{}) (data 
 		for _, deptId := range detail.DeptIds {
 			sourceDeptIds = append(sourceDeptIds, fmt.Sprintf("%s_%d", config.Conf.DingTalk.Flag, deptId))
 		}
-		groupIds, err := isql.Group.DingTalkDeptIdsToGroupIds(sourceDeptIds)
+		groupIds, err := isql.Group.DeptIdsToGroupIds(sourceDeptIds)
 		if err != nil {
 			return nil, tools.NewMySqlError(fmt.Errorf("SyncDingTalkUsers获取钉钉部门ids转换为内部部门id失败：%s", err.Error()))
 		}
@@ -168,7 +168,7 @@ func (d DingTalkLogic) SyncDingTalkUsers(c *gin.Context, req interface{}) (data 
 	}
 
 	// 3.获取钉钉已离职用户id列表
-	userIds, err := dingtalk.GetDingTalkLeaveUserIds()
+	userIds, err := dingtalk.GetLeaveUserIds()
 	if err != nil {
 		return nil, tools.NewOperationError(fmt.Errorf("SyncDingTalkUsers获取钉钉离职用户列表失败：%s", err.Error()))
 	}
