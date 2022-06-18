@@ -161,7 +161,10 @@ type DingTalkConfig struct {
 }
 
 type WeComConfig struct {
-	Flag string `mapstructure:"flag" json:"flag"`
+	Flag       string `mapstructure:"flag" json:"flag"`
+	CorpID     string `mapstructure:"corp-id" json:"corpId"`
+	AgentID    int    `mapstructure:"agent-id" json:"agentId"`
+	CorpSecret string `mapstructure:"corp-secret" json:"corpSecret"`
 }
 
 type FeiShuConfig struct {

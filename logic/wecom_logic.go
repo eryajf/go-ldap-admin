@@ -7,31 +7,34 @@ import (
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/model"
 	"github.com/eryajf/go-ldap-admin/model/request"
-	"github.com/eryajf/go-ldap-admin/public/client/dingtalk"
+	"github.com/eryajf/go-ldap-admin/public/client/wechat"
+	"github.com/mozillazg/go-pinyin"
+	"github.com/wenerme/go-wecom/wecom"
+
 	"github.com/eryajf/go-ldap-admin/public/tools"
 	"github.com/eryajf/go-ldap-admin/service/ildap"
 	"github.com/eryajf/go-ldap-admin/service/isql"
 	"github.com/gin-gonic/gin"
-	"github.com/mozillazg/go-pinyin"
 )
 
-type DingTalkLogic struct {
+type WeComLogic struct {
 }
 
-// TODO: 目前同步没毛病，只有更新还需要再琢磨琢磨
-
-//通过钉钉获取部门信息
-func (d *DingTalkLogic) SyncDingTalkDepts(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
+//通过企业微信获取部门信息
+func (d *WeComLogic) SyncWeComDepts(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
 	// 1.获取所有部门
-	depts, err := dingtalk.GetAllDepts(1)
+	depts, err := wechat.GetAllDepts()
 	if err != nil {
-		return nil, tools.NewOperationError(fmt.Errorf("获取钉钉部门列表失败：%s", err.Error()))
+		return nil, tools.NewOperationError(fmt.Errorf("获取企业微信部门列表失败：%s", err.Error()))
 	}
 	// 2.将部门这个数组进行拆分，一组是父ID为1的，一组是父ID不为1的
-	var firstDepts []*dingtalk.DingTalkDept // 父ID为1的部门
-	var otherDepts []*dingtalk.DingTalkDept // 父ID不为1的部门
+	var firstDepts []wecom.ListDepartmentResponseItem // 父ID为1的部门
+	var otherDepts []wecom.ListDepartmentResponseItem // 父ID不为1的部门
 	for _, dept := range depts {
-		if dept.ParentId == 1 {
+		if dept.ID == 1 { // 跳过ID为1的根部门，由系统配置的根部门进行占位
+			continue
+		}
+		if dept.ParentID == 1 {
 			firstDepts = append(firstDepts, dept)
 		} else {
 			otherDepts = append(otherDepts, dept)
@@ -39,37 +42,37 @@ func (d *DingTalkLogic) SyncDingTalkDepts(c *gin.Context, req interface{}) (data
 	}
 	// 3.先写父ID为1的，再写父ID不为1的
 	for _, dept := range firstDepts {
-		err := d.AddDepts(&request.DingGroupAddReq{
+		err := d.AddDepts(&request.WeComGroupAddReq{
 			GroupType:          "cn",
-			GroupName:          dept.Name,
-			Remark:             dept.Remark,
-			SourceDeptId:       fmt.Sprintf("%s_%d", config.Conf.DingTalk.Flag, dept.Id),
-			Source:             config.Conf.DingTalk.Flag,
-			SourceDeptParentId: fmt.Sprintf("%s_%d", config.Conf.DingTalk.Flag, 1),
+			GroupName:          strings.Join(pinyin.LazyConvert(dept.Name, nil), ""),
+			Remark:             dept.Name,
+			SourceDeptId:       fmt.Sprintf("%s_%d", config.Conf.WeCom.Flag, dept.ID),
+			Source:             config.Conf.WeCom.Flag,
+			SourceDeptParentId: fmt.Sprintf("%s_%d", config.Conf.WeCom.Flag, 1),
 		})
 		if err != nil {
-			return nil, tools.NewOperationError(fmt.Errorf("DsyncDingTalkDepts添加根部门失败：%s", err.Error()))
-		}
-	}
-	for _, dept := range otherDepts {
-		err := d.AddDepts(&request.DingGroupAddReq{
-			GroupType:          "cn",
-			GroupName:          dept.Name,
-			Remark:             dept.Remark,
-			SourceDeptId:       fmt.Sprintf("%s_%d", config.Conf.DingTalk.Flag, dept.Id),
-			Source:             config.Conf.DingTalk.Flag,
-			SourceDeptParentId: fmt.Sprintf("%s_%d", config.Conf.DingTalk.Flag, dept.ParentId),
-		})
-		if err != nil {
-			return nil, tools.NewOperationError(fmt.Errorf("DsyncDingTalkDepts添加根部门失败：%s", err.Error()))
+			return nil, tools.NewOperationError(fmt.Errorf("SyncWeComDepts添加根部门失败：%s", err.Error()))
 		}
 	}
 
+	for _, dept := range otherDepts {
+		err := d.AddDepts(&request.WeComGroupAddReq{
+			GroupType:          "cn",
+			GroupName:          strings.Join(pinyin.LazyConvert(dept.Name, nil), ""),
+			Remark:             dept.Name,
+			SourceDeptId:       fmt.Sprintf("%s_%d", config.Conf.WeCom.Flag, dept.ID),
+			Source:             config.Conf.WeCom.Flag,
+			SourceDeptParentId: fmt.Sprintf("%s_%d", config.Conf.WeCom.Flag, dept.ParentID),
+		})
+		if err != nil {
+			return nil, tools.NewOperationError(fmt.Errorf("SyncWeComDepts添加根部门失败：%s", err.Error()))
+		}
+	}
 	return nil, nil
 }
 
 // AddGroup 添加部门数据
-func (d DingTalkLogic) AddDepts(r *request.DingGroupAddReq) error {
+func (d WeComLogic) AddDepts(r *request.WeComGroupAddReq) error {
 	// 判断部门名称是否存在
 	parentGroup := new(model.Group)
 	err := isql.Group.Find(tools.H{"source_dept_id": r.SourceDeptParentId}, parentGroup)
@@ -98,18 +101,33 @@ func (d DingTalkLogic) AddDepts(r *request.DingGroupAddReq) error {
 }
 
 //根据现有数据库同步到的部门信息，开启用户同步
-func (d DingTalkLogic) SyncDingTalkUsers(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
-	// 1.获取钉钉用户列表
-	users, err := dingtalk.GetAllUsers()
+func (d WeComLogic) SyncWeComUsers(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
+	// 1.获取企业微信用户列表
+	users, err := wechat.GetAllUsers()
 	if err != nil {
-		return nil, tools.NewOperationError(fmt.Errorf("SyncDingTalkUsers获取钉钉用户列表失败：%s", err.Error()))
+		return nil, tools.NewOperationError(fmt.Errorf("SyncWeComUsers获取企业微信用户列表失败：%s", err.Error()))
+	}
+	// 2.将用户拆分成两组，一组状态为1的在职正常用户，一组状态为2的禁用账户
+	// 此问题在企业微信这里没有统一的定论
+	// 	有的公司是员工离职，直接在企业微信后台删除(企业微信又没有对应接口拿到已经被删除的用户)
+	//  也有公司是在后台禁用账号，这两者不同，处理方式也不一样
+	// 	目前先以第二种为准，判断用户状态字段来判断用户是否离职
+	var liveUsers []wecom.ListUserResponseItem
+	var leaveUsers []wecom.ListUserResponseItem
+	for _, user := range users {
+		if user.Status == 1 {
+			liveUsers = append(liveUsers, user)
+		}
+		if user.Status == 2 {
+			leaveUsers = append(leaveUsers, user)
+		}
 	}
 	// 2.遍历用户，开始写入
-	for _, detail := range users {
+	for _, detail := range liveUsers {
 		// 用户名的几种情况
 		var userName string
-		if detail.OrgEmail != "" {
-			userName = strings.Split(detail.OrgEmail, "@")[0]
+		if detail.Email != "" {
+			userName = strings.Split(detail.Email, "@")[0]
 		}
 		if userName == "" && detail.Name != "" {
 			userName = strings.Join(pinyin.LazyConvert(detail.Name, nil), "")
@@ -121,61 +139,57 @@ func (d DingTalkLogic) SyncDingTalkUsers(c *gin.Context, req interface{}) (data 
 			userName = strings.Split(detail.Email, "@")[0]
 		}
 
-		if detail.OrgEmail == "" {
-			detail.OrgEmail = detail.Email
+		if detail.BizMail == "" {
+			detail.BizMail = detail.Email
 		}
 
 		// 如果企业内没有工号，则工号用名字占位
-		if detail.JobNumber == "" {
-			detail.JobNumber = detail.Mobile
-		}
+		// if detail.JobNumber == "" {
+		// 	detail.JobNumber = detail.Mobile
+		// }
 
-		//钉钉部门ids,转换为内部部门id
+		//企业微信部门ids,转换为内部部门id
 		var sourceDeptIds []string
-		for _, deptId := range detail.DeptIds {
-			sourceDeptIds = append(sourceDeptIds, fmt.Sprintf("%s_%d", config.Conf.DingTalk.Flag, deptId))
+		for _, deptId := range detail.Department {
+			sourceDeptIds = append(sourceDeptIds, fmt.Sprintf("%s_%d", config.Conf.WeCom.Flag, deptId))
 		}
 		groupIds, err := isql.Group.DeptIdsToGroupIds(sourceDeptIds)
 		if err != nil {
-			return nil, tools.NewMySqlError(fmt.Errorf("SyncDingTalkUsers获取钉钉部门ids转换为内部部门id失败：%s", err.Error()))
+			return nil, tools.NewMySqlError(fmt.Errorf("SyncWeComUsers获取企业微信部门ids转换为内部部门id失败：%s", err.Error()))
 		}
 
 		// 写入用户
-		user := request.DingUserAddReq{
+		user := request.WeComUserAddReq{
 			Username:      userName,
 			Password:      config.Conf.Ldap.UserInitPassword,
 			Nickname:      detail.Name,
 			GivenName:     detail.Name,
-			Mail:          detail.OrgEmail,
-			JobNumber:     detail.JobNumber,
+			Mail:          detail.BizMail,
+			JobNumber:     detail.Name, // 工号暂用名字替代
 			Mobile:        detail.Mobile,
 			Avatar:        detail.Avatar,
-			PostalAddress: detail.WorkPlace,
+			PostalAddress: detail.Address,
 			// Departments:   dept.GroupName,
-			Position:      detail.Title,
-			Introduction:  detail.Remark,
+			Position:      detail.Position,
+			Introduction:  detail.Name,
 			Status:        1,
 			DepartmentId:  groupIds,
-			Source:        config.Conf.DingTalk.Flag,
-			SourceUserId:  fmt.Sprintf("%s_%s", config.Conf.DingTalk.Flag, detail.UserId),
-			SourceUnionId: fmt.Sprintf("%s_%s", config.Conf.DingTalk.Flag, detail.UnionId),
+			Source:        config.Conf.WeCom.Flag,
+			SourceUserId:  fmt.Sprintf("%s_%s", config.Conf.WeCom.Flag, detail.UserID),
+			SourceUnionId: fmt.Sprintf("%s_%s", config.Conf.WeCom.Flag, detail.UserID),
 		}
 		// 入库
 		err = d.AddUsers(&user)
 		if err != nil {
-			return nil, tools.NewOperationError(fmt.Errorf("SyncDingTalkUsers写入用户失败：%s", err.Error()))
+			return nil, tools.NewOperationError(fmt.Errorf("SyncWeComUsers写入用户失败：%s", err.Error()))
 		}
 	}
 
-	// 3.获取钉钉已离职用户id列表
-	userIds, err := dingtalk.GetLeaveUserIds()
-	if err != nil {
-		return nil, tools.NewOperationError(fmt.Errorf("SyncDingTalkUsers获取钉钉离职用户列表失败：%s", err.Error()))
-	}
+	// 3.获取企业微信已离职用户id列表
 	// 4.遍历id，开始处理
-	for _, uid := range userIds {
+	for _, userTmp := range leaveUsers {
 		user := new(model.User)
-		err = isql.User.Find(tools.H{"source_user_id": fmt.Sprintf("%s_%s", config.Conf.DingTalk.Flag, uid)}, user)
+		err = isql.User.Find(tools.H{"source_user_id": fmt.Sprintf("%s_%s", config.Conf.WeCom.Flag, userTmp.UserID)}, user)
 		if err != nil {
 			return nil, tools.NewMySqlError(fmt.Errorf("在MySQL查询用户失败: " + err.Error()))
 		}
@@ -190,12 +204,11 @@ func (d DingTalkLogic) SyncDingTalkUsers(c *gin.Context, req interface{}) (data 
 			return nil, tools.NewMySqlError(fmt.Errorf("在MySQL更新用户状态失败: " + err.Error()))
 		}
 	}
-
 	return nil, nil
 }
 
 // AddUser 添加用户数据
-func (d DingTalkLogic) AddUsers(r *request.DingUserAddReq) error {
+func (d WeComLogic) AddUsers(r *request.WeComUserAddReq) error {
 	// 根据 unionid 查询用户,不存在则创建
 	if !isql.User.Exist(tools.H{"source_union_id": r.SourceUnionId}) {
 		// 根据角色id获取角色

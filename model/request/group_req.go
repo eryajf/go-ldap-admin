@@ -40,6 +40,19 @@ type DingGroupAddReq struct {
 	SourceUserNum      int    `json:"sourceUserNum"`
 }
 
+// WeComGroupAddReq 添加企业微信资源结构体
+type WeComGroupAddReq struct {
+	GroupType string `json:"groupType" validate:"required,min=1,max=20"`
+	GroupName string `json:"groupName" validate:"required,min=1,max=20"`
+	//父级Id 大于等于0 必填
+	ParentId           uint   `json:"parentId" validate:"omitempty,min=0"`
+	Remark             string `json:"remark" validate:"min=0,max=100"` // 分组的中文描述
+	SourceDeptId       string `json:"sourceDeptId"`
+	Source             string `json:"source"`
+	SourceDeptParentId string `json:"SourceDeptParentId"`
+	SourceUserNum      int    `json:"sourceUserNum"`
+}
+
 // GroupUpdateReq 更新资源结构体
 type GroupUpdateReq struct {
 	ID        uint   `json:"id" form:"id" validate:"required"`
@@ -84,4 +97,8 @@ type UserNoInGroupReq struct {
 
 // SyncDingTalkDeptsReq 同步钉钉部门信息
 type SyncDingTalkDeptsReq struct {
+}
+
+// SyncWeComDeptsReq 同步企业微信部门信息
+type SyncWeComDeptsReq struct {
 }

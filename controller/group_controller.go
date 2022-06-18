@@ -88,3 +88,11 @@ func (m *GroupController) SyncDingTalkDepts(c *gin.Context) {
 		return logic.DingTalk.SyncDingTalkDepts(c, req)
 	})
 }
+
+//同步企业微信部门信息
+func (m *GroupController) SyncWeComDepts(c *gin.Context) {
+	req := new(request.SyncWeComDeptsReq)
+	Run(c, req, func() (interface{}, interface{}) {
+		return logic.WeCom.SyncWeComDepts(c, req)
+	})
+}

@@ -11,7 +11,7 @@ require (
 	github.com/go-ldap/ldap/v3 v3.4.2
 	github.com/go-playground/locales v0.14.0
 	github.com/go-playground/universal-translator v0.18.0
-	github.com/go-playground/validator/v10 v10.9.0
+	github.com/go-playground/validator/v10 v10.10.0
 	github.com/juju/ratelimit v1.0.1
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/robfig/cron/v3 v3.0.0
@@ -25,6 +25,8 @@ require (
 	gorm.io/gorm v1.20.12
 )
 
+require github.com/wenerme/go-wecom v0.0.0-20220617125121-2ee950da3e63
+
 require (
 	github.com/BurntSushi/toml v1.1.0 // indirect
 	github.com/golang/mock v1.6.0 // indirect
@@ -33,6 +35,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.8.1 // indirect
+	github.com/wenerme/go-req v0.0.0-20210907160348-d822e81276bb // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
 

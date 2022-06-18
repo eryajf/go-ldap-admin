@@ -107,6 +107,11 @@ dingtalk:
   agent-id: "12121212" # 目前agent-id未使用到，可忽略
   enable-sync: false  # 是否开启定时同步钉钉的任务
 wecom:
-  flag: "wecom"
+  # 配置获取详细文档参考：http://ldapdoc.eryajf.net/pages/cf1698/
+  flag: "wecom" # 作为微信在平台的标识
+  corp-id: "xxxx" # 企业微信企业ID
+  agent-id: 1000003 # 企业微信中创建的应用ID
+  corp-secret: "xxxxx" # 企业微信中创建的应用secret
+  enable-sync: false # 是否开启定时同步企业微信的任务
 feishu:
   flag: "feishu"
