@@ -38,26 +38,3 @@ func GetAllUsers() ([]wecom.ListUserResponseItem, error) {
 	}
 	return us, nil
 }
-
-// GetLeaveUserIds 获取离职人员列表
-func GetLeaveUserIds() ([]string, error) {
-	req := &wecom.GetUnassignedListRequest{
-		PageSize: "1000",
-		Cursor:   "",
-	}
-	ids := []string{}
-	for {
-		rst, err := InitWeComClient().GetUnassignedList(req)
-		if err != nil {
-			return nil, err
-		}
-		for _, info := range rst.Info {
-			ids = append(ids, info.HandoverUserID)
-		}
-		if !rst.IsLast {
-			break
-		}
-		req.Cursor = rst.NextCursor
-	}
-	return ids, nil
-}

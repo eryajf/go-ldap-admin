@@ -107,8 +107,23 @@ func (d WeComLogic) SyncWeComUsers(c *gin.Context, req interface{}) (data interf
 	if err != nil {
 		return nil, tools.NewOperationError(fmt.Errorf("SyncWeComUsers获取企业微信用户列表失败：%s", err.Error()))
 	}
+	// 2.将用户拆分成两组，一组状态为1的在职正常用户，一组状态为2的禁用账户
+	// 此问题在企业微信这里没有统一的定论
+	// 	有的公司是员工离职，直接在企业微信后台删除(企业微信又没有对应接口拿到已经被删除的用户)
+	//  也有公司是在后台禁用账号，这两者不同，处理方式也不一样
+	// 	目前先以第二种为准，判断用户状态字段来判断用户是否离职
+	var liveUsers []wecom.ListUserResponseItem
+	var leaveUsers []wecom.ListUserResponseItem
+	for _, user := range users {
+		if user.Status == 1 {
+			liveUsers = append(liveUsers, user)
+		}
+		if user.Status == 2 {
+			leaveUsers = append(leaveUsers, user)
+		}
+	}
 	// 2.遍历用户，开始写入
-	for _, detail := range users {
+	for _, detail := range liveUsers {
 		// 用户名的几种情况
 		var userName string
 		if detail.Email != "" {
@@ -171,14 +186,10 @@ func (d WeComLogic) SyncWeComUsers(c *gin.Context, req interface{}) (data interf
 	}
 
 	// 3.获取企业微信已离职用户id列表
-	userIds, err := wechat.GetLeaveUserIds()
-	if err != nil {
-		return nil, tools.NewOperationError(fmt.Errorf("SyncWeComUsers获取企业微信离职用户列表失败：%s", err.Error()))
-	}
 	// 4.遍历id，开始处理
-	for _, uid := range userIds {
+	for _, userTmp := range leaveUsers {
 		user := new(model.User)
-		err = isql.User.Find(tools.H{"source_user_id": fmt.Sprintf("%s_%s", config.Conf.WeCom.Flag, uid)}, user)
+		err = isql.User.Find(tools.H{"source_user_id": fmt.Sprintf("%s_%s", config.Conf.WeCom.Flag, userTmp.UserID)}, user)
 		if err != nil {
 			return nil, tools.NewMySqlError(fmt.Errorf("在MySQL查询用户失败: " + err.Error()))
 		}
