@@ -151,10 +151,10 @@ func (s GroupService) RemoveUserFromGroup(group *model.Group, users []model.User
 	return common.DB.Model(&group).Association("Users").Delete(users)
 }
 
-// DingTalkDeptIdsToGroupIds 将钉钉部门id转换为分组id
-func (s GroupService) DingTalkDeptIdsToGroupIds(dingTalkIds []string) (groupIds []uint, err error) {
+// DeptIdsToGroupIds 将企业IM部门id转换为MySQL分组id
+func (s GroupService) DeptIdsToGroupIds(ids []string) (groupIds []uint, err error) {
 	var tempGroups []model.Group
-	err = common.DB.Model(&model.Group{}).Where("source_dept_id IN (?)", dingTalkIds).Find(&tempGroups).Error
+	err = common.DB.Model(&model.Group{}).Where("source_dept_id IN (?)", ids).Find(&tempGroups).Error
 	if err != nil {
 		return nil, err
 	}

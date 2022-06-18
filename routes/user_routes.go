@@ -16,14 +16,16 @@ func InitUserRoutes(r *gin.RouterGroup, authMiddleware *jwt.GinJWTMiddleware) gi
 	// 开启casbin鉴权中间件
 	user.Use(middleware.CasbinMiddleware())
 	{
-		user.GET("/info", controller.User.GetUserInfo)                     // 暂时未完成
-		user.GET("/list", controller.User.List)                            // 用户列表
-		user.POST("/add", controller.User.Add)                             // 添加用户
-		user.POST("/update", controller.User.Update)                       // 更新用户
-		user.POST("/delete", controller.User.Delete)                       // 删除用户
-		user.POST("/changePwd", controller.User.ChangePwd)                 // 修改用户密码
-		user.POST("/changeUserStatus", controller.User.ChangeUserStatus)   // 修改用户状态
+		user.GET("/info", controller.User.GetUserInfo)                   // 暂时未完成
+		user.GET("/list", controller.User.List)                          // 用户列表
+		user.POST("/add", controller.User.Add)                           // 添加用户
+		user.POST("/update", controller.User.Update)                     // 更新用户
+		user.POST("/delete", controller.User.Delete)                     // 删除用户
+		user.POST("/changePwd", controller.User.ChangePwd)               // 修改用户密码
+		user.POST("/changeUserStatus", controller.User.ChangeUserStatus) // 修改用户状态
+
 		user.POST("/syncDingTalkUsers", controller.User.SyncDingTalkUsers) // 同步用户
+		user.POST("/syncWeComUsers", controller.User.SyncWeComUsers)       // 同步用户
 	}
 	return r
 }
