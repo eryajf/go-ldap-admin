@@ -102,3 +102,7 @@ type SyncDingTalkDeptsReq struct {
 // SyncWeComDeptsReq 同步企业微信部门信息
 type SyncWeComDeptsReq struct {
 }
+
+// SyncFeiShuDeptsReq 同步飞书部门信息
+type SyncFeiShuDeptsReq struct {
+}

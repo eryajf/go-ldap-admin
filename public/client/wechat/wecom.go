@@ -17,7 +17,7 @@ func GetAllDepts() ([]wecom.ListDepartmentResponseItem, error) {
 	return depts.Department, nil
 }
 
-// GetAllDepts 获取所有部门
+// GetAllUsers 获取所有员工信息
 func GetAllUsers() ([]wecom.ListUserResponseItem, error) {
 	depts, err := GetAllDepts()
 	if err != nil {

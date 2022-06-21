@@ -80,3 +80,11 @@ func (uc UserController) SyncWeComUsers(c *gin.Context) {
 		return logic.WeCom.SyncWeComUsers(c, req)
 	})
 }
+
+// 同步飞书用户信息
+func (uc UserController) SyncFeiShuUsers(c *gin.Context) {
+	req := new(request.SyncFeiShuUserReq)
+	Run(c, req, func() (interface{}, interface{}) {
+		return logic.FeiShu.SyncFeiShuUsers(c, req)
+	})
+}

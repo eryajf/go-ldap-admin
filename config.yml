@@ -114,4 +114,6 @@ wecom:
   corp-secret: "xxxxx" # 企业微信中创建的应用secret
   enable-sync: false # 是否开启定时同步企业微信的任务
 feishu:
-  flag: "feishu"
+  flag: "feishu" # 作为飞书在平台的标识
+  app-id: "xxxxxxx" # 飞书的app-id
+  app-secret: "xxxxxxxxxxx" # 飞书的app-secret
