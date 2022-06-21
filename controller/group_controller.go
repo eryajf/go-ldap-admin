@@ -96,3 +96,11 @@ func (m *GroupController) SyncWeComDepts(c *gin.Context) {
 		return logic.WeCom.SyncWeComDepts(c, req)
 	})
 }
+
+//同步飞书部门信息
+func (m *GroupController) SyncFeiShuDepts(c *gin.Context) {
+	req := new(request.SyncFeiShuDeptsReq)
+	Run(c, req, func() (interface{}, interface{}) {
+		return logic.FeiShu.SyncFeiShuDepts(c, req)
+	})
+}

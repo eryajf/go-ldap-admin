@@ -25,7 +25,10 @@ require (
 	gorm.io/gorm v1.20.12
 )
 
-require github.com/wenerme/go-wecom v0.0.0-20220617125121-2ee950da3e63
+require (
+	github.com/chyroc/lark v0.0.96
+	github.com/wenerme/go-wecom v0.0.0-20220617125121-2ee950da3e63
+)
 
 require (
 	github.com/BurntSushi/toml v1.1.0 // indirect
@@ -36,7 +39,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.8.1 // indirect
 	github.com/wenerme/go-req v0.0.0-20210907160348-d822e81276bb // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 require (
