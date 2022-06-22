@@ -6,6 +6,7 @@ import (
 	"github.com/chyroc/lark"
 )
 
+// 官方文档： https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/children
 // GetAllDepts 获取所有部门
 func GetAllDepts() (depts []*lark.GetDepartmentListRespItem, err error) {
 	var (
@@ -32,6 +33,7 @@ func GetAllDepts() (depts []*lark.GetDepartmentListRespItem, err error) {
 	return
 }
 
+// 官方文档： https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/user/find_by_department
 // GetAllUsers 获取所有员工信息
 func GetAllUsers() (users []*lark.GetUserListRespItem, err error) {
 	var (
@@ -62,6 +64,7 @@ func GetAllUsers() (users []*lark.GetUserListRespItem, err error) {
 	return
 }
 
+// 官方文档： https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/ehr/ehr-v1/employee/list
 // GetLeaveUserIds 获取离职人员ID列表
 func GetLeaveUserIds() ([]string, error) {
 	var ids []string
