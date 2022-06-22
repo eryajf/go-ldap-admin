@@ -82,6 +82,7 @@ func GetAllUsers() (result []*DingTalkUser, err error) {
 	return
 }
 
+// GetLeaveUserIds 获取离职人员ID列表
 func GetLeaveUserIds() ([]string, error) {
 	var ids []string
 	ReqParm := struct {

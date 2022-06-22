@@ -17,5 +17,6 @@ var (
 	OperationLog = &OperationLogLogic{}
 	DingTalk     = &DingTalkLogic{}
 	WeCom        = &WeComLogic{}
+	FeiShu       = &FeiShuLogic{}
 	Base         = &BaseLogic{}
 )

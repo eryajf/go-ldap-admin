@@ -28,6 +28,7 @@ func InitGroupRoutes(r *gin.RouterGroup, authMiddleware *jwt.GinJWTMiddleware) g
 
 		group.POST("/syncDingTalkDepts", controller.Group.SyncDingTalkDepts) // 同步部门
 		group.POST("/syncWeComDepts", controller.Group.SyncWeComDepts)       // 同步部门
+		group.POST("/syncFeiShuDepts", controller.Group.SyncFeiShuDepts)     // 同步部门
 	}
 
 	return r

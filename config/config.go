@@ -168,5 +168,7 @@ type WeComConfig struct {
 }
 
 type FeiShuConfig struct {
-	Flag string `mapstructure:"flag" json:"flag"`
+	Flag      string `mapstructure:"flag" json:"flag"`
+	AppID     string `mapstructure:"app-id" json:"appId"`
+	AppSecret string `mapstructure:"app-secret" json:"appSecret"`
 }

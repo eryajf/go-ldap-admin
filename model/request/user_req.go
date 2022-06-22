@@ -112,6 +112,10 @@ type SyncDingUserReq struct {
 type SyncWeComUserReq struct {
 }
 
+// SyncFeiShuUserReq 同步飞书用户信息
+type SyncFeiShuUserReq struct {
+}
+
 // UserListReq 获取用户列表结构体
 type UserListReq struct {
 	Username     string `json:"username" form:"username"`
