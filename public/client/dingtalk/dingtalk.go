@@ -7,6 +7,8 @@ import (
 	"github.com/zhaoyunxing92/dingtalk/v2/request"
 )
 
+// 官方文档地址： https://open.dingtalk.com/document/orgapp-server/obtain-the-department-list
+// GetAllDepts 获取所有部门
 func GetAllDepts(deptId int) (result []*DingTalkDept, err error) {
 	depts, err := InitDingTalkClient().FetchDeptList(deptId, true, "zh_CN")
 	if err != nil {
@@ -24,6 +26,8 @@ func GetAllDepts(deptId int) (result []*DingTalkDept, err error) {
 	return
 }
 
+// 官方文档地址： https://open.dingtalk.com/document/orgapp-server/queries-the-complete-information-of-a-department-user
+// GetAllUsers 获取所有员工信息
 func GetAllUsers() (result []*DingTalkUser, err error) {
 	depts, err := GetAllDepts(1)
 	if err != nil {
@@ -82,6 +86,7 @@ func GetAllUsers() (result []*DingTalkUser, err error) {
 	return
 }
 
+// 官方文档：https://open.dingtalk.com/document/orgapp-server/intelligent-personnel-query-company-turnover-list
 // GetLeaveUserIds 获取离职人员ID列表
 func GetLeaveUserIds() ([]string, error) {
 	var ids []string

@@ -6,6 +6,7 @@ import (
 	"github.com/wenerme/go-wecom/wecom"
 )
 
+// 官方文档： https://developer.work.weixin.qq.com/document/path/90208
 // GetAllDepts 获取所有部门
 func GetAllDepts() ([]wecom.ListDepartmentResponseItem, error) {
 	depts, err := InitWeComClient().ListDepartment(
@@ -17,6 +18,7 @@ func GetAllDepts() ([]wecom.ListDepartmentResponseItem, error) {
 	return depts.Department, nil
 }
 
+// 官方文档： https://developer.work.weixin.qq.com/document/path/90201
 // GetAllUsers 获取所有员工信息
 func GetAllUsers() ([]wecom.ListUserResponseItem, error) {
 	depts, err := GetAllDepts()
