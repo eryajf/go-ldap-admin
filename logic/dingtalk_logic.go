@@ -37,6 +37,7 @@ func (d *DingTalkLogic) SyncDingTalkDepts(c *gin.Context, req interface{}) (data
 			otherDepts = append(otherDepts, dept)
 		}
 	}
+
 	// 3.先写父ID为1的，再写父ID不为1的
 	for _, dept := range firstDepts {
 		err := d.AddDepts(&request.DingGroupAddReq{

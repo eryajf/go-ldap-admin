@@ -28,3 +28,21 @@ func JsonI2Struct(str interface{}, obj interface{}) {
 	JsonStr := str.(string)
 	Json2Struct(JsonStr, obj)
 }
+
+// Convert json string to map
+func JsonToMap(jsonStr string) (m map[string]string, err error) {
+	err = json.Unmarshal([]byte(jsonStr), &m)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+// Convert map to json string
+func MapToJson(m map[string]string) (string, error) {
+	result, err := json.Marshal(m)
+	if err != nil {
+		return "", nil
+	}
+	return string(result), nil
+}

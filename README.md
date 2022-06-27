@@ -1,13 +1,8 @@
-<p align="center">
-  <a href="" rel="noopener">
- <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220614_131521.jpg" alt="Project logo"></a>
-</p>
 <h1 align="center">Go Ldap Admin</h1>
-
 
 <div align="center">
 
-
+[![Auth](https://img.shields.io/badge/Auth-eryajf-ff69b4)](https://github.com/eryajf)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/eryajf-world/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin)
 [![Gin Version](https://img.shields.io/badge/Gin-1.6.3-brightgreen)](https://github.com/eryajf/go-ldap-admin)
 [![Gorm Version](https://img.shields.io/badge/Gorm-1.20.12-brightgreen)](https://github.com/eryajf/go-ldap-admin)
@@ -15,15 +10,19 @@
 [![GitHub Issues](https://img.shields.io/github/issues/eryajf/go-ldap-admin.svg)](https://github.com/eryajf/go-ldap-admin/issues)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/eryajf/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin/pulls)
 [![GitHub Pull Requests](https://img.shields.io/github/stars/eryajf/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin/stargazers)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/eryajf/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin/blob/main/LICENSE)
 
 </div>
-
 
 ---
 
 <p align="center"> 🌉 基于Go+Vue实现的openLDAP后台管理项目。
     <br>
+</p>
+
+<p align="center">
+  <a href="" rel="noopener">
+ <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220614_131521.jpg" alt="Project logo"></a>
 </p>
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
