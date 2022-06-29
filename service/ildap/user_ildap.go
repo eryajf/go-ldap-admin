@@ -6,6 +6,7 @@ import (
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/model"
 	"github.com/eryajf/go-ldap-admin/public/common"
+	"github.com/eryajf/go-ldap-admin/public/tools"
 
 	ldap "github.com/go-ldap/ldap/v3"
 )
@@ -28,7 +29,7 @@ func (x UserService) Add(user *model.User) error {
 	add.Attribute("postalAddress", []string{user.PostalAddress})
 	add.Attribute("mobile", []string{user.Mobile})
 	add.Attribute("uid", []string{user.Username})
-	add.Attribute("userPassword", []string{user.Password})
+	add.Attribute("userPassword", []string{tools.NewParPasswd(user.Password)})
 	return common.LDAP.Add(add)
 }
 
