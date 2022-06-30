@@ -20,40 +20,18 @@ type Group struct {
 	GroupDN            string   `gorm:"type:varchar(255);not null;comment:'分组dn'" json:"groupDn"` // 分组在ldap的dn
 }
 
-func (g *Group) setGroupName(groupName string) {
+func (g *Group) SetGroupName(groupName string) {
 	g.GroupName = groupName
 }
 
-func (g *Group) setRemark(remark string) {
+func (g *Group) SetRemark(remark string) {
 	g.Remark = remark
 }
 
-func (g *Group) setSourceDeptId(sourceDeptId string) {
+func (g *Group) SetSourceDeptId(sourceDeptId string) {
 	g.SourceDeptId = sourceDeptId
 }
 
-func (g *Group) setSourceDeptParentId(sourceDeptParentId string) {
+func (g *Group) SetSourceDeptParentId(sourceDeptParentId string) {
 	g.SourceDeptParentId = sourceDeptParentId
-}
-
-func BuildData(remoteData map[string]interface{}) *Group {
-	// output, err := sonic.Marshal(&remoteData)
-	// if err != nil {
-	// 	fmt.Printf("%v\n", err)
-	// }
-
-	g := &Group{}
-	// for system, remote := range getRelation() {
-	// 	switch system {
-	// 	case "groupName":
-	// 		g.setGroupName(gjson.Get(string(output), remote).String())
-	// 	case "remark":
-	// 		g.setRemark(gjson.Get(string(output), remote).String())
-	// 	case "sourceDeptId":
-	// 		g.setSourceDeptId(gjson.Get(string(output), remote).String())
-	// 	case "sourceDeptParentId":
-	// 		g.setSourceDeptParentId(gjson.Get(string(output), remote).String())
-	// 	}
-	// }
-	return g
 }

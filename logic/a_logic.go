@@ -3,11 +3,14 @@ package logic
 import (
 	"fmt"
 
+	"github.com/bytedance/sonic"
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/model"
+	"github.com/eryajf/go-ldap-admin/public/client/dingtalk"
 	"github.com/eryajf/go-ldap-admin/public/tools"
 	"github.com/eryajf/go-ldap-admin/service/ildap"
 	"github.com/eryajf/go-ldap-admin/service/isql"
+	"github.com/tidwall/gjson"
 )
 
 var (
@@ -26,6 +29,7 @@ var (
 	FieldRelation = &FieldRelationLogic{}
 )
 
+// CommonAddGroup 标准创建分组
 func CommonAddGroup(group *model.Group) error {
 	// 先在ldap中创建组
 	err := ildap.Group.Add(group)
@@ -54,6 +58,7 @@ func CommonAddGroup(group *model.Group) error {
 	return nil
 }
 
+// CommonUpdateGroup 标准更新分组
 func CommonUpdateGroup(oldGroup, newGroup *model.Group) error {
 	//若配置了不允许修改分组名称，则不更新分组名称
 	if !config.Conf.Ldap.GroupNameModify {
@@ -71,6 +76,7 @@ func CommonUpdateGroup(oldGroup, newGroup *model.Group) error {
 	return nil
 }
 
+// CommonAddUser 标准创建用户
 func CommonAddUser(user *model.User, groupId []uint) error {
 	if user.Departments == "" {
 		user.Departments = "默认:研发中心"
@@ -86,6 +92,9 @@ func CommonAddUser(user *model.User, groupId []uint) error {
 	}
 	if user.Introduction == "" {
 		user.Introduction = user.Nickname
+	}
+	if user.JobNumber == "" {
+		user.JobNumber = user.Mobile
 	}
 	// 先将用户添加到MySQL
 	err := isql.User.Add(user)
@@ -120,6 +129,7 @@ func CommonAddUser(user *model.User, groupId []uint) error {
 	return nil
 }
 
+// CommonUpdateUser 标准更新用户
 func CommonUpdateUser(oldUser, newUser *model.User, groupId []uint) error {
 	// 更新用户
 	if !config.Conf.Ldap.UserNameModify {
@@ -180,4 +190,124 @@ func CommonUpdateUser(oldUser, newUser *model.User, groupId []uint) error {
 		}
 	}
 	return nil
+}
+
+// BuildGroupData 根据数据与动态字段组装成分组数据
+func BuildGroupData(flag string, remoteData map[string]interface{}) (*model.Group, error) {
+	output, err := sonic.Marshal(&remoteData)
+	if err != nil {
+		return nil, err
+	}
+
+	oldData := new(model.FieldRelation)
+	err = isql.FieldRelation.Find(tools.H{"flag": flag + "_group"}, oldData)
+	if err != nil {
+		return nil, tools.NewMySqlError(err)
+	}
+	frs, err := tools.JsonToMap(string(oldData.Attributes))
+	if err != nil {
+		return nil, tools.NewOperationError(err)
+	}
+
+	g := &model.Group{}
+	for system, remote := range frs {
+		switch system {
+		case "groupName":
+			g.SetGroupName(gjson.Get(string(output), remote).String())
+		case "remark":
+			g.SetRemark(gjson.Get(string(output), remote).String())
+		case "sourceDeptId":
+			g.SetSourceDeptId(fmt.Sprintf("%s_%s", flag, gjson.Get(string(output), remote).String()))
+		case "sourceDeptParentId":
+			g.SetSourceDeptParentId(fmt.Sprintf("%s_%s", flag, gjson.Get(string(output), remote).String()))
+		}
+	}
+	return g, nil
+}
+
+// BuildUserData 根据数据与动态字段组装成用户数据
+func BuildUserData(flag string, remoteData map[string]interface{}) (*model.User, error) {
+	output, err := sonic.Marshal(&remoteData)
+	if err != nil {
+		return nil, err
+	}
+
+	fieldRelationSource := new(model.FieldRelation)
+	err = isql.FieldRelation.Find(tools.H{"flag": flag + "_user"}, fieldRelationSource)
+	if err != nil {
+		return nil, tools.NewMySqlError(err)
+	}
+	fieldRelation, err := tools.JsonToMap(string(fieldRelationSource.Attributes))
+	if err != nil {
+		return nil, tools.NewOperationError(err)
+	}
+
+	u := &model.User{}
+	for system, remote := range fieldRelation {
+		switch system {
+		case "username":
+			u.SetUserName(gjson.Get(string(output), remote).String())
+		case "nickname":
+			u.SetNickName(gjson.Get(string(output), remote).String())
+		case "givenName":
+			u.SetGivenName(gjson.Get(string(output), remote).String())
+		case "mail":
+			u.SetMail(gjson.Get(string(output), remote).String())
+		case "jobNumber":
+			u.SetJobNumber(gjson.Get(string(output), remote).String())
+		case "mobile":
+			u.SetMobile(gjson.Get(string(output), remote).String())
+		case "avatar":
+			u.SetAvatar(gjson.Get(string(output), remote).String())
+		case "postalAddress":
+			u.SetPostalAddress(gjson.Get(string(output), remote).String())
+		case "position":
+			u.SetPosition(gjson.Get(string(output), remote).String())
+		case "introduction":
+			u.SetIntroduction(gjson.Get(string(output), remote).String())
+		case "sourceUserId":
+			u.SetSourceUserId(fmt.Sprintf("%s_%s", flag, gjson.Get(string(output), remote).String()))
+		case "sourceUnionId":
+			u.SetSourceUnionId(fmt.Sprintf("%s_%s", flag, gjson.Get(string(output), remote).String()))
+		}
+	}
+	return u, nil
+}
+
+// ConvertDingTalkDept 获取钉钉部门信息并转成本地结构体
+func ConvertDingTalkDept() (groups []*model.Group, err error) {
+	depts, err := dingtalk.GetAllDepts()
+	if err != nil {
+		return nil, err
+	}
+	for _, dept := range depts {
+		group, err := BuildGroupData(config.Conf.DingTalk.Flag, dept)
+		if err != nil {
+			return nil, err
+		}
+		groups = append(groups, group)
+	}
+	return
+}
+
+// ConvertDingTalkUser 获取钉钉用户信息并转成本地结构体
+func ConvertDingTalkUser() (users []*model.User, err error) {
+	staffs, err := dingtalk.GetAllUsers()
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println("原始用户", len(staffs))
+	for _, staff := range staffs {
+		groupIds, err := isql.Group.DeptIdsToGroupIds(staff["dept_id_list"].([]string))
+		if err != nil {
+			return nil, tools.NewMySqlError(fmt.Errorf("SyncDingTalkUsers获取钉钉部门ids转换为内部部门id失败：%s", err.Error()))
+		}
+		user, err := BuildUserData(config.Conf.DingTalk.Flag, staff)
+		if err != nil {
+			return nil, err
+		}
+		user.DepartmentId = tools.SliceToString(groupIds, ",")
+		users = append(users, user)
+	}
+	return
 }

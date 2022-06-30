@@ -102,8 +102,8 @@ ldap:
 dingtalk:
   # 配置获取详细文档参考： http://ldapdoc.eryajf.net/pages/94f43a/
   flag: "dingtalk" # 作为钉钉在平台的标识
-  app-key: "xxxxxxxxxxxxxxx" # 应用的key
-  app-secret: "xxxxxxxxxxxxxxxxxxxxxxxxxxxx" # 应用的secret
+  app-key: "dingtozfmq4imgumfhnh" # 应用的key
+  app-secret: "g-6VqrnbSPRrP1wImfvJ7I-p9t2CQAN64PtmLJCYM003v-e0Akov-I4ZgoK8KxRr" # 应用的secret
   agent-id: "12121212" # 目前agent-id未使用到，可忽略
   enable-sync: false  # 是否开启定时同步钉钉的任务
 wecom:
