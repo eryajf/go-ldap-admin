@@ -6,7 +6,6 @@ import (
 	"github.com/bytedance/sonic"
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/model"
-	"github.com/eryajf/go-ldap-admin/public/client/dingtalk"
 	"github.com/eryajf/go-ldap-admin/public/tools"
 	"github.com/eryajf/go-ldap-admin/service/ildap"
 	"github.com/eryajf/go-ldap-admin/service/isql"
@@ -274,14 +273,10 @@ func BuildUserData(flag string, remoteData map[string]interface{}) (*model.User,
 	return u, nil
 }
 
-// ConvertDingTalkDept 获取钉钉部门信息并转成本地结构体
-func ConvertDingTalkDept() (groups []*model.Group, err error) {
-	depts, err := dingtalk.GetAllDepts()
-	if err != nil {
-		return nil, err
-	}
-	for _, dept := range depts {
-		group, err := BuildGroupData(config.Conf.DingTalk.Flag, dept)
+// ConvertDeptData 将部门信息转成本地结构体
+func ConvertDeptData(flag string, remoteData []map[string]interface{}) (groups []*model.Group, err error) {
+	for _, dept := range remoteData {
+		group, err := BuildGroupData(flag, dept)
 		if err != nil {
 			return nil, err
 		}
@@ -290,19 +285,14 @@ func ConvertDingTalkDept() (groups []*model.Group, err error) {
 	return
 }
 
-// ConvertDingTalkUser 获取钉钉用户信息并转成本地结构体
-func ConvertDingTalkUser() (users []*model.User, err error) {
-	staffs, err := dingtalk.GetAllUsers()
-	if err != nil {
-		return nil, err
-	}
-	fmt.Println("原始用户", len(staffs))
-	for _, staff := range staffs {
-		groupIds, err := isql.Group.DeptIdsToGroupIds(staff["dept_id_list"].([]string))
+// ConvertUserData 将用户信息转成本地结构体
+func ConvertUserData(flag string, remoteData []map[string]interface{}) (users []*model.User, err error) {
+	for _, staff := range remoteData {
+		groupIds, err := isql.Group.DeptIdsToGroupIds(staff["department_ids"].([]string))
 		if err != nil {
-			return nil, tools.NewMySqlError(fmt.Errorf("SyncDingTalkUsers获取钉钉部门ids转换为内部部门id失败：%s", err.Error()))
+			return nil, tools.NewMySqlError(fmt.Errorf("将部门ids转换为内部部门id失败：%s", err.Error()))
 		}
-		user, err := BuildUserData(config.Conf.DingTalk.Flag, staff)
+		user, err := BuildUserData(flag, staff)
 		if err != nil {
 			return nil, err
 		}
@@ -311,3 +301,77 @@ func ConvertDingTalkUser() (users []*model.User, err error) {
 	}
 	return
 }
+
+// // ConvertDingTalkDept 获取钉钉部门信息并转成本地结构体
+// func ConvertDingTalkDept() (groups []*model.Group, err error) {
+// 	depts, err := dingtalk.GetAllDepts()
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	for _, dept := range depts {
+// 		group, err := BuildGroupData(config.Conf.DingTalk.Flag, dept)
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 		groups = append(groups, group)
+// 	}
+// 	return
+// }
+
+// // ConvertDingTalkUser 获取钉钉用户信息并转成本地结构体
+// func ConvertDingTalkUser() (users []*model.User, err error) {
+// 	staffs, err := dingtalk.GetAllUsers()
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	for _, staff := range staffs {
+// 		groupIds, err := isql.Group.DeptIdsToGroupIds(staff["department_ids"].([]string))
+// 		if err != nil {
+// 			return nil, tools.NewMySqlError(fmt.Errorf("SyncDingTalkUsers获取钉钉部门ids转换为内部部门id失败：%s", err.Error()))
+// 		}
+// 		user, err := BuildUserData(config.Conf.DingTalk.Flag, staff)
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 		user.DepartmentId = tools.SliceToString(groupIds, ",")
+// 		users = append(users, user)
+// 	}
+// 	return
+// }
+
+// // ConvertFeiShuDept 获取飞书部门信息并转成本地结构体
+// func ConvertFeiShuDept() (groups []*model.Group, err error) {
+// 	depts, err := feishu.NGetAllDepts()
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	for _, dept := range depts {
+// 		group, err := BuildGroupData(config.Conf.FeiShu.Flag, dept)
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 		groups = append(groups, group)
+// 	}
+// 	return
+// }
+
+// // ConvertFeiShuUser 获取飞书用户信息并转成本地结构体
+// func ConvertFeiShuUser() (users []*model.User, err error) {
+// 	staffs, err := feishu.NGetAllUsers()
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	for _, staff := range staffs {
+// 		groupIds, err := isql.Group.DeptIdsToGroupIds(staff["department_ids"].([]string))
+// 		if err != nil {
+// 			return nil, tools.NewMySqlError(fmt.Errorf("SyncFeiShuUsers获取飞书部门ids转换为内部部门id失败：%s", err.Error()))
+// 		}
+// 		user, err := BuildUserData(config.Conf.FeiShu.Flag, staff)
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 		user.DepartmentId = tools.SliceToString(groupIds, ",")
+// 		users = append(users, user)
+// 	}
+// 	return
+// }

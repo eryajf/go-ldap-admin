@@ -18,9 +18,13 @@ type DingTalkLogic struct {
 //通过钉钉获取部门信息
 func (d *DingTalkLogic) SyncDingTalkDepts(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
 	// 1.获取所有部门
-	depts, err := ConvertDingTalkDept()
+	deptSource, err := dingtalk.GetAllDepts()
 	if err != nil {
 		return nil, tools.NewOperationError(fmt.Errorf("获取钉钉部门列表失败：%s", err.Error()))
+	}
+	depts, err := ConvertDeptData(config.Conf.DingTalk.Flag, deptSource)
+	if err != nil {
+		return nil, tools.NewOperationError(fmt.Errorf("转换钉钉部门数据失败：%s", err.Error()))
 	}
 	// 2.将部门这个数组进行拆分，一组是父ID为1的，一组是父ID不为1的
 	var firstDepts []*model.Group
@@ -77,9 +81,13 @@ func (d DingTalkLogic) AddDepts(group *model.Group) error {
 //根据现有数据库同步到的部门信息，开启用户同步
 func (d DingTalkLogic) SyncDingTalkUsers(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
 	// 1.获取钉钉用户列表
-	staffs, err := ConvertDingTalkUser()
+	staffSource, err := dingtalk.GetAllUsers()
 	if err != nil {
 		return nil, tools.NewOperationError(fmt.Errorf("SyncDingTalkUsers获取钉钉用户列表失败：%s", err.Error()))
+	}
+	staffs, err := ConvertUserData(config.Conf.DingTalk.Flag, staffSource)
+	if err != nil {
+		return nil, tools.NewOperationError(fmt.Errorf("转换钉钉用户数据失败：%s", err.Error()))
 	}
 	// 2.遍历用户，开始写入
 	for _, staff := range staffs {

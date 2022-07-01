@@ -63,12 +63,12 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 				ele["leader"] = user.Leader
 				ele["org_email"] = user.OrgEmail
 				ele["email"] = user.Email
-				// 钉钉部门ids
+				// 部门ids
 				var sourceDeptIds []string
 				for _, deptId := range user.DeptIds {
 					sourceDeptIds = append(sourceDeptIds, fmt.Sprintf("%s_%d", config.Conf.DingTalk.Flag, deptId))
 				}
-				ele["dept_id_list"] = sourceDeptIds
+				ele["department_ids"] = sourceDeptIds
 				ret = append(ret, ele)
 			}
 			if !rsp.HasMore {

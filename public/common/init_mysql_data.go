@@ -704,7 +704,7 @@ func InitData() {
 			Creator:            "system",
 			GroupType:          "ou",
 			ParentId:           0,
-			SourceDeptId:       fmt.Sprintf("%s_%d", config.Conf.FeiShu.Flag, 1),
+			SourceDeptId:       fmt.Sprintf("%s_%d", config.Conf.FeiShu.Flag, 0),
 			Source:             config.Conf.FeiShu.Flag,
 			SourceDeptParentId: fmt.Sprintf("%s_%d", config.Conf.FeiShu.Flag, 0),
 			GroupDN:            fmt.Sprintf("ou=%s,%s", config.Conf.FeiShu.Flag+"root", config.Conf.Ldap.BaseDN),
