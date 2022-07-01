@@ -1,42 +1,43 @@
 package dingtalk
 
 import (
+	"fmt"
 	"strings"
 
+	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/mozillazg/go-pinyin"
 	"github.com/zhaoyunxing92/dingtalk/v2/request"
 )
 
 // 官方文档地址： https://open.dingtalk.com/document/orgapp-server/obtain-the-department-list
 // GetAllDepts 获取所有部门
-func GetAllDepts(deptId int) (result []*DingTalkDept, err error) {
-	depts, err := InitDingTalkClient().FetchDeptList(deptId, true, "zh_CN")
+func GetAllDepts() (ret []map[string]interface{}, err error) {
+	depts, err := InitDingTalkClient().FetchDeptList(1, true, "zh_CN")
 	if err != nil {
-		return result, err
+		return ret, err
 	}
-
+	ret = make([]map[string]interface{}, 0)
 	for _, dept := range depts.Dept {
-		result = append(result, &DingTalkDept{
-			Id:       dept.Id,
-			Name:     strings.Join(pinyin.LazyConvert(dept.Name, nil), ""),
-			Remark:   dept.Name,
-			ParentId: dept.ParentId,
-		})
+		ele := make(map[string]interface{})
+		ele["id"] = dept.Id
+		ele["name_pinyin"] = strings.Join(pinyin.LazyConvert(dept.Name, nil), "")
+		ele["name"] = dept.Name
+		ele["parentid"] = dept.ParentId
+		ret = append(ret, ele)
 	}
 	return
 }
 
 // 官方文档地址： https://open.dingtalk.com/document/orgapp-server/queries-the-complete-information-of-a-department-user
 // GetAllUsers 获取所有员工信息
-func GetAllUsers() (result []*DingTalkUser, err error) {
-	depts, err := GetAllDepts(1)
+func GetAllUsers() (ret []map[string]interface{}, err error) {
+	depts, err := GetAllDepts()
 	if err != nil {
 		return nil, err
 	}
-
 	for _, dept := range depts {
 		r := request.DeptDetailUserInfo{
-			DeptId:   dept.Id,
+			DeptId:   dept["id"].(int),
 			Cursor:   0,
 			Size:     99,
 			Language: "zh_CN",
@@ -48,34 +49,27 @@ func GetAllUsers() (result []*DingTalkUser, err error) {
 				return nil, err
 			}
 			for _, user := range rsp.DeptDetailUsers {
-				result = append(result, &DingTalkUser{
-					UserId:               user.UserId,
-					UnionId:              user.UnionId,
-					Name:                 user.Name,
-					Avatar:               user.Avatar,
-					StateCode:            user.StateCode,
-					ManagerUserId:        user.ManagerUserId,
-					Mobile:               user.Mobile,
-					HideMobile:           user.HideMobile,
-					Telephone:            user.Telephone,
-					JobNumber:            user.JobNumber,
-					Title:                user.Title,
-					WorkPlace:            user.WorkPlace,
-					Remark:               user.Remark,
-					LoginId:              user.LoginId,
-					DeptIds:              user.DeptIds,
-					DeptOrder:            user.DeptOrder,
-					Extension:            user.Extension,
-					HiredDate:            user.HiredDate,
-					Active:               user.Active,
-					Admin:                user.Admin,
-					Boss:                 user.Boss,
-					ExclusiveAccount:     user.ExclusiveAccount,
-					Leader:               user.Leader,
-					ExclusiveAccountType: user.ExclusiveAccountType,
-					OrgEmail:             user.OrgEmail,
-					Email:                user.Email,
-				})
+				ele := make(map[string]interface{})
+				ele["userid"] = user.UserId
+				ele["unionid"] = user.UnionId
+				ele["name_pinyin"] = strings.Join(pinyin.LazyConvert(user.Name, nil), "")
+				ele["name"] = user.Name
+				ele["avatar"] = user.Avatar
+				ele["mobile"] = user.Mobile
+				ele["job_number"] = user.JobNumber
+				ele["title"] = user.Title
+				ele["work_place"] = user.WorkPlace
+				ele["remark"] = user.Remark
+				ele["leader"] = user.Leader
+				ele["org_email"] = user.OrgEmail
+				ele["email"] = user.Email
+				// 部门ids
+				var sourceDeptIds []string
+				for _, deptId := range user.DeptIds {
+					sourceDeptIds = append(sourceDeptIds, fmt.Sprintf("%s_%d", config.Conf.DingTalk.Flag, deptId))
+				}
+				ele["department_ids"] = sourceDeptIds
+				ret = append(ret, ele)
 			}
 			if !rsp.HasMore {
 				break

@@ -2,13 +2,17 @@ package feishu
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	"github.com/chyroc/lark"
+	"github.com/eryajf/go-ldap-admin/config"
+	"github.com/mozillazg/go-pinyin"
 )
 
 // 官方文档： https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/children
 // GetAllDepts 获取所有部门
-func GetAllDepts() (depts []*lark.GetDepartmentListRespItem, err error) {
+func GetAllDepts() (ret []map[string]interface{}, err error) {
 	var (
 		fetchChild bool  = true
 		pageSize   int64 = 50
@@ -24,7 +28,17 @@ func GetAllDepts() (depts []*lark.GetDepartmentListRespItem, err error) {
 		if err != nil {
 			return nil, err
 		}
-		depts = append(depts, res.Items...)
+		for _, dept := range res.Items {
+			ele := make(map[string]interface{})
+			ele["name"] = dept.Name
+			ele["name_pinyin"] = strings.Join(pinyin.LazyConvert(dept.Name, nil), "")
+			ele["parent_department_id"] = dept.ParentDepartmentID
+			ele["department_id"] = dept.DepartmentID
+			ele["open_department_id"] = dept.OpenDepartmentID
+			ele["leader_user_id"] = dept.LeaderUserID
+			ele["unit_ids"] = dept.UnitIDs
+			ret = append(ret, ele)
+		}
 		if !res.HasMore {
 			break
 		}
@@ -35,7 +49,7 @@ func GetAllDepts() (depts []*lark.GetDepartmentListRespItem, err error) {
 
 // 官方文档： https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/user/find_by_department
 // GetAllUsers 获取所有员工信息
-func GetAllUsers() (users []*lark.GetUserListRespItem, err error) {
+func GetAllUsers() (ret []map[string]interface{}, err error) {
 	var (
 		pageSize int64 = 50
 	)
@@ -47,14 +61,41 @@ func GetAllUsers() (users []*lark.GetUserListRespItem, err error) {
 		req := lark.GetUserListReq{
 			PageSize:     &pageSize,
 			PageToken:    new(string),
-			DepartmentID: dept.OpenDepartmentID,
+			DepartmentID: dept["department_id"].(string),
 		}
 		for {
 			res, _, err := InitFeiShuClient().Contact.GetUserList(context.Background(), &req)
 			if err != nil {
 				return nil, err
 			}
-			users = append(users, res.Items...)
+			for _, user := range res.Items {
+				ele := make(map[string]interface{})
+				ele["name"] = user.Name
+				ele["name_pinyin"] = strings.Join(pinyin.LazyConvert(user.Name, nil), "")
+				ele["union_id"] = user.UnionID
+				ele["user_id"] = user.UserID
+				ele["open_id"] = user.OpenID
+				ele["en_name"] = user.EnName
+				ele["nickname"] = user.Nickname
+				ele["email"] = user.Email
+				ele["mobile"] = user.Mobile[3:]
+				ele["gender"] = user.Gender
+				ele["avatar"] = user.Avatar.AvatarOrigin
+				ele["city"] = user.City
+				ele["country"] = user.Country
+				ele["work_station"] = user.WorkStation
+				ele["join_time"] = user.JoinTime
+				ele["employee_no"] = user.EmployeeNo
+				ele["enterprise_email"] = user.EnterpriseEmail
+				ele["job_title"] = user.JobTitle
+				// 部门ids
+				var sourceDeptIds []string
+				for _, deptId := range user.DepartmentIDs {
+					sourceDeptIds = append(sourceDeptIds, fmt.Sprintf("%s_%s", config.Conf.FeiShu.Flag, deptId))
+				}
+				ele["department_ids"] = sourceDeptIds
+				ret = append(ret, ele)
+			}
 			if !res.HasMore {
 				break
 			}

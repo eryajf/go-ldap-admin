@@ -1,6 +1,8 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Group struct {
 	gorm.Model
@@ -16,4 +18,20 @@ type Group struct {
 	SourceUserNum      int      `gorm:"default:0;comment:'部门下的用户数量，从第三方获取的数据'" json:"source_user_num"`
 	Children           []*Group `gorm:"-" json:"children"`
 	GroupDN            string   `gorm:"type:varchar(255);not null;comment:'分组dn'" json:"groupDn"` // 分组在ldap的dn
+}
+
+func (g *Group) SetGroupName(groupName string) {
+	g.GroupName = groupName
+}
+
+func (g *Group) SetRemark(remark string) {
+	g.Remark = remark
+}
+
+func (g *Group) SetSourceDeptId(sourceDeptId string) {
+	g.SourceDeptId = sourceDeptId
+}
+
+func (g *Group) SetSourceDeptParentId(sourceDeptParentId string) {
+	g.SourceDeptParentId = sourceDeptParentId
 }

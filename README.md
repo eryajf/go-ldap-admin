@@ -1,13 +1,8 @@
-<p align="center">
-  <a href="" rel="noopener">
- <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220614_131521.jpg" alt="Project logo"></a>
-</p>
 <h1 align="center">Go Ldap Admin</h1>
-
 
 <div align="center">
 
-
+[![Auth](https://img.shields.io/badge/Auth-eryajf-ff69b4)](https://github.com/eryajf)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/eryajf-world/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin)
 [![Gin Version](https://img.shields.io/badge/Gin-1.6.3-brightgreen)](https://github.com/eryajf/go-ldap-admin)
 [![Gorm Version](https://img.shields.io/badge/Gorm-1.20.12-brightgreen)](https://github.com/eryajf/go-ldap-admin)
@@ -15,15 +10,19 @@
 [![GitHub Issues](https://img.shields.io/github/issues/eryajf/go-ldap-admin.svg)](https://github.com/eryajf/go-ldap-admin/issues)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/eryajf/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin/pulls)
 [![GitHub Pull Requests](https://img.shields.io/github/stars/eryajf/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin/stargazers)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/eryajf/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin/blob/main/LICENSE)
 
 </div>
-
 
 ---
 
 <p align="center"> 🌉 基于Go+Vue实现的openLDAP后台管理项目。
     <br>
+</p>
+
+<p align="center">
+  <a href="" rel="noopener">
+ <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220614_131521.jpg" alt="Project logo"></a>
 </p>
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -52,6 +51,37 @@
 | phpLdapAdmin  | [http://demo-go-ldap-admin.eryajf.net:8091/](http://demo-go-ldap-admin.eryajf.net:8091/) | cn=admin,dc=eryajf,dc=net | 123456 |
 
 在线环境可能不稳，如果遇到访问异常，或者数据错乱，请联系我进行修复。
+
+**页面功能概览：**
+
+<details><summary> 👉 展开查看</summary>
+
+`登陆页`
+
+![image_20220608_103118](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220608_103118.png)
+
+- 登录页背景图秉持go-ldap-admin项目定位，以一座抽象的高架桥梁作为背景。
+
+- 注意红框中的忘记密码，此处是普通用户在忘记密码的情况下，可通过输入邮箱对密码进行重置，重置成功之后，系统会自动生成密码，并发送到用户邮箱。
+
+  - 部分公司的企业邮箱也是基于ldap进行认证的，那么这里可能会是个死循环，目前暂时不兼容考虑这种情况，后续如果这个场景的需求比较多，可以考虑再集成其他收信方式。
+
+  > 以上方式是用户忘记密码之后的自助修改密码方式，还有一种修改密码方式，是用户登录个人账号之后，在个人中心，通过输入原密码以及新密码进行密码重置。
+
+`首页`
+
+![image_20220608_103823](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220608_103823.png)
+
+目前首页中红框部分内容仅作为占位，并无实际数据含义。
+
+`用户管理`
+
+![image_20220608_103925](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220608_103925.png)
+
+`分组管理`
+
+![image_20220608_104609](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220608_104609.png)
+</details>
 
 ## 👨‍💻 项目地址
 

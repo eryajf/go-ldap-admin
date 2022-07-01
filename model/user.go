@@ -25,3 +25,51 @@ type User struct {
 	SourceUnionId string  `gorm:"type:varchar(100);not null;comment:'第三方唯一unionId'" json:"sourceUnionId"`            // 第三方唯一unionId
 	UserDN        string  `gorm:"type:varchar(255);not null;comment:'用户dn'" json:"userDn"`                           // 用户在ldap的dn
 }
+
+func (u *User) SetUserName(userName string) {
+	u.Username = userName
+}
+
+func (u *User) SetNickName(nickName string) {
+	u.Nickname = nickName
+}
+
+func (u *User) SetGivenName(givenName string) {
+	u.GivenName = givenName
+}
+
+func (u *User) SetMail(mail string) {
+	u.Mail = mail
+}
+
+func (u *User) SetJobNumber(jobNum string) {
+	u.JobNumber = jobNum
+}
+
+func (u *User) SetMobile(mobile string) {
+	u.Mobile = mobile
+}
+
+func (u *User) SetAvatar(avatar string) {
+	u.Avatar = avatar
+}
+
+func (u *User) SetPostalAddress(address string) {
+	u.PostalAddress = address
+}
+
+func (u *User) SetPosition(position string) {
+	u.Position = position
+}
+
+func (u *User) SetIntroduction(desc string) {
+	u.Introduction = desc
+}
+
+func (u *User) SetSourceUserId(sourceUserId string) {
+	u.SourceUserId = sourceUserId
+}
+
+func (u *User) SetSourceUnionId(sourceUnionId string) {
+	u.SourceUnionId = sourceUnionId
+}
