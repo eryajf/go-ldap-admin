@@ -17,14 +17,13 @@ import (
 )
 
 var (
-	Api           = &ApiController{}
-	Group         = &GroupController{}
-	Menu          = &MenuController{}
-	Role          = &RoleController{}
-	User          = &UserController{}
-	OperationLog  = &OperationLogController{}
-	Base          = &BaseController{}
-	FieldRelation = &FieldRelationController{}
+	Api          = &ApiController{}
+	Group        = &GroupController{}
+	Menu         = &MenuController{}
+	Role         = &RoleController{}
+	User         = &UserController{}
+	OperationLog = &OperationLogController{}
+	Base         = &BaseController{}
 
 	validate = validator.New()
 	trans    ut.Translator

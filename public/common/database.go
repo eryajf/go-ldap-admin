@@ -70,6 +70,5 @@ func dbAutoMigrate() {
 		&model.Menu{},
 		&model.Api{},
 		&model.OperationLog{},
-		&model.FieldRelation{},
 	)
 }
