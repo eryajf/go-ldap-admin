@@ -61,7 +61,7 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 		req := lark.GetUserListReq{
 			PageSize:     &pageSize,
 			PageToken:    new(string),
-			DepartmentID: dept["department_id"].(string),
+			DepartmentID: dept["open_department_id"].(string),
 		}
 		for {
 			res, _, err := InitFeiShuClient().Contact.GetUserList(context.Background(), &req)
