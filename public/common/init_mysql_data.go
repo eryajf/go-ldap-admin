@@ -69,14 +69,15 @@ func InitData() {
 	newMenus := make([]model.Menu, 0)
 	var uint0 uint = 0
 	var uint1 uint = 1
-	var uint4 uint = 4
-	var uint8 uint = 8
+	var uint4 uint = 5
+	var uint8 uint = 9
 	componentStr := "component"
 	systemRoleStr := "/system/role"
 	personnelManageStr := "/personnel/user"
 	userStr := "user"
 	peopleStr := "people"
 	groupStr := "peoples"
+	fieldRelationStr := "el-icon-s-tools"
 	roleStr := "eye-open"
 	treeTableStr := "tree-table"
 	treeStr := "tree"
@@ -92,7 +93,7 @@ func InitData() {
 			Path:      "/personnel",
 			Component: "Layout",
 			Redirect:  personnelManageStr,
-			Sort:      6,
+			Sort:      5,
 			ParentId:  uint0,
 			Roles:     roles[:1],
 			Creator:   "系统",
@@ -104,7 +105,7 @@ func InitData() {
 			Icon:      peopleStr,
 			Path:      "user",
 			Component: "/personnel/user/index",
-			Sort:      7,
+			Sort:      6,
 			ParentId:  uint1,
 			Roles:     roles[:1],
 			Creator:   "系统",
@@ -116,13 +117,25 @@ func InitData() {
 			Icon:      groupStr,
 			Path:      "group",
 			Component: "/personnel/group/index",
-			Sort:      8,
+			Sort:      7,
 			ParentId:  uint1,
 			Roles:     roles[:1],
 			Creator:   "系统",
 		},
 		{
 			Model:     gorm.Model{ID: 4},
+			Name:      "FieldRelation",
+			Title:     "字段关系管理",
+			Icon:      fieldRelationStr,
+			Path:      "fieldRelation",
+			Component: "/personnel/fieldRelation/index",
+			Sort:      8,
+			ParentId:  uint1,
+			Roles:     roles[:1],
+			Creator:   "系统",
+		},
+		{
+			Model:     gorm.Model{ID: 5},
 			Name:      "System",
 			Title:     "系统管理",
 			Icon:      componentStr,
@@ -135,7 +148,7 @@ func InitData() {
 			Creator:   "系统",
 		},
 		{
-			Model:     gorm.Model{ID: 5},
+			Model:     gorm.Model{ID: 6},
 			Name:      "Role",
 			Title:     "角色管理",
 			Icon:      roleStr,
@@ -147,7 +160,7 @@ func InitData() {
 			Creator:   "系统",
 		},
 		{
-			Model:     gorm.Model{ID: 6},
+			Model:     gorm.Model{ID: 7},
 			Name:      "Menu",
 			Title:     "菜单管理",
 			Icon:      treeTableStr,
@@ -159,7 +172,7 @@ func InitData() {
 			Creator:   "系统",
 		},
 		{
-			Model:     gorm.Model{ID: 7},
+			Model:     gorm.Model{ID: 8},
 			Name:      "Api",
 			Title:     "接口管理",
 			Icon:      treeStr,
@@ -171,7 +184,7 @@ func InitData() {
 			Creator:   "系统",
 		},
 		{
-			Model:     gorm.Model{ID: 8},
+			Model:     gorm.Model{ID: 9},
 			Name:      "Log",
 			Title:     "日志管理",
 			Icon:      exampleStr,
@@ -184,7 +197,7 @@ func InitData() {
 			Creator:   "系统",
 		},
 		{
-			Model:     gorm.Model{ID: 9},
+			Model:     gorm.Model{ID: 10},
 			Name:      "OperationLog",
 			Title:     "操作日志",
 			Icon:      documentationStr,
