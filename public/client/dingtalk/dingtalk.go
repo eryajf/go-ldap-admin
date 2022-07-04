@@ -52,7 +52,7 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 				ele := make(map[string]interface{})
 				ele["userid"] = user.UserId
 				ele["unionid"] = user.UnionId
-				ele["name_pinyin"] = strings.Join(pinyin.LazyConvert(user.Name, nil), "")
+				ele["custom_name_pinyin"] = strings.Join(pinyin.LazyConvert(user.Name, nil), "")
 				ele["name"] = user.Name
 				ele["avatar"] = user.Avatar
 				ele["mobile"] = user.Mobile
@@ -62,7 +62,13 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 				ele["remark"] = user.Remark
 				ele["leader"] = user.Leader
 				ele["org_email"] = user.OrgEmail
+				if user.OrgEmail != "" {
+					ele["custom_nickname_org_email"] = strings.Split(user.OrgEmail, "@")[0]
+				}
 				ele["email"] = user.Email
+				if user.Email != "" {
+					ele["custom_nickname_email"] = strings.Split(user.Email, "@")[0]
+				}
 				// 部门ids
 				var sourceDeptIds []string
 				for _, deptId := range user.DeptIds {

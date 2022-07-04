@@ -22,3 +22,4 @@ go-ldap-admin
 # Dependency directories (remove the comment below to include it)
 # vendor/
 tmp
+docs/docker-compose/data
