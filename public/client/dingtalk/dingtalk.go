@@ -62,6 +62,9 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 				ele["remark"] = user.Remark
 				ele["leader"] = user.Leader
 				ele["org_email"] = user.OrgEmail
+				if user.OrgEmail != "" {
+					ele["custom_nickname_org_email"] = strings.Split(user.OrgEmail, "@")[0]
+				}
 				ele["email"] = user.Email
 				if user.Email != "" {
 					ele["custom_nickname_email"] = strings.Split(user.Email, "@")[0]
