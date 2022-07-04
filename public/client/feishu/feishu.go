@@ -71,12 +71,18 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 			for _, user := range res.Items {
 				ele := make(map[string]interface{})
 				ele["name"] = user.Name
-				ele["name_pinyin"] = strings.Join(pinyin.LazyConvert(user.Name, nil), "")
+				ele["custom_name_pinyin"] = strings.Join(pinyin.LazyConvert(user.Name, nil), "")
 				ele["union_id"] = user.UnionID
 				ele["user_id"] = user.UserID
 				ele["open_id"] = user.OpenID
 				ele["en_name"] = user.EnName
 				ele["nickname"] = user.Nickname
+				if user.Email != "" {
+					ele["custom_nickname_email"] = strings.Split(user.Email, "@")[0]
+				}
+				if user.EnterpriseEmail != "" {
+					ele["custom_nickname_enterprise_email"] = strings.Split(user.EnterpriseEmail, "@")[0]
+				}
 				ele["email"] = user.Email
 				ele["mobile"] = user.Mobile[3:]
 				ele["gender"] = user.Gender

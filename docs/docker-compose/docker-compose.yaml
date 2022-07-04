@@ -76,6 +76,8 @@ services:
       WAIT_HOSTS: mysql:3306, openldap:389
     ports:
       - 8888:8888
+    volumes:
+      - ./config/config.yml:/app/config.yml
     depends_on:
       - mysql
       - openldap
