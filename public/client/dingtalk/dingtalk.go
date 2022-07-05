@@ -20,9 +20,9 @@ func GetAllDepts() (ret []map[string]interface{}, err error) {
 	for _, dept := range depts.Dept {
 		ele := make(map[string]interface{})
 		ele["id"] = dept.Id
-		ele["name_pinyin"] = strings.Join(pinyin.LazyConvert(dept.Name, nil), "")
 		ele["name"] = dept.Name
 		ele["parentid"] = dept.ParentId
+		ele["custom_name_pinyin"] = strings.Join(pinyin.LazyConvert(dept.Name, nil), "")
 		ret = append(ret, ele)
 	}
 	return
