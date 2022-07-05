@@ -3,12 +3,12 @@ package logic
 import (
 	"fmt"
 
-	"github.com/bytedance/sonic"
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/model"
 	"github.com/eryajf/go-ldap-admin/public/tools"
 	"github.com/eryajf/go-ldap-admin/service/ildap"
 	"github.com/eryajf/go-ldap-admin/service/isql"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/tidwall/gjson"
 )
 
@@ -26,6 +26,8 @@ var (
 	FeiShu        = &FeiShuLogic{}
 	Base          = &BaseLogic{}
 	FieldRelation = &FieldRelationLogic{}
+
+	json = jsoniter.ConfigCompatibleWithStandardLibrary
 )
 
 // CommonAddGroup 标准创建分组
@@ -193,7 +195,7 @@ func CommonUpdateUser(oldUser, newUser *model.User, groupId []uint) error {
 
 // BuildGroupData 根据数据与动态字段组装成分组数据
 func BuildGroupData(flag string, remoteData map[string]interface{}) (*model.Group, error) {
-	output, err := sonic.Marshal(&remoteData)
+	output, err := json.Marshal(&remoteData)
 	if err != nil {
 		return nil, err
 	}
@@ -226,7 +228,7 @@ func BuildGroupData(flag string, remoteData map[string]interface{}) (*model.Grou
 
 // BuildUserData 根据数据与动态字段组装成用户数据
 func BuildUserData(flag string, remoteData map[string]interface{}) (*model.User, error) {
-	output, err := sonic.Marshal(&remoteData)
+	output, err := json.Marshal(&remoteData)
 	if err != nil {
 		return nil, err
 	}
