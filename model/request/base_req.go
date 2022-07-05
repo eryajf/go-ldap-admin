@@ -8,3 +8,8 @@ type BaseChangePwdReq struct {
 // BaseDashboardReq  系统首页展示数据结构体
 type BaseDashboardReq struct {
 }
+
+// GetPasswdReq
+type GetPasswdReq struct {
+	Passwd string `json:"passwd" form:"passwd" validate:"required"`
+}
