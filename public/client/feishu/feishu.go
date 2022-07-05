@@ -31,7 +31,7 @@ func GetAllDepts() (ret []map[string]interface{}, err error) {
 		for _, dept := range res.Items {
 			ele := make(map[string]interface{})
 			ele["name"] = dept.Name
-			ele["name_pinyin"] = strings.Join(pinyin.LazyConvert(dept.Name, nil), "")
+			ele["custom_name_pinyin"] = strings.Join(pinyin.LazyConvert(dept.Name, nil), "")
 			ele["parent_department_id"] = dept.ParentDepartmentID
 			ele["department_id"] = dept.DepartmentID
 			ele["open_department_id"] = dept.OpenDepartmentID
