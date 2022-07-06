@@ -1,12 +1,10 @@
 package controller
 
 import (
-	"encoding/base64"
 	"fmt"
 	"net/http"
 	"regexp"
 
-	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/public/tools"
 
 	"github.com/gin-gonic/gin"
@@ -73,37 +71,4 @@ func Demo(c *gin.Context) {
 }
 
 func CodeDebug() {
-	// pass := "SI8HqZxBLGDTU5ZsL8fQyyFLKYSF3bI1KIMZ9yBqo6xWFQDk0HH7AvZUFqbiWNSPNWWNjS9TNsgS1ubTg5Lh7bV+AeSuW3cEuLN9wJI/9tg50eS94O3NETWf3RoZ2jBrd/huwcDRrNk5+cqLffUXI5Da68i1QEiQ3X1w/DW6VH4="
-	// fmt.Printf("秘钥为：%s\n", config.Conf.System.RSAPrivateBytes)
-	// // 密码通过RSA解密
-	// decodeData, err := tools.RSADecrypt([]byte(pass), config.Conf.System.RSAPrivateBytes)
-	// if err != nil {
-	// 	fmt.Printf("密码解密失败：%s\n", err)
-	// }
-	// fmt.Printf("密码解密后为：%s\n", string(decodeData))
-	// users, err := isql.User.GetUserByIds([]uint{1, 2, 3})
-	// if err != nil {
-	// 	fmt.Printf("获取用户失败：%s\n", err)
-	// }
-	// for _, user := range users {
-	// 	fmt.Println("===============", user.Username)
-	// }
-
-	// user, _ := isql.User.GetUserById(1)
-	// fmt.Println(user)
-	// user1 := new(model.User)
-	// _ = isql.User.Find(tools.H{"id": 1}, user1)
-	// fmt.Println(user1)
-
-	// user2, _ := isql.User.GetCurrentUser(c)
-	// fmt.Println("========", user2)
-	data := []byte("hello world")
-	m, _ := tools.RSAEncrypt(data, config.Conf.System.RSAPublicBytes)
-	fmt.Println(base64.StdEncoding.EncodeToString(m))
-	s, _ := tools.RSADecrypt(m, config.Conf.System.RSAPrivateBytes)
-	fmt.Println(string(s))
-	new := tools.NewGenPasswd("hello world")
-	fmt.Println("==========", new)
-	s1 := tools.NewParPasswd(new)
-	fmt.Println(string(s1))
 }

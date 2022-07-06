@@ -76,8 +76,8 @@ services:
       WAIT_HOSTS: mysql:3306, openldap:389
     ports:
       - 8888:8888
-    volumes:
-      - ./config/config.yml:/app/config.yml
+    # volumes:  # 可按需打开此配置，将配置文件挂载到本地,如果挂载，需要注意修改本地配置中MySQL与ldap的连接信息
+    #   - ./config/config.yml:/app/config.yml
     depends_on:
       - mysql
       - openldap

@@ -136,6 +136,10 @@
 
 如果你所在公司使用了该项目，烦请在这里留下脚印，感谢支持🥳 [点我](https://github.com/eryajf/go-ldap-admin/issues/18)
 
+## 💎 优秀软件推荐
+
+- [🦄ConsulManager：高效易用的Consul Web运维平台](https://github.com/starsliao/ConsulManager)
+
 ## 🤝 贡献者
 
 <!-- readme: collaborators,contributors -start -->
