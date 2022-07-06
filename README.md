@@ -37,6 +37,7 @@
 - [⚡ 加群](#-%E5%8A%A0%E7%BE%A4)
 - [🤑 捐赠](#-%E6%8D%90%E8%B5%A0)
 - [📝 使用登记](#-%E4%BD%BF%E7%94%A8%E7%99%BB%E8%AE%B0)
+- [💎 优秀软件推荐](#-%E4%BC%98%E7%A7%80%E8%BD%AF%E4%BB%B6%E6%8E%A8%E8%8D%90)
 - [🤝 贡献者](#-%E8%B4%A1%E7%8C%AE%E8%80%85)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -135,6 +136,10 @@
 ## 📝 使用登记
 
 如果你所在公司使用了该项目，烦请在这里留下脚印，感谢支持🥳 [点我](https://github.com/eryajf/go-ldap-admin/issues/18)
+
+## 💎 优秀软件推荐
+
+- [🦄ConsulManager：高效易用的Consul Web运维平台](https://github.com/starsliao/ConsulManager)
 
 ## 🤝 贡献者
 
