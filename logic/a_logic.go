@@ -5,10 +5,12 @@ import (
 
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/model"
+	"github.com/eryajf/go-ldap-admin/public/common"
 	"github.com/eryajf/go-ldap-admin/public/tools"
 	"github.com/eryajf/go-ldap-admin/service/ildap"
 	"github.com/eryajf/go-ldap-admin/service/isql"
 	jsoniter "github.com/json-iterator/go"
+	"github.com/robfig/cron/v3"
 	"github.com/tidwall/gjson"
 )
 
@@ -303,4 +305,62 @@ func ConvertUserData(flag string, remoteData []map[string]interface{}) (users []
 		users = append(users, user)
 	}
 	return
+}
+
+func InitCron() {
+	c := cron.New(cron.WithSeconds())
+
+	if config.Conf.DingTalk.EnableSync {
+		//启动定时任务
+		_, err := c.AddFunc("0 1 5 * * *", func() {
+			common.Log.Info("每天凌晨5点1分0秒执行一次同步钉钉部门信息到ldap")
+			DingTalk.SyncDingTalkDepts(nil, nil)
+		})
+		if err != nil {
+			common.Log.Errorf("启动同步部门的定时任务失败: %v", err)
+		}
+		//每天凌晨1点执行一次
+		_, err = c.AddFunc("0 30 5 * * *", func() {
+			common.Log.Info("每天凌晨5点30分执行一次同步钉钉用户信息到ldap")
+			DingTalk.SyncDingTalkUsers(nil, nil)
+		})
+		if err != nil {
+			common.Log.Errorf("启动同步用户的定时任务失败: %v", err)
+		}
+	}
+	if config.Conf.WeCom.EnableSync {
+		_, err := c.AddFunc("0 1 5 * * *", func() {
+			common.Log.Info("每天凌晨5点1分0秒执行一次同步企业微信部门信息到ldap")
+			WeCom.SyncWeComDepts(nil, nil)
+		})
+		if err != nil {
+			common.Log.Errorf("启动同步部门的定时任务失败: %v", err)
+		}
+		//每天凌晨1点执行一次
+		_, err = c.AddFunc("0 30 5 * * *", func() {
+			common.Log.Info("每天凌晨5点30分执行一次同步企业微信用户信息到ldap")
+			WeCom.SyncWeComUsers(nil, nil)
+		})
+		if err != nil {
+			common.Log.Errorf("启动同步用户的定时任务失败: %v", err)
+		}
+	}
+	if config.Conf.FeiShu.EnableSync {
+		_, err := c.AddFunc("0 1 5 * * *", func() {
+			common.Log.Info("每天凌晨5点1分0秒执行一次同步飞书部门信息到ldap")
+			FeiShu.SyncFeiShuDepts(nil, nil)
+		})
+		if err != nil {
+			common.Log.Errorf("启动同步部门的定时任务失败: %v", err)
+		}
+		//每天凌晨1点执行一次
+		_, err = c.AddFunc("0 30 5 * * *", func() {
+			common.Log.Info("每天凌晨5点30分执行一次同步飞书用户信息到ldap")
+			FeiShu.SyncFeiShuUsers(nil, nil)
+		})
+		if err != nil {
+			common.Log.Errorf("启动同步用户的定时任务失败: %v", err)
+		}
+	}
+	c.Start()
 }

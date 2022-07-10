@@ -165,10 +165,12 @@ type WeComConfig struct {
 	CorpID     string `mapstructure:"corp-id" json:"corpId"`
 	AgentID    int    `mapstructure:"agent-id" json:"agentId"`
 	CorpSecret string `mapstructure:"corp-secret" json:"corpSecret"`
+	EnableSync bool   `mapstructure:"enable-sync" json:"enableSync"`
 }
 
 type FeiShuConfig struct {
-	Flag      string `mapstructure:"flag" json:"flag"`
-	AppID     string `mapstructure:"app-id" json:"appId"`
-	AppSecret string `mapstructure:"app-secret" json:"appSecret"`
+	Flag       string `mapstructure:"flag" json:"flag"`
+	AppID      string `mapstructure:"app-id" json:"appId"`
+	AppSecret  string `mapstructure:"app-secret" json:"appSecret"`
+	EnableSync bool   `mapstructure:"enable-sync" json:"enableSync"`
 }
