@@ -104,3 +104,11 @@ func (m *GroupController) SyncFeiShuDepts(c *gin.Context) {
 		return logic.FeiShu.SyncFeiShuDepts(c, req)
 	})
 }
+
+//同步原ldap部门信息
+func (m *GroupController) SyncOpenLdapDepts(c *gin.Context) {
+	req := new(request.SyncOpenLdapDeptsReq)
+	Run(c, req, func() (interface{}, interface{}) {
+		return logic.OpenLdap.SyncOpenLdapDepts(c, req)
+	})
+}

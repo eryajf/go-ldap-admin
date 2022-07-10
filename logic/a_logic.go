@@ -24,6 +24,7 @@ var (
 	DingTalk      = &DingTalkLogic{}
 	WeCom         = &WeComLogic{}
 	FeiShu        = &FeiShuLogic{}
+	OpenLdap      = &OpenLdapLogic{}
 	Base          = &BaseLogic{}
 	FieldRelation = &FieldRelationLogic{}
 
