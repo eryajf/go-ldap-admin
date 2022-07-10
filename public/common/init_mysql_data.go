@@ -702,18 +702,6 @@ func InitData() {
 	groups := []model.Group{
 		{
 			Model:              gorm.Model{ID: 1},
-			GroupName:          "openldaproot",
-			Remark:             "ldap根部门",
-			Creator:            "system",
-			GroupType:          "ou",
-			ParentId:           0,
-			SourceDeptId:       "openldap_1",
-			Source:             "openldap",
-			SourceDeptParentId: "openldap_0",
-			GroupDN:            fmt.Sprintf("ou=%s,%s", "openldaproot", config.Conf.Ldap.BaseDN),
-		},
-		{
-			Model:              gorm.Model{ID: 2},
 			GroupName:          config.Conf.DingTalk.Flag + "root",
 			Remark:             "钉钉根部门",
 			Creator:            "system",
@@ -725,7 +713,7 @@ func InitData() {
 			GroupDN:            fmt.Sprintf("ou=%s,%s", config.Conf.DingTalk.Flag+"root", config.Conf.Ldap.BaseDN),
 		},
 		{
-			Model:              gorm.Model{ID: 3},
+			Model:              gorm.Model{ID: 2},
 			GroupName:          "wecomroot",
 			Remark:             "企业微信根部门",
 			Creator:            "system",
@@ -737,7 +725,7 @@ func InitData() {
 			GroupDN:            fmt.Sprintf("ou=%s,%s", config.Conf.WeCom.Flag+"root", config.Conf.Ldap.BaseDN),
 		},
 		{
-			Model:              gorm.Model{ID: 4},
+			Model:              gorm.Model{ID: 3},
 			GroupName:          config.Conf.FeiShu.Flag + "root",
 			Remark:             "飞书根部门",
 			Creator:            "system",

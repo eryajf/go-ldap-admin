@@ -25,7 +25,7 @@ func (d *OpenLdapLogic) SyncOpenLdapDepts(c *gin.Context, req interface{}) (data
 	var firstDepts []*openldap.Dept // 父ID为根的部门
 	var otherDepts []*openldap.Dept // 父ID不为根的部门
 	for _, dept := range depts {
-		if dept.ParentId == "1" {
+		if dept.ParentId == "openldap_0" {
 			firstDepts = append(firstDepts, dept)
 		} else {
 			otherDepts = append(otherDepts, dept)
@@ -41,6 +41,7 @@ func (d *OpenLdapLogic) SyncOpenLdapDepts(c *gin.Context, req interface{}) (data
 			SourceDeptId:       dept.Id,
 			Source:             "openldap",
 			SourceDeptParentId: dept.ParentId,
+			ParentId:           0,
 			GroupDN:            dept.DN,
 		})
 		if err != nil {
@@ -49,7 +50,13 @@ func (d *OpenLdapLogic) SyncOpenLdapDepts(c *gin.Context, req interface{}) (data
 	}
 
 	for _, dept := range otherDepts {
-		err := d.AddDepts(&model.Group{
+		// 判断部门名称是否存在
+		parentGroup := new(model.Group)
+		err := isql.Group.Find(tools.H{"source_dept_id": dept.ParentId}, parentGroup)
+		if err != nil {
+			return nil, tools.NewMySqlError(fmt.Errorf("查询父级部门失败：%s", err.Error()))
+		}
+		err = d.AddDepts(&model.Group{
 			GroupName:          dept.Name,
 			Remark:             dept.Remark,
 			Creator:            "system",
@@ -58,6 +65,7 @@ func (d *OpenLdapLogic) SyncOpenLdapDepts(c *gin.Context, req interface{}) (data
 			Source:             "openldap",
 			SourceDeptParentId: dept.ParentId,
 			GroupDN:            dept.DN,
+			ParentId:           parentGroup.ID,
 		})
 		if err != nil {
 			return nil, tools.NewOperationError(fmt.Errorf("SyncOpenLdapDepts添加其他部门失败：%s", err.Error()))
@@ -68,16 +76,9 @@ func (d *OpenLdapLogic) SyncOpenLdapDepts(c *gin.Context, req interface{}) (data
 
 // AddGroup 添加部门数据
 func (d OpenLdapLogic) AddDepts(group *model.Group) error {
-	// 判断部门名称是否存在
-	parentGroup := new(model.Group)
-	err := isql.Group.Find(tools.H{"source_dept_id": group.SourceDeptParentId}, parentGroup)
-	if err != nil {
-		return tools.NewMySqlError(fmt.Errorf("查询父级部门失败：%s", err.Error()))
-	}
+	// 在数据库中创建组
 	if !isql.Group.Exist(tools.H{"source_dept_id": group.SourceDeptId}) {
-		group.ParentId = parentGroup.ID
-		// 在数据库中创建组
-		err = isql.Group.Add(group)
+		err := isql.Group.Add(group)
 		if err != nil {
 			return err
 		}
