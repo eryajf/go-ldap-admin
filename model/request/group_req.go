@@ -106,3 +106,7 @@ type SyncWeComDeptsReq struct {
 // SyncFeiShuDeptsReq 同步飞书部门信息
 type SyncFeiShuDeptsReq struct {
 }
+
+// SyncOpenLdapDeptsReq 同步原ldap部门信息
+type SyncOpenLdapDeptsReq struct {
+}

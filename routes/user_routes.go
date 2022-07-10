@@ -27,6 +27,7 @@ func InitUserRoutes(r *gin.RouterGroup, authMiddleware *jwt.GinJWTMiddleware) gi
 		user.POST("/syncDingTalkUsers", controller.User.SyncDingTalkUsers) // 同步用户
 		user.POST("/syncWeComUsers", controller.User.SyncWeComUsers)       // 同步用户
 		user.POST("/syncFeiShuUsers", controller.User.SyncFeiShuUsers)     // 同步用户
+		user.POST("/syncOpenLdapUsers", controller.User.SyncOpenLdapUsers) // 同步用户
 	}
 	return r
 }
