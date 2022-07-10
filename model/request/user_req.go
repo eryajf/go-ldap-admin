@@ -116,6 +116,10 @@ type SyncWeComUserReq struct {
 type SyncFeiShuUserReq struct {
 }
 
+// SyncOpenLdapUserReq 同步ldap用户信息
+type SyncOpenLdapUserReq struct {
+}
+
 // UserListReq 获取用户列表结构体
 type UserListReq struct {
 	Username     string `json:"username" form:"username"`

@@ -88,3 +88,11 @@ func (uc UserController) SyncFeiShuUsers(c *gin.Context) {
 		return logic.FeiShu.SyncFeiShuUsers(c, req)
 	})
 }
+
+// 同步ldap用户信息
+func (uc UserController) SyncOpenLdapUsers(c *gin.Context) {
+	req := new(request.SyncOpenLdapUserReq)
+	Run(c, req, func() (interface{}, interface{}) {
+		return logic.OpenLdap.SyncOpenLdapUsers(c, req)
+	})
+}
