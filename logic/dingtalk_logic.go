@@ -47,7 +47,7 @@ func (d *DingTalkLogic) SyncDingTalkDepts(c *gin.Context, req interface{}) (data
 	for _, dept := range otherDepts {
 		err := d.AddDepts(dept)
 		if err != nil {
-			return nil, tools.NewOperationError(fmt.Errorf("DsyncDingTalkDepts添加根部门失败：%s", err.Error()))
+			return nil, tools.NewOperationError(fmt.Errorf("DsyncDingTalkDepts添加其他部门失败：%s", err.Error()))
 		}
 	}
 

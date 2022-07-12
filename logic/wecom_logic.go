@@ -52,7 +52,7 @@ func (d *WeComLogic) SyncWeComDepts(c *gin.Context, req interface{}) (data inter
 	for _, dept := range otherDepts {
 		err := d.AddDepts(dept)
 		if err != nil {
-			return nil, tools.NewOperationError(fmt.Errorf("SyncWeComDepts添加根部门失败：%s", err.Error()))
+			return nil, tools.NewOperationError(fmt.Errorf("SyncWeComDepts添加其他部门失败：%s", err.Error()))
 		}
 	}
 	return nil, nil
