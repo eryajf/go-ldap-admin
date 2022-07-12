@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/eryajf/go-ldap-admin/model"
 	"github.com/eryajf/go-ldap-admin/model/request"
@@ -20,14 +21,25 @@ type OperationLogService struct{}
 func (s OperationLogService) SaveOperationLogChannel(olc <-chan *model.OperationLog) {
 	// 只会在线程开启的时候执行一次
 	Logs := make([]model.OperationLog, 0)
-
-	// 一直执行--收到olc就会执行
-	for log := range olc {
-		Logs = append(Logs, *log)
-		// 每10条记录到数据库
-		if len(Logs) > 5 {
+	//5s 自动同步一次
+	duration := 5 * time.Second
+	timer := time.NewTimer(duration)
+	defer timer.Stop()
+	for {
+		select {
+		case log := <-olc:
+			Logs = append(Logs, *log)
+			// 每10条记录到数据库
+			if len(Logs) > 5 {
+				common.DB.Create(&Logs)
+				Logs = make([]model.OperationLog, 0)
+				timer.Reset(duration) // 入库重置定时器
+			}
+		case <-timer.C: //5s 自动同步一次
 			common.DB.Create(&Logs)
 			Logs = make([]model.OperationLog, 0)
+			timer.Reset(duration) // 入库重置定时器
+
 		}
 	}
 }
