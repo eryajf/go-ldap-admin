@@ -36,10 +36,11 @@ func (s OperationLogService) SaveOperationLogChannel(olc <-chan *model.Operation
 				timer.Reset(duration) // 入库重置定时器
 			}
 		case <-timer.C: //5s 自动同步一次
-			common.DB.Create(&Logs)
-			Logs = make([]model.OperationLog, 0)
+			if len(Logs) > 0 {
+				common.DB.Create(&Logs)
+				Logs = make([]model.OperationLog, 0)
+			}
 			timer.Reset(duration) // 入库重置定时器
-
 		}
 	}
 }
