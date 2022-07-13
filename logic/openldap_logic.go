@@ -21,69 +21,63 @@ func (d *OpenLdapLogic) SyncOpenLdapDepts(c *gin.Context, req interface{}) (data
 	if err != nil {
 		return nil, tools.NewOperationError(fmt.Errorf("获取ldap部门列表失败：%s", err.Error()))
 	}
-	// 2.将部门这个数组进行拆分，一组是父ID为根的，一组是父ID不为根的
-	var firstDepts []*openldap.Dept // 父ID为根的部门
-	var otherDepts []*openldap.Dept // 父ID不为根的部门
+	groups := make([]*model.Group, 0)
 	for _, dept := range depts {
-		if dept.ParentId == "openldap_0" {
-			firstDepts = append(firstDepts, dept)
-		} else {
-			otherDepts = append(otherDepts, dept)
-		}
-	}
-	// 3.先写父ID为根的，再写父ID不为根的
-	for _, dept := range firstDepts {
-		err := d.AddDepts(&model.Group{
+		groups = append(groups, &model.Group{
 			GroupName:          dept.Name,
 			Remark:             dept.Remark,
-			Creator:            "system",
-			GroupType:          "cn",
 			SourceDeptId:       dept.Id,
-			Source:             "openldap",
 			SourceDeptParentId: dept.ParentId,
-			ParentId:           0,
 			GroupDN:            dept.DN,
 		})
-		if err != nil {
-			return nil, tools.NewOperationError(fmt.Errorf("SyncOpenLdapDepts添加根部门失败：%s", err.Error()))
-		}
 	}
+	// 2.将远程数据转换成树
+	deptTree := GroupListToTree("0", groups)
 
-	for _, dept := range otherDepts {
-		// 判断部门名称是否存在
-		parentGroup := new(model.Group)
-		err := isql.Group.Find(tools.H{"source_dept_id": dept.ParentId}, parentGroup)
+	// 3.根据树进行创建
+	err = d.addDepts(deptTree.Children)
+
+	return nil, err
+}
+
+// 添加部门
+func (d OpenLdapLogic) addDepts(depts []*model.Group) error {
+	for _, dept := range depts {
+		err := d.AddDepts(dept)
 		if err != nil {
-			return nil, tools.NewMySqlError(fmt.Errorf("查询父级部门失败：%s", err.Error()))
+			return tools.NewOperationError(fmt.Errorf("DsyncOpenLdapDepts添加部门失败: %s", err.Error()))
 		}
-		err = d.AddDepts(&model.Group{
-			GroupName:          dept.Name,
-			Remark:             dept.Remark,
-			Creator:            "system",
-			GroupType:          "cn",
-			SourceDeptId:       dept.Id,
-			Source:             "openldap",
-			SourceDeptParentId: dept.ParentId,
-			GroupDN:            dept.DN,
-			ParentId:           parentGroup.ID,
-		})
-		if err != nil {
-			return nil, tools.NewOperationError(fmt.Errorf("SyncOpenLdapDepts添加其他部门失败：%s", err.Error()))
+		if len(dept.Children) != 0 {
+			err = d.addDepts(dept.Children)
+			if err != nil {
+				return tools.NewOperationError(fmt.Errorf("DsyncOpenLdapDepts添加部门失败: %s", err.Error()))
+			}
 		}
 	}
-	return nil, nil
+	return nil
 }
 
 // AddGroup 添加部门数据
 func (d OpenLdapLogic) AddDepts(group *model.Group) error {
-	// 在数据库中创建组
+	// 判断部门名称是否存在
+	parentGroup := new(model.Group)
+	err := isql.Group.Find(tools.H{"source_dept_id": group.SourceDeptParentId}, parentGroup)
+	if err != nil {
+		return tools.NewMySqlError(fmt.Errorf("查询父级部门失败：%s", err.Error()))
+	}
 	if !isql.Group.Exist(tools.H{"source_dept_id": group.SourceDeptId}) {
+		// 此时的 group 已经附带了Build后动态关联好的字段，接下来将一些确定性的其他字段值添加上，就可以创建这个分组了
+		group.Creator = "system"
+		group.GroupType = "cn"
+		group.ParentId = parentGroup.ID
+		group.Source = "openldap"
 		err := isql.Group.Add(group)
 		if err != nil {
 			return err
 		}
 	}
 	return nil
+
 }
 
 //根据现有数据库同步到的部门信息，开启用户同步
