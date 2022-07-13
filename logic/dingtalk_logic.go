@@ -31,9 +31,9 @@ func (d *DingTalkLogic) SyncDingTalkDepts(c *gin.Context, req interface{}) (data
 	deptTree := GroupListToTree(fmt.Sprintf("%s_1", config.Conf.DingTalk.Flag), depts)
 
 	// 3.根据树进行创建
-	d.addDepts(deptTree.Children)
+	err = d.addDepts(deptTree.Children)
 
-	return nil, nil
+	return nil, err
 }
 
 // 添加部门
