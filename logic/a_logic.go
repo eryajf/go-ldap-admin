@@ -364,3 +364,23 @@ func InitCron() {
 	}
 	c.Start()
 }
+
+func GroupListToTree(rootId string, groupList []*model.Group) *model.Group {
+	// 创建空根节点
+	rootGroup := &model.Group{SourceDeptId: rootId}
+	rootGroup.Children = groupListToTree(rootGroup, groupList)
+	return rootGroup
+}
+
+func groupListToTree(rootGroup *model.Group, list []*model.Group) []*model.Group {
+	children := make([]*model.Group, 0)
+	for _, group := range list {
+		if group.SourceDeptParentId == rootGroup.SourceDeptId {
+			children = append(children, group)
+		}
+	}
+	for _, group := range children {
+		group.Children = groupListToTree(group, list)
+	}
+	return children
+}
