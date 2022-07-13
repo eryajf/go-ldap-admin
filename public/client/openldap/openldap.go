@@ -61,7 +61,7 @@ func GetAllDepts() (ret []*Dept, err error) {
 			ele.Id = strings.Split(strings.Split(v.DN, ",")[0], "=")[1]
 			ele.Remark = v.GetAttributeValue("description")
 			if len(strings.Split(v.DN, ","))-len(strings.Split(config.Conf.Ldap.BaseDN, ",")) == 1 {
-				ele.ParentId = "openldap_0"
+				ele.ParentId = "0"
 			} else {
 				ele.ParentId = strings.Split(strings.Split(v.DN, ",")[1], "=")[1]
 			}

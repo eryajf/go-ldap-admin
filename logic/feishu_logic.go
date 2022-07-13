@@ -27,31 +27,31 @@ func (d *FeiShuLogic) SyncFeiShuDepts(c *gin.Context, req interface{}) (data int
 	if err != nil {
 		return nil, tools.NewOperationError(fmt.Errorf("转换飞书部门数据失败：%s", err.Error()))
 	}
-	// 2.将部门这个数组进行拆分，一组是父ID为根的，一组是父ID不为根的
-	var firstDepts []*model.Group // 父ID为根的部门
-	var otherDepts []*model.Group // 父ID不为根的部门
-	for _, dept := range depts {
-		if dept.SourceDeptParentId == fmt.Sprintf("%s_0", config.Conf.FeiShu.Flag) {
-			firstDepts = append(firstDepts, dept)
-		} else {
-			otherDepts = append(otherDepts, dept)
-		}
-	}
-	// 3.先写父ID为根的，再写父ID不为根的
-	for _, dept := range firstDepts {
-		err := d.AddDepts(dept)
-		if err != nil {
-			return nil, tools.NewOperationError(fmt.Errorf("SyncFeiShuDepts添加根部门失败：%s", err.Error()))
-		}
-	}
 
-	for _, dept := range otherDepts {
+	// 2.将远程数据转换成树
+	deptTree := GroupListToTree(fmt.Sprintf("%s_0", config.Conf.FeiShu.Flag), depts)
+
+	// 3.根据树进行创建
+	err = d.addDepts(deptTree.Children)
+
+	return nil, err
+}
+
+// 添加部门
+func (d FeiShuLogic) addDepts(depts []*model.Group) error {
+	for _, dept := range depts {
 		err := d.AddDepts(dept)
 		if err != nil {
-			return nil, tools.NewOperationError(fmt.Errorf("SyncFeiShuDepts添加其他部门失败：%s", err.Error()))
+			return tools.NewOperationError(fmt.Errorf("DsyncFeiShuDepts添加部门失败: %s", err.Error()))
+		}
+		if len(dept.Children) != 0 {
+			err = d.addDepts(dept.Children)
+			if err != nil {
+				return tools.NewOperationError(fmt.Errorf("DsyncFeiShuDepts添加部门失败: %s", err.Error()))
+			}
 		}
 	}
-	return nil, nil
+	return nil
 }
 
 // AddGroup 添加部门数据

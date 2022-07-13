@@ -28,34 +28,31 @@ func (d *WeComLogic) SyncWeComDepts(c *gin.Context, req interface{}) (data inter
 	if err != nil {
 		return nil, tools.NewOperationError(fmt.Errorf("转换企业微信部门数据失败：%s", err.Error()))
 	}
-	// 2.将部门这个数组进行拆分，一组是父ID为1的，一组是父ID不为1的
-	var firstDepts []*model.Group // 父ID为1的部门
-	var otherDepts []*model.Group // 父ID不为1的部门
-	for _, dept := range depts {
-		if dept.SourceDeptId == fmt.Sprintf("%s_1", config.Conf.WeCom.Flag) { // 跳过ID为1的根部门，由系统配置的根部门进行占位
-			continue
-		}
-		if dept.SourceDeptParentId == fmt.Sprintf("%s_1", config.Conf.WeCom.Flag) {
-			firstDepts = append(firstDepts, dept)
-		} else {
-			otherDepts = append(otherDepts, dept)
-		}
-	}
-	// 3.先写父ID为1的，再写父ID不为1的
-	for _, dept := range firstDepts {
-		err := d.AddDepts(dept)
-		if err != nil {
-			return nil, tools.NewOperationError(fmt.Errorf("SyncWeComDepts添加根部门失败：%s", err.Error()))
-		}
-	}
 
-	for _, dept := range otherDepts {
+	// 2.将远程数据转换成树
+	deptTree := GroupListToTree(fmt.Sprintf("%s_1", config.Conf.WeCom.Flag), depts)
+
+	// 3.根据树进行创建
+	err = d.addDepts(deptTree.Children)
+
+	return nil, err
+}
+
+// 添加部门
+func (d WeComLogic) addDepts(depts []*model.Group) error {
+	for _, dept := range depts {
 		err := d.AddDepts(dept)
 		if err != nil {
-			return nil, tools.NewOperationError(fmt.Errorf("SyncWeComDepts添加其他部门失败：%s", err.Error()))
+			return tools.NewOperationError(fmt.Errorf("DsyncWeComDepts添加部门失败: %s", err.Error()))
+		}
+		if len(dept.Children) != 0 {
+			err = d.addDepts(dept.Children)
+			if err != nil {
+				return tools.NewOperationError(fmt.Errorf("DsyncWeComDepts添加部门失败: %s", err.Error()))
+			}
 		}
 	}
-	return nil, nil
+	return nil
 }
 
 // AddGroup 添加部门数据
