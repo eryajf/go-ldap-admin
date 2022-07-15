@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/eryajf/go-ldap-admin/config"
-	"github.com/mozillazg/go-pinyin"
+	"github.com/eryajf/go-ldap-admin/public/tools"
 	"github.com/zhaoyunxing92/dingtalk/v2/request"
 )
 
@@ -22,7 +22,7 @@ func GetAllDepts() (ret []map[string]interface{}, err error) {
 		ele["id"] = dept.Id
 		ele["name"] = dept.Name
 		ele["parentid"] = dept.ParentId
-		ele["custom_name_pinyin"] = strings.Join(pinyin.LazyConvert(dept.Name, nil), "")
+		ele["custom_name_pinyin"] = tools.ConvertToPinYin(dept.Name)
 		ret = append(ret, ele)
 	}
 	return
@@ -52,7 +52,7 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 				ele := make(map[string]interface{})
 				ele["userid"] = user.UserId
 				ele["unionid"] = user.UnionId
-				ele["custom_name_pinyin"] = strings.Join(pinyin.LazyConvert(user.Name, nil), "")
+				ele["custom_name_pinyin"] = tools.ConvertToPinYin(user.Name)
 				ele["name"] = user.Name
 				ele["avatar"] = user.Avatar
 				ele["mobile"] = user.Mobile

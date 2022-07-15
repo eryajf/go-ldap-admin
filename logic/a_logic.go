@@ -81,7 +81,7 @@ func CommonUpdateGroup(oldGroup, newGroup *model.Group) error {
 }
 
 // CommonAddUser 标准创建用户
-func CommonAddUser(user *model.User, groupId []uint) error {
+func CommonAddUser(user *model.User, groups []*model.Group) error {
 	if user.Departments == "" {
 		user.Departments = "默认:研发中心"
 	}
@@ -110,11 +110,8 @@ func CommonAddUser(user *model.User, groupId []uint) error {
 	if err != nil {
 		return tools.NewLdapError(fmt.Errorf("AddUser向LDAP创建用户失败：" + err.Error()))
 	}
-	// 获取用户将要添加的分组
-	groups, err := isql.Group.GetGroupByIds(groupId)
-	if err != nil {
-		return tools.NewMySqlError(fmt.Errorf("根据部门ID获取部门信息失败" + err.Error()))
-	}
+
+	// 处理用户归属的组
 	for _, group := range groups {
 		if group.GroupDN[:3] == "ou=" {
 			continue
