@@ -2,6 +2,7 @@ package logic
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/model"
@@ -68,6 +69,7 @@ func (d DingTalkLogic) AddDepts(group *model.Group) error {
 		group.ParentId = parentGroup.ID
 		group.Source = config.Conf.DingTalk.Flag
 		group.GroupDN = fmt.Sprintf("cn=%s,%s", group.GroupName, parentGroup.GroupDN)
+		fmt.Println(group.GroupName, group.Remark, group.GroupDN)
 
 		err = CommonAddGroup(group)
 		if err != nil {
@@ -140,7 +142,17 @@ func (d DingTalkLogic) AddUsers(user *model.User) error {
 		user.Password = config.Conf.Ldap.UserInitPassword
 		user.Source = config.Conf.DingTalk.Flag
 		user.UserDN = fmt.Sprintf("uid=%s,%s", user.Username, config.Conf.Ldap.UserDN)
-		err = CommonAddUser(user, tools.StringToSlice(user.DepartmentId, ","))
+		// 获取用户将要添加的分组
+		groups, err := isql.Group.GetGroupByIds(tools.StringToSlice(user.DepartmentId, ","))
+		if err != nil {
+			return tools.NewMySqlError(fmt.Errorf("根据部门ID获取部门信息失败" + err.Error()))
+		}
+		var deptTmp string
+		for _, group := range groups {
+			deptTmp = deptTmp + group.GroupName + ","
+		}
+		user.Departments = strings.TrimRight(deptTmp, ",")
+		err = CommonAddUser(user, groups)
 		if err != nil {
 			return err
 		}

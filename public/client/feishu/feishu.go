@@ -7,7 +7,7 @@ import (
 
 	"github.com/chyroc/lark"
 	"github.com/eryajf/go-ldap-admin/config"
-	"github.com/mozillazg/go-pinyin"
+	"github.com/eryajf/go-ldap-admin/public/tools"
 )
 
 // 官方文档： https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/children
@@ -31,7 +31,7 @@ func GetAllDepts() (ret []map[string]interface{}, err error) {
 		for _, dept := range res.Items {
 			ele := make(map[string]interface{})
 			ele["name"] = dept.Name
-			ele["custom_name_pinyin"] = strings.Join(pinyin.LazyConvert(dept.Name, nil), "")
+			ele["custom_name_pinyin"] = tools.ConvertToPinYin(dept.Name)
 			ele["parent_department_id"] = dept.ParentDepartmentID
 			ele["department_id"] = dept.DepartmentID
 			ele["open_department_id"] = dept.OpenDepartmentID
@@ -71,7 +71,7 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 			for _, user := range res.Items {
 				ele := make(map[string]interface{})
 				ele["name"] = user.Name
-				ele["custom_name_pinyin"] = strings.Join(pinyin.LazyConvert(user.Name, nil), "")
+				ele["custom_name_pinyin"] = tools.ConvertToPinYin(user.Name)
 				ele["union_id"] = user.UnionID
 				ele["user_id"] = user.UserID
 				ele["open_id"] = user.OpenID
