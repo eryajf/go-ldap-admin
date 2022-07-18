@@ -84,7 +84,7 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 					ele["custom_nickname_enterprise_email"] = strings.Split(user.EnterpriseEmail, "@")[0]
 				}
 				ele["email"] = user.Email
-				ele["mobile"] = user.Mobile[3:]
+				ele["mobile"] = user.Mobile
 				ele["gender"] = user.Gender
 				ele["avatar"] = user.Avatar.AvatarOrigin
 				ele["city"] = user.City
