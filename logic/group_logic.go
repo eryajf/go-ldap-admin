@@ -27,10 +27,6 @@ func (l GroupLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspE
 	}
 	_ = c
 
-	if isql.Group.Exist(tools.H{"group_name": r.GroupName}) {
-		return nil, tools.NewValidatorError(fmt.Errorf("组名已存在"))
-	}
-
 	// 获取当前用户
 	ctxUser, err := isql.User.GetCurrentLoginUser(c)
 	if err != nil {
@@ -45,6 +41,7 @@ func (l GroupLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspE
 		Creator:   ctxUser.Username,
 		Source:    "platform", //默认是平台添加
 	}
+
 	if r.ParentId == 0 {
 		group.SourceDeptId = "platform_0"
 		group.SourceDeptParentId = "platform_0"
@@ -58,6 +55,11 @@ func (l GroupLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspE
 		group.SourceDeptId = "platform_0"
 		group.SourceDeptParentId = fmt.Sprintf("%s_%d", parentGroup.Source, r.ParentId)
 		group.GroupDN = fmt.Sprintf("%s=%s,%s", r.GroupType, r.GroupName, parentGroup.GroupDN)
+	}
+
+	// 根据 group_dn 判断分组是否已存在
+	if isql.Group.Exist(tools.H{"group_dn": group.GroupDN}) {
+		return nil, tools.NewValidatorError(fmt.Errorf("该分组对应DN已存在"))
 	}
 
 	// 先在ldap中创建组
