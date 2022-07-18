@@ -6,7 +6,6 @@ import (
 
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/model"
-	"github.com/eryajf/go-ldap-admin/model/request"
 	"github.com/eryajf/go-ldap-admin/public/client/wechat"
 
 	"github.com/eryajf/go-ldap-admin/public/tools"
@@ -64,13 +63,15 @@ func (d WeComLogic) AddDepts(group *model.Group) error {
 	if err != nil {
 		return tools.NewMySqlError(fmt.Errorf("查询父级部门失败：%s", err.Error()))
 	}
-	if !isql.Group.Exist(tools.H{"source_dept_id": group.SourceDeptId}) {
-		// 此时的 group 已经附带了Build后动态关联好的字段，接下来将一些确定性的其他字段值添加上，就可以创建这个分组了
-		group.Creator = "system"
-		group.GroupType = "cn"
-		group.ParentId = parentGroup.ID
-		group.Source = config.Conf.WeCom.Flag
-		group.GroupDN = fmt.Sprintf("cn=%s,%s", group.GroupName, parentGroup.GroupDN)
+
+	// 此时的 group 已经附带了Build后动态关联好的字段，接下来将一些确定性的其他字段值添加上，就可以创建这个分组了
+	group.Creator = "system"
+	group.GroupType = "cn"
+	group.ParentId = parentGroup.ID
+	group.Source = config.Conf.WeCom.Flag
+	group.GroupDN = fmt.Sprintf("cn=%s,%s", group.GroupName, parentGroup.GroupDN)
+
+	if !isql.Group.Exist(tools.H{"group_dn": group.GroupDN}) {
 		err = CommonAddGroup(group)
 		if err != nil {
 			return tools.NewOperationError(fmt.Errorf("添加部门失败：%s", err.Error()))
@@ -100,14 +101,15 @@ func (d WeComLogic) SyncWeComUsers(c *gin.Context, req interface{}) (data interf
 	}
 
 	// 3.获取企业微信已离职用户id列表
-	// 拿到MySQL所有用户数据，远程没有的，则说明被删除了
+	// 拿到MySQL所有用户数据(来源为 wecom的用户)，远程没有的，则说明被删除了
+	// 如果以后企业微信透出了已离职用户列表的接口，则这里可以进行改进
 	var res []*model.User
-	users, err := isql.User.List(&request.UserListReq{})
+	users, err := isql.User.ListAll()
 	if err != nil {
 		return nil, tools.NewMySqlError(fmt.Errorf("获取用户列表失败：" + err.Error()))
 	}
 	for _, user := range users {
-		if user.Username == "admin" {
+		if user.Source != config.Conf.WeCom.Flag {
 			continue
 		}
 		in := true
@@ -144,18 +146,19 @@ func (d WeComLogic) SyncWeComUsers(c *gin.Context, req interface{}) (data interf
 
 // AddUser 添加用户数据
 func (d WeComLogic) AddUsers(user *model.User) error {
-	// 根据 unionid 查询用户,不存在则创建
-	if !isql.User.Exist(tools.H{"source_union_id": user.SourceUnionId}) {
-		// 根据角色id获取角色
-		roles, err := isql.Role.GetRolesByIds([]uint{2})
-		if err != nil {
-			return tools.NewValidatorError(fmt.Errorf("根据角色ID获取角色信息失败:%s", err.Error()))
-		}
-		user.Creator = "system"
-		user.Roles = roles
-		user.Password = config.Conf.Ldap.UserInitPassword
-		user.Source = config.Conf.WeCom.Flag
-		user.UserDN = fmt.Sprintf("uid=%s,%s", user.Username, config.Conf.Ldap.UserDN)
+	// 根据角色id获取角色
+	roles, err := isql.Role.GetRolesByIds([]uint{2})
+	if err != nil {
+		return tools.NewValidatorError(fmt.Errorf("根据角色ID获取角色信息失败:%s", err.Error()))
+	}
+	user.Creator = "system"
+	user.Roles = roles
+	user.Password = config.Conf.Ldap.UserInitPassword
+	user.Source = config.Conf.WeCom.Flag
+	user.UserDN = fmt.Sprintf("uid=%s,%s", user.Username, config.Conf.Ldap.UserDN)
+
+	// 根据 user_dn 查询用户,不存在则创建
+	if !isql.User.Exist(tools.H{"user_dn": user.UserDN}) {
 		// 获取用户将要添加的分组
 		groups, err := isql.Group.GetGroupByIds(tools.StringToSlice(user.DepartmentId, ","))
 		if err != nil {
@@ -166,6 +169,8 @@ func (d WeComLogic) AddUsers(user *model.User) error {
 			deptTmp = deptTmp + group.GroupName + ","
 		}
 		user.Departments = strings.TrimRight(deptTmp, ",")
+
+		// 创建用户
 		err = CommonAddUser(user, groups)
 		if err != nil {
 			return err

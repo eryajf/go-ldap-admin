@@ -56,21 +56,20 @@ func (d DingTalkLogic) addDepts(depts []*model.Group) error {
 
 // AddGroup 添加部门数据
 func (d DingTalkLogic) AddDepts(group *model.Group) error {
-	// 判断部门名称是否存在
 	parentGroup := new(model.Group)
 	err := isql.Group.Find(tools.H{"source_dept_id": group.SourceDeptParentId}, parentGroup) // 查询当前分组父ID在MySQL中的数据信息
 	if err != nil {
 		return tools.NewMySqlError(fmt.Errorf("查询父级部门失败：%s", err.Error()))
 	}
-	if !isql.Group.Exist(tools.H{"source_dept_id": group.SourceDeptId}) { // 判断当前部门是否已落库
-		// 此时的 group 已经附带了Build后动态关联好的字段，接下来将一些确定性的其他字段值添加上，就可以创建这个分组了
-		group.Creator = "system"
-		group.GroupType = "cn"
-		group.ParentId = parentGroup.ID
-		group.Source = config.Conf.DingTalk.Flag
-		group.GroupDN = fmt.Sprintf("cn=%s,%s", group.GroupName, parentGroup.GroupDN)
-		fmt.Println(group.GroupName, group.Remark, group.GroupDN)
 
+	// 此时的 group 已经附带了Build后动态关联好的字段，接下来将一些确定性的其他字段值添加上，就可以创建这个分组了
+	group.Creator = "system"
+	group.GroupType = "cn"
+	group.ParentId = parentGroup.ID
+	group.Source = config.Conf.DingTalk.Flag
+	group.GroupDN = fmt.Sprintf("cn=%s,%s", group.GroupName, parentGroup.GroupDN)
+
+	if !isql.Group.Exist(tools.H{"group_dn": group.GroupDN}) { // 判断当前部门是否已落库
 		err = CommonAddGroup(group)
 		if err != nil {
 			return tools.NewOperationError(fmt.Errorf("添加部门失败：%s", err.Error()))
@@ -130,18 +129,19 @@ func (d DingTalkLogic) SyncDingTalkUsers(c *gin.Context, req interface{}) (data 
 
 // AddUser 添加用户数据
 func (d DingTalkLogic) AddUsers(user *model.User) error {
-	// 根据 unionid 查询用户,不存在则创建
-	if !isql.User.Exist(tools.H{"source_union_id": user.SourceUnionId}) {
-		// 根据角色id获取角色
-		roles, err := isql.Role.GetRolesByIds([]uint{2}) // 默认添加为普通用户角色
-		if err != nil {
-			return tools.NewValidatorError(fmt.Errorf("根据角色ID获取角色信息失败:%s", err.Error()))
-		}
-		user.Creator = "system"
-		user.Roles = roles
-		user.Password = config.Conf.Ldap.UserInitPassword
-		user.Source = config.Conf.DingTalk.Flag
-		user.UserDN = fmt.Sprintf("uid=%s,%s", user.Username, config.Conf.Ldap.UserDN)
+	// 根据角色id获取角色
+	roles, err := isql.Role.GetRolesByIds([]uint{2}) // 默认添加为普通用户角色
+	if err != nil {
+		return tools.NewValidatorError(fmt.Errorf("根据角色ID获取角色信息失败:%s", err.Error()))
+	}
+	user.Roles = roles
+	user.Creator = "system"
+	user.Source = config.Conf.DingTalk.Flag
+	user.Password = config.Conf.Ldap.UserInitPassword
+	user.UserDN = fmt.Sprintf("uid=%s,%s", user.Username, config.Conf.Ldap.UserDN)
+
+	// 根据 user_dn 查询用户,不存在则创建
+	if !isql.User.Exist(tools.H{"user_dn": user.UserDN}) {
 		// 获取用户将要添加的分组
 		groups, err := isql.Group.GetGroupByIds(tools.StringToSlice(user.DepartmentId, ","))
 		if err != nil {
@@ -152,6 +152,8 @@ func (d DingTalkLogic) AddUsers(user *model.User) error {
 			deptTmp = deptTmp + group.GroupName + ","
 		}
 		user.Departments = strings.TrimRight(deptTmp, ",")
+
+		// 新增用户
 		err = CommonAddUser(user, groups)
 		if err != nil {
 			return err

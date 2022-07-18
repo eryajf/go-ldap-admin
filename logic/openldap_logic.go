@@ -59,25 +59,42 @@ func (d OpenLdapLogic) addDepts(depts []*model.Group) error {
 
 // AddGroup 添加部门数据
 func (d OpenLdapLogic) AddDepts(group *model.Group) error {
-	// 判断部门名称是否存在
-	parentGroup := new(model.Group)
-	err := isql.Group.Find(tools.H{"source_dept_id": group.SourceDeptParentId}, parentGroup)
-	if err != nil {
-		return tools.NewMySqlError(fmt.Errorf("查询父级部门失败：%s", err.Error()))
-	}
-	if !isql.Group.Exist(tools.H{"source_dept_id": group.SourceDeptId}) {
+	// 判断部门名称是否存在,此处使用ldap中的唯一值dn,以免出现数据同步不全的问题
+	if !isql.Group.Exist(tools.H{"group_dn": group.GroupDN}) {
 		// 此时的 group 已经附带了Build后动态关联好的字段，接下来将一些确定性的其他字段值添加上，就可以创建这个分组了
 		group.Creator = "system"
 		group.GroupType = "cn"
-		group.ParentId = parentGroup.ID
+		parentid, err := d.getParentGroupID(group)
+		if err != nil {
+			return err
+		}
+		group.ParentId = parentid
 		group.Source = "openldap"
-		err := isql.Group.Add(group)
+		err = isql.Group.Add(group)
 		if err != nil {
 			return err
 		}
 	}
 	return nil
 
+}
+
+// AddGroup 添加部门数据
+func (d OpenLdapLogic) getParentGroupID(group *model.Group) (id uint, err error) {
+	switch group.SourceDeptParentId {
+	case "dingtalkroot":
+		group.SourceDeptParentId = "dingtalk_1"
+	case "feishuroot":
+		group.SourceDeptParentId = "feishu_0"
+	case "wecomroot":
+		group.SourceDeptParentId = "wecom_1"
+	}
+	parentGroup := new(model.Group)
+	err = isql.Group.Find(tools.H{"source_dept_id": group.SourceDeptParentId}, parentGroup)
+	if err != nil {
+		return id, tools.NewMySqlError(fmt.Errorf("查询父级部门失败：%s,%s", err.Error(), group.GroupName))
+	}
+	return parentGroup.ID, nil
 }
 
 //根据现有数据库同步到的部门信息，开启用户同步
@@ -127,8 +144,8 @@ func (d OpenLdapLogic) SyncOpenLdapUsers(c *gin.Context, req interface{}) (data 
 
 // AddUser 添加用户数据
 func (d OpenLdapLogic) AddUsers(user *model.User) error {
-	// 根据 unionid 查询用户,不存在则创建
-	if !isql.User.Exist(tools.H{"source_union_id": user.SourceUnionId}) {
+	// 根据 user_dn 查询用户,不存在则创建
+	if !isql.User.Exist(tools.H{"user_dn": user.UserDN}) {
 		if user.Departments == "" {
 			user.Departments = "默认:研发中心"
 		}
