@@ -2,6 +2,7 @@ package logic
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/eryajf/go-ldap-admin/model"
 	"github.com/eryajf/go-ldap-admin/public/client/openldap"
@@ -63,7 +64,7 @@ func (d OpenLdapLogic) AddDepts(group *model.Group) error {
 	if !isql.Group.Exist(tools.H{"group_dn": group.GroupDN}) {
 		// 此时的 group 已经附带了Build后动态关联好的字段，接下来将一些确定性的其他字段值添加上，就可以创建这个分组了
 		group.Creator = "system"
-		group.GroupType = "cn"
+		group.GroupType = strings.Split(strings.Split(group.GroupDN, ",")[0], "=")[0]
 		parentid, err := d.getParentGroupID(group)
 		if err != nil {
 			return err
