@@ -59,8 +59,9 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 	}
 
 	deptids := make([]string, 0)
+	deptids = append(deptids, "0") // 0 代表根部门
 	for _, dept := range depts {
-		deptids = append(deptids, dept["open_department_id"].(string), "0") // 0 代表根部门
+		deptids = append(deptids, dept["open_department_id"].(string))
 	}
 
 	for _, deptid := range deptids {
