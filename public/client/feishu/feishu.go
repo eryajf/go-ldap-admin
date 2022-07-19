@@ -57,11 +57,17 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 	if err != nil {
 		return nil, err
 	}
+
+	deptids := make([]string, 0)
 	for _, dept := range depts {
+		deptids = append(deptids, dept["open_department_id"].(string), "0") // 0 代表根部门
+	}
+
+	for _, deptid := range deptids {
 		req := lark.GetUserListReq{
 			PageSize:     &pageSize,
 			PageToken:    new(string),
-			DepartmentID: dept["open_department_id"].(string),
+			DepartmentID: deptid,
 		}
 		for {
 			res, _, err := InitFeiShuClient().Contact.GetUserList(context.Background(), &req)
