@@ -76,11 +76,13 @@ func (l UserLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspEr
 	// 前端传来用户角色排序最小值（最高等级角色）
 	reqRoleSortMin := uint(funk.MinInt(reqRoleSorts).(int))
 
-	// 当前用户的角色排序最小值 需要小于 前端传来的角色排序最小值（用户不能创建比自己等级高的或者相同等级的用户）
-	if currentRoleSortMin >= reqRoleSortMin {
-		return nil, tools.NewValidatorError(fmt.Errorf("用户不能创建比自己等级高的或者相同等级的用户"))
+	// 如果登录用户的角色ID为1，亦即为管理员，则直接放行，保障管理员拥有最大权限
+	if currentRoleSortMin != 1 {
+		// 当前用户的角色排序最小值 需要小于 前端传来的角色排序最小值（用户不能创建比自己等级高的或者相同等级的用户）
+		if currentRoleSortMin >= reqRoleSortMin {
+			return nil, tools.NewValidatorError(fmt.Errorf("用户不能创建比自己等级高的或者相同等级的用户"))
+		}
 	}
-
 	user := model.User{
 		Username:      r.Username,
 		Password:      r.Password,
@@ -165,42 +167,57 @@ func (l UserLogic) Update(c *gin.Context, req interface{}) (data interface{}, rs
 	if err != nil {
 		return nil, tools.NewMySqlError(fmt.Errorf("获取当前登陆用户失败"))
 	}
-	// 获取当前登陆用户的所有角色
-	currentRoles := ctxUser.Roles
-	// 获取当前登陆用户角色的排序，和前端传来的角色排序做比较
-	var currentRoleSorts []int
-	// 当前登陆用户角色ID集合
-	var currentRoleIds []uint
-	for _, role := range currentRoles {
-		currentRoleSorts = append(currentRoleSorts, int(role.Sort))
-		currentRoleIds = append(currentRoleIds, role.ID)
-	}
-	// 当前登陆用户角色排序最小值（最高等级角色）
-	currentRoleSortMin := funk.MinInt(currentRoleSorts).(int)
 
-	// 获取前端传来的用户角色id
-	reqRoleIds := r.RoleIds
-	// 根据角色id获取角色
-	roles, err := isql.Role.GetRolesByIds(reqRoleIds)
-	if err != nil {
+	// 获取当前登陆用户角色ID集合
+	var currentRoleSorts []int
+	for _, role := range ctxUser.Roles {
+		currentRoleSorts = append(currentRoleSorts, int(role.Sort))
+	}
+
+	// 获取将要操作的用户角色ID集合
+	var reqRoleSorts []int
+	roles, err := isql.Role.GetRolesByIds(r.RoleIds)
+	if err != nil || len(roles) == 0 {
 		return nil, tools.NewValidatorError(fmt.Errorf("根据角色ID获取角色信息失败"))
 	}
-	if len(roles) == 0 {
-		return nil, tools.NewValidatorError(fmt.Errorf("未获取到角色信息"))
-	}
-	var reqRoleSorts []int
 	for _, role := range roles {
 		reqRoleSorts = append(reqRoleSorts, int(role.Sort))
 	}
+
+	// 当前登陆用户角色排序最小值（最高等级角色）
+	currentRoleSortMin := funk.MinInt(currentRoleSorts).(int)
 	// 前端传来用户角色排序最小值（最高等级角色）
 	reqRoleSortMin := funk.MinInt(reqRoleSorts).(int)
 
+	// 如果登录用户的角色ID为1，亦即为管理员，则直接放行，保障管理员拥有最大权限
+	if currentRoleSortMin != 1 {
+		// 判断是更新自己还是更新别人,如果操作的ID与登陆用户的ID一致，则说明操作的是自己
+		if int(r.ID) == int(ctxUser.ID) {
+			// 不能更改自己的角色
+			reqDiff, currentDiff := funk.Difference(reqRoleSorts, currentRoleSorts)
+			if len(reqDiff.([]int)) > 0 || len(currentDiff.([]int)) > 0 {
+				return nil, tools.NewValidatorError(fmt.Errorf("不能更改自己的角色"))
+			}
+		}
+
+		// 如果是更新别人，操作者不能更新比自己角色等级高的或者相同等级的用户
+		minRoleSorts, err := isql.User.GetUserMinRoleSortsByIds([]uint{uint(r.ID)}) // 根据userIdID获取用户角色排序最小值
+		if err != nil || len(minRoleSorts) == 0 {
+			return nil, tools.NewValidatorError(fmt.Errorf("根据用户ID获取用户角色排序最小值失败"))
+		}
+		if currentRoleSortMin >= minRoleSorts[0] || currentRoleSortMin >= reqRoleSortMin {
+			return nil, tools.NewValidatorError(fmt.Errorf("用户不能更新比自己角色等级高的或者相同等级的用户"))
+		}
+	}
+
+	// 先获取用户信息
 	oldData := new(model.User)
 	err = isql.User.Find(tools.H{"id": r.ID}, oldData)
 	if err != nil {
 		return nil, tools.NewMySqlError(err)
 	}
 
+	// 拼装新的用户信息
 	user := model.User{
 		Model:         oldData.Model,
 		Username:      r.Username,
@@ -221,28 +238,6 @@ func (l UserLogic) Update(c *gin.Context, req interface{}) (data interface{}, rs
 		UserDN:        oldData.UserDN,
 	}
 
-	// 判断是更新自己还是更新别人,如果操作的ID与登陆用户的ID一致，则说明操作的是自己
-	if int(r.ID) == int(ctxUser.ID) {
-		// 不能更改自己的角色
-		reqDiff, currentDiff := funk.Difference(r.RoleIds, currentRoleIds)
-		if len(reqDiff.([]uint)) > 0 || len(currentDiff.([]uint)) > 0 {
-			return nil, tools.NewValidatorError(fmt.Errorf("不能更改自己的角色"))
-		}
-	} else {
-		// 如果是更新别人，操作者不能更新比自己角色等级高的或者相同等级的用户
-		// 根据userIdID获取用户角色排序最小值
-		minRoleSorts, err := isql.User.GetUserMinRoleSortsByIds([]uint{uint(r.ID)})
-		if err != nil || len(minRoleSorts) == 0 {
-			return nil, tools.NewValidatorError(fmt.Errorf("根据用户ID获取用户角色排序最小值失败"))
-		}
-		if currentRoleSortMin >= minRoleSorts[0] {
-			return nil, tools.NewValidatorError(fmt.Errorf("用户不能更新比自己角色等级高的或者相同等级的用户"))
-		}
-		// 用户不能把别的用户角色等级更新得比自己高或相等
-		if currentRoleSortMin >= reqRoleSortMin {
-			return nil, tools.NewValidatorError(fmt.Errorf("用户不能把别的用户角色等级更新得比自己高或相等"))
-		}
-	}
 	if err = CommonUpdateUser(oldData, &user, r.DepartmentId); err != nil {
 		return nil, tools.NewOperationError(fmt.Errorf("更新用户失败" + err.Error()))
 	}
@@ -266,7 +261,7 @@ func (l UserLogic) Delete(c *gin.Context, req interface{}) (data interface{}, rs
 	}
 
 	// 根据用户ID获取用户角色排序最小值
-	roleMinSortList, err := isql.User.GetUserMinRoleSortsByIds(r.UserIds) // TODO: 这里应该复用下边的 GetUserByIds 方法
+	roleMinSortList, err := isql.User.GetUserMinRoleSortsByIds(r.UserIds)
 	if err != nil || len(roleMinSortList) == 0 {
 		return nil, tools.NewValidatorError(fmt.Errorf("根据用户ID获取用户角色排序最小值失败"))
 	}
@@ -276,7 +271,6 @@ func (l UserLogic) Delete(c *gin.Context, req interface{}) (data interface{}, rs
 	if err != nil {
 		return nil, tools.NewValidatorError(fmt.Errorf("获取当前登陆用户角色排序最小值失败"))
 	}
-	currentRoleSortMin := int(minSort)
 
 	// 不能删除自己
 	if funk.Contains(r.UserIds, ctxUser.ID) {
@@ -285,7 +279,7 @@ func (l UserLogic) Delete(c *gin.Context, req interface{}) (data interface{}, rs
 
 	// 不能删除比自己(登陆用户)角色排序低(等级高)的用户
 	for _, sort := range roleMinSortList {
-		if currentRoleSortMin >= sort {
+		if int(minSort) > sort {
 			return nil, tools.NewValidatorError(fmt.Errorf("用户不能删除比自己角色等级高的用户"))
 		}
 	}
