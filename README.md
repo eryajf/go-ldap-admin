@@ -55,11 +55,11 @@
 
 **页面功能概览：**
 
-| ![image_20220724_165411](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_165411.png) | ![image_20220724_165545](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_165545.png) |
+| ![登录页](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_165411.png) | ![首页](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_165545.png) |
 | :----------------------------------------------------------: | ------------------------------------------------------------ |
-| ![image_20220724_165623](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_165623.png) | ![image_20220724_165701](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_165701.png) |
-| ![image_20220724_165853](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_165853.png) | ![image_20220724_165954](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_165954.png) |
-| ![image_20220724_170015](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_170015.png) | ![image_20220724_170035](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_170035.png) |
+| ![用户管理](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_165623.png) | ![分组管理](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_165701.png) |
+| ![字段关系管理](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_165853.png) | ![菜单管理](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_165954.png) |
+| ![接口管理](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_170015.png) | ![操作日志](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_170035.png) |
 
 ## 👨‍💻 项目地址
 
