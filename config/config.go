@@ -135,6 +135,7 @@ type RateLimitConfig struct {
 
 type LdapConfig struct {
 	Url              string `mapstructure:"url" json:"url"`
+	MaxConn          int    `mapstructure:"max-conn" json:"maxConn"`
 	BaseDN           string `mapstructure:"base-dn" json:"baseDN"`
 	AdminDN          string `mapstructure:"admin-dn" json:"adminDN"`
 	AdminPass        string `mapstructure:"admin-pass" json:"adminPass"`

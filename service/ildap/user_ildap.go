@@ -30,7 +30,15 @@ func (x UserService) Add(user *model.User) error {
 	add.Attribute("mobile", []string{user.Mobile})
 	add.Attribute("uid", []string{user.Username})
 	add.Attribute("userPassword", []string{tools.NewParPasswd(user.Password)})
-	return common.LDAP.Add(add)
+
+	// 获取 LDAP 连接
+	conn, err := common.GetLDAPConn()
+	defer common.PutLADPConn(conn)
+	if err != nil {
+		return err
+	}
+
+	return conn.Add(add)
 }
 
 // Update 更新资源
@@ -47,13 +55,21 @@ func (x UserService) Update(oldusername string, user *model.User) error {
 	modify.Replace("givenName", []string{user.GivenName})
 	modify.Replace("postalAddress", []string{user.PostalAddress})
 	modify.Replace("mobile", []string{user.Mobile})
-	err := common.LDAP.Modify(modify)
+
+	// 获取 LDAP 连接
+	conn, err := common.GetLDAPConn()
+	defer common.PutLADPConn(conn)
+	if err != nil {
+		return err
+	}
+
+	err = conn.Modify(modify)
 	if err != nil {
 		return err
 	}
 	if config.Conf.Ldap.UserNameModify && oldusername != user.Username {
 		modifyDn := ldap.NewModifyDNRequest(fmt.Sprintf("uid=%s,%s", oldusername, config.Conf.Ldap.UserDN), fmt.Sprintf("uid=%s", user.Username), true, "")
-		return common.LDAP.ModifyDN(modifyDn)
+		return conn.ModifyDN(modifyDn)
 	}
 	return nil
 }
@@ -61,13 +77,27 @@ func (x UserService) Update(oldusername string, user *model.User) error {
 // Delete 删除资源
 func (x UserService) Delete(udn string) error {
 	del := ldap.NewDelRequest(udn, nil)
-	return common.LDAP.Del(del)
+	// 获取 LDAP 连接
+	conn, err := common.GetLDAPConn()
+	defer common.PutLADPConn(conn)
+	if err != nil {
+		return err
+	}
+	return conn.Del(del)
 }
 
 // ChangePwd 修改用户密码，此处旧密码也可以为空，ldap可以直接通过用户DN加上新密码来进行修改
 func (x UserService) ChangePwd(udn, oldpasswd, newpasswd string) error {
 	modifyPass := ldap.NewPasswordModifyRequest(udn, oldpasswd, newpasswd)
-	_, err := common.LDAP.PasswordModify(modifyPass)
+
+	// 获取 LDAP 连接
+	conn, err := common.GetLDAPConn()
+	defer common.PutLADPConn(conn)
+	if err != nil {
+		return err
+	}
+
+	_, err = conn.PasswordModify(modifyPass)
 	if err != nil {
 		return fmt.Errorf("password modify failed for %s, err: %v", udn, err)
 	}
@@ -81,7 +111,15 @@ func (x UserService) NewPwd(username string) (string, error) {
 		udn = config.Conf.Ldap.AdminDN
 	}
 	modifyPass := ldap.NewPasswordModifyRequest(udn, "", "")
-	newpass, err := common.LDAP.PasswordModify(modifyPass)
+
+	// 获取 LDAP 连接
+	conn, err := common.GetLDAPConn()
+	defer common.PutLADPConn(conn)
+	if err != nil {
+		return "", err
+	}
+
+	newpass, err := conn.PasswordModify(modifyPass)
 	if err != nil {
 		return "", fmt.Errorf("password modify failed for %s, err: %v", username, err)
 	}

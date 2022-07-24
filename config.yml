@@ -85,6 +85,8 @@ email:
 ldap:
   # ldap服务器地址
   url: ldap://localhost:389
+  # ladp最大连接数设置
+  max-conn: 10
   # ldap服务器基础DN
   base-dn: "dc=eryajf,dc=net"
   # ldap管理员DN
