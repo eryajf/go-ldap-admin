@@ -44,8 +44,16 @@ func GetAllDepts() (ret []*Dept, err error) {
 		[]string{},           // Here are the attributes returned by the query, provided as an array. If empty, all attributes are returned
 		nil,
 	)
+
+	// 获取 LDAP 连接
+	conn, err := common.GetLDAPConn()
+	defer common.PutLADPConn(conn)
+	if err != nil {
+		return nil, err
+	}
+
 	// Search through ldap built-in search
-	sr, err := common.LDAP.Search(searchRequest)
+	sr, err := conn.Search(searchRequest)
 	if err != nil {
 		return ret, err
 	}
@@ -81,8 +89,16 @@ func GetAllUsers() (ret []*User, err error) {
 		[]string{},           // Here are the attributes returned by the query, provided as an array. If empty, all attributes are returned
 		nil,
 	)
+
+	// 获取 LDAP 连接
+	conn, err := common.GetLDAPConn()
+	defer common.PutLADPConn(conn)
+	if err != nil {
+		return nil, err
+	}
+
 	// Search through ldap built-in search
-	sr, err := common.LDAP.Search(searchRequest)
+	sr, err := conn.Search(searchRequest)
 	if err != nil {
 		return ret, err
 	}
@@ -128,8 +144,16 @@ func GetUserDeptIds(udn string) (ret []string, err error) {
 		[]string{}, // Here are the attributes returned by the query, provided as an array. If empty, all attributes are returned
 		nil,
 	)
+
+	// 获取 LDAP 连接
+	conn, err := common.GetLDAPConn()
+	defer common.PutLADPConn(conn)
+	if err != nil {
+		return nil, err
+	}
+
 	// Search through ldap built-in search
-	sr, err := common.LDAP.Search(searchRequest)
+	sr, err := conn.Search(searchRequest)
 	if err != nil {
 		return ret, err
 	}
