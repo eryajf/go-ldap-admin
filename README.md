@@ -145,17 +145,17 @@
         </a>
     </td>
     <td align="center">
-        <a href="https://github.com/0x0034">
-            <img src="https://avatars.githubusercontent.com/u/39284250?v=4" width="100;" alt="0x0034"/>
-            <br />
-            <sub><b>0x0034</b></sub>
-        </a>
-    </td>
-    <td align="center">
         <a href="https://github.com/RoninZc">
             <img src="https://avatars.githubusercontent.com/u/48718694?v=4" width="100;" alt="RoninZc"/>
             <br />
             <sub><b>Ronin_Zc</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/0x0034">
+            <img src="https://avatars.githubusercontent.com/u/39284250?v=4" width="100;" alt="0x0034"/>
+            <br />
+            <sub><b>0x0034</b></sub>
         </a>
     </td></tr>
 </table>
