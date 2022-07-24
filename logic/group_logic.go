@@ -2,6 +2,7 @@ package logic
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/eryajf/go-ldap-admin/config"
@@ -26,10 +27,6 @@ func (l GroupLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspE
 	}
 	_ = c
 
-	if isql.Group.Exist(tools.H{"group_name": r.GroupName}) {
-		return nil, tools.NewValidatorError(fmt.Errorf("组名已存在"))
-	}
-
 	// 获取当前用户
 	ctxUser, err := isql.User.GetCurrentLoginUser(c)
 	if err != nil {
@@ -44,6 +41,7 @@ func (l GroupLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspE
 		Creator:   ctxUser.Username,
 		Source:    "platform", //默认是平台添加
 	}
+
 	if r.ParentId == 0 {
 		group.SourceDeptId = "platform_0"
 		group.SourceDeptParentId = "platform_0"
@@ -57,6 +55,11 @@ func (l GroupLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspE
 		group.SourceDeptId = "platform_0"
 		group.SourceDeptParentId = fmt.Sprintf("%s_%d", parentGroup.Source, r.ParentId)
 		group.GroupDN = fmt.Sprintf("%s=%s,%s", r.GroupType, r.GroupName, parentGroup.GroupDN)
+	}
+
+	// 根据 group_dn 判断分组是否已存在
+	if isql.Group.Exist(tools.H{"group_dn": group.GroupDN}) {
+		return nil, tools.NewValidatorError(fmt.Errorf("该分组对应DN已存在"))
 	}
 
 	// 先在ldap中创建组
@@ -269,7 +272,31 @@ func (l GroupLogic) AddUser(c *gin.Context, req interface{}) (data interface{}, 
 		}
 	}
 
+	for _, user := range users {
+		oldData := new(model.User)
+		err = isql.User.Find(tools.H{"id": user.ID}, oldData)
+		if err != nil {
+			return nil, tools.NewMySqlError(err)
+		}
+		newData := oldData
+		// 添加新增的分组ID与部门
+		newData.DepartmentId = oldData.DepartmentId + "," + strconv.Itoa(int(r.GroupID))
+		newData.Departments = oldData.Departments + "," + group.GroupName
+		err = l.updataUser(newData)
+		if err != nil {
+			return nil, tools.NewOperationError(fmt.Errorf("处理用户的部门数据失败:" + err.Error()))
+		}
+	}
+
 	return nil, nil
+}
+
+func (l GroupLogic) updataUser(newUser *model.User) error {
+	err := isql.User.Update(newUser)
+	if err != nil {
+		return tools.NewMySqlError(fmt.Errorf("在MySQL更新用户失败：" + err.Error()))
+	}
+	return nil
 }
 
 // RemoveUser 移除用户
@@ -313,6 +340,37 @@ func (l GroupLogic) RemoveUser(c *gin.Context, req interface{}) (data interface{
 	err = isql.Group.RemoveUserFromGroup(group, users)
 	if err != nil {
 		return nil, tools.NewMySqlError(fmt.Errorf("将用户从MySQL移除失败: %s", err.Error()))
+	}
+
+	for _, user := range users {
+		oldData := new(model.User)
+		err = isql.User.Find(tools.H{"id": user.ID}, oldData)
+		if err != nil {
+			return nil, tools.NewMySqlError(err)
+		}
+		newData := oldData
+
+		var newDepts []string
+		var newDeptIds []string
+		// 删掉移除的分组名字
+		for _, v := range strings.Split(oldData.Departments, ",") {
+			if v != group.GroupName {
+				newDepts = append(newDepts, v)
+			}
+		}
+		// 删掉移除的分组id
+		for _, v := range strings.Split(oldData.DepartmentId, ",") {
+			if v != strconv.Itoa(int(r.GroupID)) {
+				newDeptIds = append(newDeptIds, v)
+			}
+		}
+
+		newData.Departments = strings.Join(newDepts, ",")
+		newData.DepartmentId = strings.Join(newDeptIds, ",")
+		err = l.updataUser(newData)
+		if err != nil {
+			return nil, tools.NewOperationError(fmt.Errorf("处理用户的部门数据失败:" + err.Error()))
+		}
 	}
 
 	return nil, nil

@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/eryajf/go-ldap-admin/config"
-	"github.com/mozillazg/go-pinyin"
+	"github.com/eryajf/go-ldap-admin/public/tools"
 	"github.com/wenerme/go-wecom/wecom"
 )
 
@@ -21,7 +21,7 @@ func GetAllDepts() (ret []map[string]interface{}, err error) {
 	for _, dept := range depts.Department {
 		ele := make(map[string]interface{})
 		ele["name"] = dept.Name
-		ele["custom_name_pinyin"] = strings.Join(pinyin.LazyConvert(dept.Name, nil), "")
+		ele["custom_name_pinyin"] = tools.ConvertToPinYin(dept.Name)
 		ele["id"] = dept.ID
 		ele["name_en"] = dept.NameEn
 		ele["parentid"] = dept.ParentID
@@ -50,7 +50,7 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 		for _, user := range users.UserList {
 			ele := make(map[string]interface{})
 			ele["name"] = user.Name
-			ele["custom_name_pinyin"] = strings.Join(pinyin.LazyConvert(user.Name, nil), "")
+			ele["custom_name_pinyin"] = tools.ConvertToPinYin(user.Name)
 			ele["userid"] = user.UserID
 			ele["mobile"] = user.Mobile
 			ele["position"] = user.Position

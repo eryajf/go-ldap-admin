@@ -7,7 +7,7 @@ import (
 
 	"github.com/chyroc/lark"
 	"github.com/eryajf/go-ldap-admin/config"
-	"github.com/mozillazg/go-pinyin"
+	"github.com/eryajf/go-ldap-admin/public/tools"
 )
 
 // 官方文档： https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/children
@@ -31,7 +31,7 @@ func GetAllDepts() (ret []map[string]interface{}, err error) {
 		for _, dept := range res.Items {
 			ele := make(map[string]interface{})
 			ele["name"] = dept.Name
-			ele["custom_name_pinyin"] = strings.Join(pinyin.LazyConvert(dept.Name, nil), "")
+			ele["custom_name_pinyin"] = tools.ConvertToPinYin(dept.Name)
 			ele["parent_department_id"] = dept.ParentDepartmentID
 			ele["department_id"] = dept.DepartmentID
 			ele["open_department_id"] = dept.OpenDepartmentID
@@ -57,11 +57,18 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 	if err != nil {
 		return nil, err
 	}
+
+	deptids := make([]string, 0)
+	deptids = append(deptids, "0") // 0 代表根部门
 	for _, dept := range depts {
+		deptids = append(deptids, dept["open_department_id"].(string))
+	}
+
+	for _, deptid := range deptids {
 		req := lark.GetUserListReq{
 			PageSize:     &pageSize,
 			PageToken:    new(string),
-			DepartmentID: dept["open_department_id"].(string),
+			DepartmentID: deptid,
 		}
 		for {
 			res, _, err := InitFeiShuClient().Contact.GetUserList(context.Background(), &req)
@@ -71,7 +78,7 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 			for _, user := range res.Items {
 				ele := make(map[string]interface{})
 				ele["name"] = user.Name
-				ele["custom_name_pinyin"] = strings.Join(pinyin.LazyConvert(user.Name, nil), "")
+				ele["custom_name_pinyin"] = tools.ConvertToPinYin(user.Name)
 				ele["union_id"] = user.UnionID
 				ele["user_id"] = user.UserID
 				ele["open_id"] = user.OpenID
@@ -84,7 +91,7 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 					ele["custom_nickname_enterprise_email"] = strings.Split(user.EnterpriseEmail, "@")[0]
 				}
 				ele["email"] = user.Email
-				ele["mobile"] = user.Mobile[3:]
+				ele["mobile"] = user.Mobile
 				ele["gender"] = user.Gender
 				ele["avatar"] = user.Avatar.AvatarOrigin
 				ele["city"] = user.City
