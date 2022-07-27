@@ -72,7 +72,7 @@ func (d DingTalkLogic) AddDepts(group *model.Group) error {
 	if !isql.Group.Exist(tools.H{"group_dn": group.GroupDN}) { // 判断当前部门是否已落库
 		err = CommonAddGroup(group)
 		if err != nil {
-			return tools.NewOperationError(fmt.Errorf("添加部门失败：%s", err.Error()))
+			return tools.NewOperationError(fmt.Errorf("添加部门: %s, 失败: %s", group.GroupName, err.Error()))
 		}
 	}
 	return nil
@@ -156,7 +156,7 @@ func (d DingTalkLogic) AddUsers(user *model.User) error {
 		// 新增用户
 		err = CommonAddUser(user, groups)
 		if err != nil {
-			return err
+			return tools.NewOperationError(fmt.Errorf("添加用户: %s, 失败: %s", user.Username, err.Error()))
 		}
 	}
 	return nil
