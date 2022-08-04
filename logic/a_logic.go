@@ -94,6 +94,9 @@ func CommonAddUser(user *model.User, groups []*model.Group) error {
 	if user.Position == "" {
 		user.Position = "默认:技术"
 	}
+	if user.Mobile == "" {
+		user.Mobile = "该用户手机号为空"
+	}
 	if user.Introduction == "" {
 		user.Introduction = user.Nickname
 	}

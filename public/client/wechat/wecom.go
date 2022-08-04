@@ -74,7 +74,7 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 			// 部门ids
 			var sourceDeptIds []string
 			for _, deptId := range user.Department {
-				sourceDeptIds = append(sourceDeptIds, fmt.Sprintf("%s_%d", config.Conf.FeiShu.Flag, deptId))
+				sourceDeptIds = append(sourceDeptIds, fmt.Sprintf("%s_%d", config.Conf.WeCom.Flag, deptId))
 			}
 			ele["department_ids"] = sourceDeptIds
 			ret = append(ret, ele)
