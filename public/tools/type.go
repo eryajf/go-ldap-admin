@@ -17,6 +17,12 @@ func isEnglish(str string) bool {
 	return match
 }
 
+// 是否为英文与数字组合
+func isEnglishAndNum(str string) bool {
+	match, _ := regexp.MatchString(`^[a-zA-Z0-9_-]+$`, str)
+	return match
+}
+
 // 是否全为中文
 func isChinese(s string) bool {
 	for _, r := range s {
@@ -32,7 +38,8 @@ func isChinese(s string) bool {
 	1.如果名字中有横杠或者下划线连接，将会删去下划线再处理
 	2.全是中文：直接转拼音
 	3.全是英文：不进行处理，原文呈现
-	4.如果是中英混合，那么分以下几种情况
+	4.英文与数字组合，不进行处理，原文呈现
+	5.如果是中英混合，那么分以下几种情况
 		1.开头是中文，结尾不是中文：进入Convert逻辑第一种
 		2.开头不是中文，结尾不是中文：进入Convert逻辑第一种
 		3.开头不是中文，结尾是中文：进入Convert逻辑第三种
@@ -56,7 +63,7 @@ func Convert(src string) string {
 	if isChinese(src) { // 全是中文
 		return strings.Join(pinyin.LazyConvert(src, nil), "")
 	}
-	if isEnglish(src) { // 全是英文
+	if isEnglish(src) || isEnglishAndNum(src) { // 全是英文,或者为英文与数字组合
 		return src
 	}
 
