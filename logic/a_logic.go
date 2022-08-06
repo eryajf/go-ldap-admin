@@ -82,27 +82,35 @@ func CommonUpdateGroup(oldGroup, newGroup *model.Group) error {
 
 // CommonAddUser 标准创建用户
 func CommonAddUser(user *model.User, groups []*model.Group) error {
-	if user.Departments == "" {
-		user.Departments = "默认:研发中心"
+	// 用户信息的预置处理
+	if user.Nickname == "" {
+		user.Nickname = "佚名"
 	}
 	if user.GivenName == "" {
 		user.GivenName = user.Nickname
 	}
-	if user.PostalAddress == "" {
-		user.PostalAddress = "默认:地球"
+	if user.Introduction == "" {
+		user.Introduction = user.Nickname
+	}
+	if user.Mail == "" {
+		user.Mail = "该用户邮箱为空"
+	}
+	if user.JobNumber == "" {
+		user.JobNumber = "该用户工号为空"
+	}
+	if user.Departments == "" {
+		user.Departments = "默认:研发中心"
 	}
 	if user.Position == "" {
 		user.Position = "默认:技术"
 	}
+	if user.PostalAddress == "" {
+		user.PostalAddress = "默认:地球"
+	}
 	if user.Mobile == "" {
-		user.Mobile = "该用户手机号为空"
+		user.Mobile = "emptyMobile"
 	}
-	if user.Introduction == "" {
-		user.Introduction = user.Nickname
-	}
-	if user.JobNumber == "" {
-		user.JobNumber = user.Mobile
-	}
+
 	// 先将用户添加到MySQL
 	err := isql.User.Add(user)
 	if err != nil {
