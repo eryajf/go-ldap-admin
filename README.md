@@ -113,7 +113,9 @@
 
 ## 💎 优秀软件推荐
 
-- [🦄ConsulManager：高效易用的Consul Web运维平台](https://github.com/starsliao/ConsulManager)
+- [🦄 ConsulManager：高效易用的Consul Web运维平台](https://github.com/starsliao/ConsulManager)
+- [🦚 Yearning — MYSQL 开源SQL语句审核平台](https://github.com/cookieY/Yearning)
+- [🦅 Spug - 开源轻量自动化运维平台](https://github.com/openspug/spug)
 
 ## 🤝 贡献者
 
