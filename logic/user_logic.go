@@ -107,14 +107,13 @@ func (l UserLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspEr
 	if user.Source == "" {
 		user.Source = "platform"
 	}
+
 	// 获取用户将要添加的分组
 	groups, err := isql.Group.GetGroupByIds(tools.StringToSlice(user.DepartmentId, ","))
 	if err != nil {
 		return nil, tools.NewMySqlError(fmt.Errorf("根据部门ID获取部门信息失败" + err.Error()))
 	}
-	for _, group := range groups {
-		user.Departments = user.Departments + group.GroupName
-	}
+
 	err = CommonAddUser(&user, groups)
 	if err != nil {
 		return nil, tools.NewOperationError(fmt.Errorf("添加用户失败" + err.Error()))
