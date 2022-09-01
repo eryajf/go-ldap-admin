@@ -400,6 +400,21 @@ func (l UserLogic) ChangeUserStatus(c *gin.Context, req interface{}) (data inter
 		if err != nil {
 			return nil, tools.NewLdapError(fmt.Errorf("在LDAP添加用户失败" + err.Error()))
 		}
+		// 将用户要添加至原有分组
+		groups, err := isql.Group.GetGroupByIds(tools.StringToSlice(user.DepartmentId, ","))
+		if err != nil {
+			return nil, tools.NewMySqlError(fmt.Errorf("根据部门ID获取部门信息失败" + err.Error()))
+		}
+		for _, group := range groups {
+			if group.GroupDN[:3] == "ou=" {
+				continue
+			}
+			//根据选择的部门，添加到部门内
+			err = ildap.Group.AddUserToGroup(group.GroupDN, user.UserDN)
+			if err != nil {
+				return nil, tools.NewLdapError(fmt.Errorf("向Ldap添加用户到分组关系失败：" + err.Error()))
+			}
+		}
 	}
 	err = isql.User.ChangeStatus(int(r.ID), int(r.Status))
 	if err != nil {
