@@ -44,7 +44,7 @@ func (x UserService) Add(user *model.User) error {
 // Update 更新资源
 func (x UserService) Update(oldusername string, user *model.User) error {
 	modify := ldap.NewModifyRequest(user.UserDN, nil)
-	modify.Replace("cn", []string{user.Nickname})
+	modify.Replace("cn", []string{user.Username})
 	modify.Replace("sn", []string{oldusername})
 	modify.Replace("businessCategory", []string{user.Departments})
 	modify.Replace("departmentNumber", []string{user.Position})
