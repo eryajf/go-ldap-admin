@@ -76,7 +76,7 @@ services:
       WAIT_HOSTS: mysql:3306, openldap:389
     ports:
       - 8888:8888
-    # volumes:  # 可按需打开此配置，将配置文件挂载到本地 可在服务运行之后，执行 docker cp go-ldap-admin-server:/app/config.yml ./config 然后再取消改行注释
+    # volumes:  # 可按需打开此配置，将配置文件挂载到本地 可在服务运行之后，执行 docker cp go-ldap-admin-server:/app/config.yml ./config 然后再取消该行注释
     #   - ./config/config.yml:/app/config.yml
     depends_on:
       - mysql

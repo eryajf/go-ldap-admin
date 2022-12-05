@@ -93,22 +93,22 @@ func CommonAddUser(user *model.User, groups []*model.Group) error {
 		user.Introduction = user.Nickname
 	}
 	if user.Mail == "" {
-		user.Mail = "该用户邮箱为空"
+		user.Mail = "noone@eryajf.net"
 	}
 	if user.JobNumber == "" {
-		user.JobNumber = "该用户工号为空"
+		user.JobNumber = "0000"
 	}
 	if user.Departments == "" {
 		user.Departments = "默认:研发中心"
 	}
 	if user.Position == "" {
-		user.Position = "默认:技术"
+		user.Position = "默认:打工人"
 	}
 	if user.PostalAddress == "" {
 		user.PostalAddress = "默认:地球"
 	}
 	if user.Mobile == "" {
-		user.Mobile = "emptyMobile"
+		user.Mobile = "18888888888"
 	}
 
 	// 先将用户添加到MySQL
@@ -320,16 +320,14 @@ func InitCron() {
 
 	if config.Conf.DingTalk.EnableSync {
 		//启动定时任务
-		_, err := c.AddFunc("0 1 5 * * *", func() {
-			common.Log.Info("每天凌晨5点1分0秒执行一次同步钉钉部门信息到ldap")
+		_, err := c.AddFunc(config.Conf.DingTalk.DeptSyncTime, func() {
 			DingTalk.SyncDingTalkDepts(nil, nil)
 		})
 		if err != nil {
 			common.Log.Errorf("启动同步部门的定时任务失败: %v", err)
 		}
 		//每天凌晨1点执行一次
-		_, err = c.AddFunc("0 30 5 * * *", func() {
-			common.Log.Info("每天凌晨5点30分执行一次同步钉钉用户信息到ldap")
+		_, err = c.AddFunc(config.Conf.DingTalk.UserSyncTime, func() {
 			DingTalk.SyncDingTalkUsers(nil, nil)
 		})
 		if err != nil {
@@ -337,16 +335,14 @@ func InitCron() {
 		}
 	}
 	if config.Conf.WeCom.EnableSync {
-		_, err := c.AddFunc("0 1 5 * * *", func() {
-			common.Log.Info("每天凌晨5点1分0秒执行一次同步企业微信部门信息到ldap")
+		_, err := c.AddFunc(config.Conf.WeCom.DeptSyncTime, func() {
 			WeCom.SyncWeComDepts(nil, nil)
 		})
 		if err != nil {
 			common.Log.Errorf("启动同步部门的定时任务失败: %v", err)
 		}
 		//每天凌晨1点执行一次
-		_, err = c.AddFunc("0 30 5 * * *", func() {
-			common.Log.Info("每天凌晨5点30分执行一次同步企业微信用户信息到ldap")
+		_, err = c.AddFunc(config.Conf.WeCom.UserSyncTime, func() {
 			WeCom.SyncWeComUsers(nil, nil)
 		})
 		if err != nil {
@@ -354,16 +350,14 @@ func InitCron() {
 		}
 	}
 	if config.Conf.FeiShu.EnableSync {
-		_, err := c.AddFunc("0 1 5 * * *", func() {
-			common.Log.Info("每天凌晨5点1分0秒执行一次同步飞书部门信息到ldap")
+		_, err := c.AddFunc(config.Conf.FeiShu.DeptSyncTime, func() {
 			FeiShu.SyncFeiShuDepts(nil, nil)
 		})
 		if err != nil {
 			common.Log.Errorf("启动同步部门的定时任务失败: %v", err)
 		}
 		//每天凌晨1点执行一次
-		_, err = c.AddFunc("0 30 5 * * *", func() {
-			common.Log.Info("每天凌晨5点30分执行一次同步飞书用户信息到ldap")
+		_, err = c.AddFunc(config.Conf.FeiShu.UserSyncTime, func() {
 			FeiShu.SyncFeiShuUsers(nil, nil)
 		})
 		if err != nil {
