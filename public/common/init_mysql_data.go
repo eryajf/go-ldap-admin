@@ -119,6 +119,7 @@ func InitData() {
 			Component: "/personnel/group/index",
 			Sort:      7,
 			ParentId:  uint1,
+			NoCache:   1,
 			Roles:     roles[:1],
 			Creator:   "系统",
 		},
