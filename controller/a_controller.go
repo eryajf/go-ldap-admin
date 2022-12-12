@@ -36,7 +36,7 @@ func init() {
 }
 
 func checkMobile(fl validator.FieldLevel) bool {
-	reg := `^1([38][0-9]|14[579]|5[^4]|16[6]|7[1-35-8]|9[189])\d{8}$`
+	reg := `^1(3[0-2]|4[5-9]|5[0-35-9]|6[2-8]|7[1-9]|8[1-35-8]|9[89])\d{8}$`
 	rgx := regexp.MustCompile(reg)
 	return rgx.MatchString(fl.Field().String())
 }
