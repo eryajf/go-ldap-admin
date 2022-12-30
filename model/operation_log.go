@@ -13,7 +13,7 @@ type OperationLog struct {
 	Path       string `gorm:"type:varchar(100);comment:'访问路径'" json:"path"`
 	Remark     string `gorm:"type:varchar(100);comment:'备注'" json:"remark"`
 	Status     int    `gorm:"type:int(4);comment:'响应状态码'" json:"status"`
-	StartTime  string `gorm:"type:varchar(2048);comment:'浏览器标识'" json:"startTime"`
+	StartTime  string `gorm:"type:varchar(2048);comment:'发起时间'" json:"startTime"`
 	TimeCost   int64  `gorm:"type:int(6);comment:'请求耗时(ms)'" json:"timeCost"`
 	UserAgent  string `gorm:"type:varchar(2048);comment:'浏览器标识'" json:"userAgent"`
 }
