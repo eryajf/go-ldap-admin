@@ -18,6 +18,7 @@ var Conf = new(config)
 type config struct {
 	System    *SystemConfig    `mapstructure:"system" json:"system"`
 	Logs      *LogsConfig      `mapstructure:"logs" json:"logs"`
+	Database  *Database        `mapstructure:"database" json:"database"`
 	Mysql     *MysqlConfig     `mapstructure:"mysql" json:"mysql"`
 	Casbin    *CasbinConfig    `mapstructure:"casbin" json:"casbin"`
 	Jwt       *JwtConfig       `mapstructure:"jwt" json:"jwt"`
@@ -102,6 +103,11 @@ type LogsConfig struct {
 	MaxBackups int           `mapstructure:"max-backups" json:"maxBackups"`
 	MaxAge     int           `mapstructure:"max-age" json:"maxAge"`
 	Compress   bool          `mapstructure:"compress" json:"compress"`
+}
+
+type Database struct {
+	Driver string `mapstructure:"driver" json:"driver"`
+	Source string `mapstructure:"source" json:"source"`
 }
 
 type MysqlConfig struct {

@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
@@ -56,9 +57,9 @@ func OperationLogMiddleware() gin.HandlerFunc {
 			Path:       path,
 			Remark:     api.Remark,
 			Status:     c.Writer.Status(),
-			StartTime:  startTime,
+			StartTime:  fmt.Sprintf("%v", startTime),
 			TimeCost:   timeCost,
-			//UserAgent:  c.Request.UserAgent(),
+			UserAgent:  c.Request.UserAgent(),
 		}
 
 		// 最好是将日志发送到rabbitmq或者kafka中

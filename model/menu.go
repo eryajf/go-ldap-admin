@@ -12,7 +12,7 @@ type Menu struct {
 	Path       string  `gorm:"type:varchar(100);comment:'菜单访问路径'" json:"path"`
 	Redirect   string  `gorm:"type:varchar(100);comment:'重定向路径'" json:"redirect"`
 	Component  string  `gorm:"type:varchar(100);comment:'前端组件路径'" json:"component"`
-	Sort       uint    `gorm:"type:int(3) unsigned;default:999;comment:'菜单顺序(1-999)'" json:"sort"`
+	Sort       uint    `gorm:"type:int(3);default:999;comment:'菜单顺序(1-999)'" json:"sort"`
 	Status     uint    `gorm:"type:tinyint(1);default:1;comment:'菜单状态(正常/禁用, 默认正常)'" json:"status"`
 	Hidden     uint    `gorm:"type:tinyint(1);default:2;comment:'菜单在侧边栏隐藏(1隐藏，2显示)'" json:"hidden"`
 	NoCache    uint    `gorm:"type:tinyint(1);default:2;comment:'菜单是否被 <keep-alive> 缓存(1不缓存，2缓存)'" json:"noCache"`
