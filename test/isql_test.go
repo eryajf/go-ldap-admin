@@ -18,7 +18,7 @@ func InitConfig() {
 	common.InitLogger()
 
 	// 初始化数据库(mysql)
-	common.InitMysql()
+	common.InitDB()
 
 	// 初始化ldap连接
 	common.InitLDAP()

@@ -48,7 +48,7 @@ func (s OperationLogService) SaveOperationLogChannel(olc <-chan *model.Operation
 // List 获取数据列表
 func (s OperationLogService) List(req *request.OperationLogListReq) ([]*model.OperationLog, error) {
 	var list []*model.OperationLog
-	db := common.DB.Model(&model.OperationLog{}).Order("start_time DESC")
+	db := common.DB.Model(&model.OperationLog{}).Order("id DESC")
 
 	username := strings.TrimSpace(req.Username)
 	if username != "" {

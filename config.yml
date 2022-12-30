@@ -27,6 +27,12 @@ logs:
   # 是否压缩
   compress: false
 
+database:
+  # 数据库类型 mysql sqlite3
+  driver: mysql
+  # 数据库连接sqlite3数据文件的路径
+  source: go-ldap-admin.db
+
 mysql:
   # 用户名
   username: root

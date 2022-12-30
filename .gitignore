@@ -12,6 +12,7 @@ build.sh
 logs
 go-web-mini
 go-ldap-admin
+go-ldap-admin.db
 
 # Test binary, built with `go test -c`
 *.test
