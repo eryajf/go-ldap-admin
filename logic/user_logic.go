@@ -175,8 +175,8 @@ func (l UserLogic) Update(c *gin.Context, req interface{}) (data interface{}, rs
 
 	// 获取将要操作的用户角色ID集合
 	var reqRoleSorts []int
-	roles, err := isql.Role.GetRolesByIds(r.RoleIds)
-	if err != nil || len(roles) == 0 {
+	roles, _ := isql.Role.GetRolesByIds(r.RoleIds)
+	if len(roles) == 0 {
 		return nil, tools.NewValidatorError(fmt.Errorf("根据角色ID获取角色信息失败"))
 	}
 	for _, role := range roles {

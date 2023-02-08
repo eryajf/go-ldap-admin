@@ -96,7 +96,7 @@ func (l MenuLogic) Update(c *gin.Context, req interface{}) (data interface{}, rs
 
 	filter := tools.H{"id": int(r.ID)}
 	if !isql.Menu.Exist(filter) {
-		return nil, tools.NewMySqlError(fmt.Errorf("改ID对应的记录不存在"))
+		return nil, tools.NewMySqlError(fmt.Errorf("该ID对应的记录不存在"))
 	}
 
 	// 获取当前登陆用户
@@ -149,7 +149,7 @@ func (l MenuLogic) Delete(c *gin.Context, req interface{}) (data interface{}, rs
 	for _, id := range r.MenuIds {
 		filter := tools.H{"id": int(id)}
 		if !isql.Menu.Exist(filter) {
-			return nil, tools.NewMySqlError(fmt.Errorf("改ID对应的记录不存在"))
+			return nil, tools.NewMySqlError(fmt.Errorf("该ID对应的记录不存在"))
 		}
 	}
 
@@ -168,16 +168,8 @@ func (l MenuLogic) GetTree(c *gin.Context, req interface{}) (data interface{}, r
 		return nil, ReqAssertErr
 	}
 	_ = c
-	ctxUser, err := isql.User.GetCurrentLoginUser(c)
-	if err != nil {
-		return nil, tools.NewMySqlError(fmt.Errorf("获取当前登陆用户信息失败"))
-	}
-	roleIds := []uint{}
-	for _, role := range ctxUser.Roles {
-		roleIds = append(roleIds, role.ID)
-	}
-	var menus []*model.Menu
-	menus, err = isql.Menu.ListUserMenus(roleIds)
+
+	menus, err := isql.Menu.List()
 	if err != nil {
 		return nil, tools.NewMySqlError(fmt.Errorf("获取资源列表失败: " + err.Error()))
 	}

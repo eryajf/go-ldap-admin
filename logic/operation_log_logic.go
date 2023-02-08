@@ -62,13 +62,13 @@ func (l OperationLogLogic) Delete(c *gin.Context, req interface{}) (data interfa
 	for _, id := range r.OperationLogIds {
 		filter := tools.H{"id": int(id)}
 		if !isql.OperationLog.Exist(filter) {
-			return nil, tools.NewMySqlError(fmt.Errorf("改条记录不存在"))
+			return nil, tools.NewMySqlError(fmt.Errorf("该条记录不存在"))
 		}
 	}
 	// 删除接口
 	err := isql.OperationLog.Delete(r.OperationLogIds)
 	if err != nil {
-		return nil, tools.NewMySqlError(fmt.Errorf("删除改条记录失败: %s", err.Error()))
+		return nil, tools.NewMySqlError(fmt.Errorf("删除该改条记录失败: %s", err.Error()))
 	}
 	return nil, nil
 }
