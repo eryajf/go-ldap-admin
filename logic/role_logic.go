@@ -113,8 +113,8 @@ func (l RoleLogic) Update(c *gin.Context, req interface{}) (data interface{}, rs
 
 	// 不能更新比自己角色等级高或相等的角色
 	// 根据path中的角色ID获取该角色信息
-	roles, err := isql.Role.GetRolesByIds([]uint{r.ID})
-	if err != nil || len(roles) == 0 {
+	roles, _ := isql.Role.GetRolesByIds([]uint{r.ID})
+	if len(roles) == 0 {
 		return nil, tools.NewMySqlError(fmt.Errorf("获取角色信息失败: %s", err.Error()))
 	}
 
@@ -210,9 +210,9 @@ func (l RoleLogic) Delete(c *gin.Context, req interface{}) (data interface{}, rs
 	}
 
 	// 获取角色信息
-	roles, err := isql.Role.GetRolesByIds(r.RoleIds)
-	if err != nil || len(roles) == 0 {
-		return nil, tools.NewMySqlError(fmt.Errorf("获取角色信息失败: %s", err.Error()))
+	roles, _ := isql.Role.GetRolesByIds(r.RoleIds)
+	if len(roles) == 0 {
+		return nil, tools.NewMySqlError(fmt.Errorf("未能获取到角色信息"))
 	}
 
 	// 不能删除比自己角色等级高或相等的角色
@@ -292,8 +292,8 @@ func (l RoleLogic) UpdateMenus(c *gin.Context, req interface{}) (data interface{
 	}
 	_ = c
 
-	roles, err := isql.Role.GetRolesByIds([]uint{r.RoleID})
-	if err != nil || len(roles) == 0 {
+	roles, _ := isql.Role.GetRolesByIds([]uint{r.RoleID})
+	if len(roles) == 0 {
 		return nil, tools.NewMySqlError(fmt.Errorf("未获取到角色信息"))
 	}
 
@@ -376,8 +376,8 @@ func (l RoleLogic) UpdateApis(c *gin.Context, req interface{}) (data interface{}
 	_ = c
 
 	// 根据path中的角色ID获取该角色信息
-	roles, err := isql.Role.GetRolesByIds([]uint{r.RoleID})
-	if err != nil || len(roles) == 0 {
+	roles, _ := isql.Role.GetRolesByIds([]uint{r.RoleID})
+	if len(roles) == 0 {
 		return nil, tools.NewMySqlError(fmt.Errorf("未获取到角色信息"))
 	}
 
