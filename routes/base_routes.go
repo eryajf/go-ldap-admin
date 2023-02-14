@@ -12,7 +12,8 @@ func InitBaseRoutes(r *gin.RouterGroup, authMiddleware *jwt.GinJWTMiddleware) gi
 	base := r.Group("/base")
 	{
 		base.GET("ping", controller.Demo)
-		base.GET("getpasswd", controller.Base.GetPasswd) // 将明文字符串转为MySQL识别的密码
+		base.GET("encryptpwd", controller.Base.EncryptPasswd) // 生成加密密码
+		base.GET("decryptpwd", controller.Base.DecryptPasswd) // 密码解密为明文
 		// 登录登出刷新token无需鉴权
 		base.POST("/login", authMiddleware.LoginHandler)
 		base.POST("/logout", authMiddleware.LogoutHandler)

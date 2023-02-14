@@ -136,13 +136,24 @@ func (l BaseLogic) Dashboard(c *gin.Context, req interface{}) (data interface{},
 	return rst, nil
 }
 
-// GetPasswd
-func (l BaseLogic) GetPasswd(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
-	r, ok := req.(*request.GetPasswdReq)
+// EncryptPasswd
+func (l BaseLogic) EncryptPasswd(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
+	r, ok := req.(*request.EncryptPasswdReq)
 	if !ok {
 		return nil, ReqAssertErr
 	}
 	_ = c
 
 	return tools.NewGenPasswd(r.Passwd), nil
+}
+
+// DecryptPasswd
+func (l BaseLogic) DecryptPasswd(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
+	r, ok := req.(*request.DecryptPasswdReq)
+	if !ok {
+		return nil, ReqAssertErr
+	}
+	_ = c
+
+	return tools.NewParPasswd(r.Passwd), nil
 }

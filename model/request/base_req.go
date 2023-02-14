@@ -9,7 +9,12 @@ type BaseChangePwdReq struct {
 type BaseDashboardReq struct {
 }
 
-// GetPasswdReq
-type GetPasswdReq struct {
+// EncryptPasswdReq
+type EncryptPasswdReq struct {
+	Passwd string `json:"passwd" form:"passwd" validate:"required"`
+}
+
+// DecryptPasswdReq
+type DecryptPasswdReq struct {
 	Passwd string `json:"passwd" form:"passwd" validate:"required"`
 }

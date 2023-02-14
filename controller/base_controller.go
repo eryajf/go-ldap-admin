@@ -25,10 +25,18 @@ func (m *BaseController) Dashboard(c *gin.Context) {
 	})
 }
 
-// GetPasswd 生成加密密码
-func (m *BaseController) GetPasswd(c *gin.Context) {
-	req := new(request.GetPasswdReq)
+// EncryptPasswd 生成加密密码
+func (m *BaseController) EncryptPasswd(c *gin.Context) {
+	req := new(request.EncryptPasswdReq)
 	Run(c, req, func() (interface{}, interface{}) {
-		return logic.Base.GetPasswd(c, req)
+		return logic.Base.EncryptPasswd(c, req)
+	})
+}
+
+// DecryptPasswd 密码解密为明文
+func (m *BaseController) DecryptPasswd(c *gin.Context) {
+	req := new(request.DecryptPasswdReq)
+	Run(c, req, func() (interface{}, interface{}) {
+		return logic.Base.DecryptPasswd(c, req)
 	})
 }
