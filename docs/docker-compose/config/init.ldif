@@ -16,7 +16,7 @@ objectClass: top
 objectClass: organizationalUnit
 
 dn: ou=feishuroot,dc=eryajf,dc=net
-ou: feishu
+ou: feishuroot
 description: 飞书根部门
 objectClass: top
 objectClass: organizationalUnit
