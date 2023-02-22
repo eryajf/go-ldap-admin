@@ -40,8 +40,8 @@ func (x GroupService) Add(g *model.Group) error { //organizationalUnit
 
 // UpdateGroup 更新一个分组
 func (x GroupService) Update(oldGroup, newGroup *model.Group) error {
-	modify := ldap.NewModifyRequest(oldGroup.GroupDN, nil)
-	modify.Replace("description", []string{newGroup.Remark})
+	modify1 := ldap.NewModifyRequest(oldGroup.GroupDN, nil)
+	modify1.Replace("description", []string{newGroup.Remark})
 
 	// 获取 LDAP 连接
 	conn, err := common.GetLDAPConn()
@@ -50,14 +50,14 @@ func (x GroupService) Update(oldGroup, newGroup *model.Group) error {
 		return err
 	}
 
-	err = conn.Modify(modify)
+	err = conn.Modify(modify1)
 	if err != nil {
 		return err
 	}
 	// 如果配置文件允许修改分组名称，且分组名称发生了变化，那么执行修改分组名称
 	if config.Conf.Ldap.GroupNameModify && newGroup.GroupName != oldGroup.GroupName {
-		modify := ldap.NewModifyDNRequest(oldGroup.GroupDN, newGroup.GroupDN, true, "")
-		err := conn.ModifyDN(modify)
+		modify2 := ldap.NewModifyDNRequest(oldGroup.GroupDN, newGroup.GroupDN, true, "")
+		err := conn.ModifyDN(modify2)
 		if err != nil {
 			return err
 		}
@@ -111,4 +111,37 @@ func (x GroupService) RemoveUserFromGroup(gdn, udn string) error {
 	}
 
 	return conn.Modify(newmr)
+}
+
+// DelUserFromGroup 将用户从分组删除
+func (x GroupService) ListGroupDN() (groups []*model.Group, err error) {
+	// Construct query request
+	searchRequest := ldap.NewSearchRequest(
+		config.Conf.Ldap.BaseDN,                                     // This is basedn, we will start searching from this node.
+		ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false, // Here several parameters are respectively scope, derefAliases, sizeLimit, timeLimit,  typesOnly
+		"(|(objectClass=organizationalUnit)(objectClass=groupOfUniqueNames))", // This is Filter for LDAP query
+		[]string{"DN"}, // Here are the attributes returned by the query, provided as an array. If empty, all attributes are returned
+		nil,
+	)
+
+	// 获取 LDAP 连接
+	conn, err := common.GetLDAPConn()
+	defer common.PutLADPConn(conn)
+	if err != nil {
+		return groups, err
+	}
+	var sr *ldap.SearchResult
+	// Search through ldap built-in search
+	sr, err = conn.Search(searchRequest)
+	if err != nil {
+		return nil, err
+	}
+	if len(sr.Entries) > 0 {
+		for _, v := range sr.Entries {
+			groups = append(groups, &model.Group{
+				GroupDN: v.DN,
+			})
+		}
+	}
+	return
 }

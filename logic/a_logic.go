@@ -27,6 +27,7 @@ var (
 	WeCom         = &WeComLogic{}
 	FeiShu        = &FeiShuLogic{}
 	OpenLdap      = &OpenLdapLogic{}
+	Sql           = &SqlLogic{}
 	Base          = &BaseLogic{}
 	FieldRelation = &FieldRelationLogic{}
 
@@ -363,6 +364,17 @@ func InitCron() {
 		if err != nil {
 			common.Log.Errorf("启动同步用户的定时任务失败: %v", err)
 		}
+	}
+
+	// 自动检索未同步数据
+	_, err := c.AddFunc("0 */2 * * * *", func() {
+		// 开发调试时调整为10秒执行一次
+		// _, err := c.AddFunc("*/10 * * * * *", func() {
+		_ = SearchGroupDiff()
+		_ = SearchUserDiff()
+	})
+	if err != nil {
+		common.Log.Errorf("启动同步任务状态检查任务失败: %v", err)
 	}
 	c.Start()
 }

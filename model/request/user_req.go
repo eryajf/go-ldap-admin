@@ -119,6 +119,9 @@ type SyncFeiShuUserReq struct {
 // SyncOpenLdapUserReq 同步ldap用户信息
 type SyncOpenLdapUserReq struct {
 }
+type SyncSqlUserReq struct {
+	UserIds []uint `json:"userIds" validate:"required"`
+}
 
 // UserListReq 获取用户列表结构体
 type UserListReq struct {
@@ -128,6 +131,7 @@ type UserListReq struct {
 	GivenName    string `json:"givenName" form:"givenName"`
 	DepartmentId []uint `json:"departmentId" form:"departmentId"`
 	Status       uint   `json:"status" form:"status" `
+	SyncState    uint   `json:"syncState" form:"syncState" `
 	PageNum      int    `json:"pageNum" form:"pageNum"`
 	PageSize     int    `json:"pageSize" form:"pageSize"`
 }

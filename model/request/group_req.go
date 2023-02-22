@@ -6,6 +6,7 @@ type GroupListReq struct {
 	Remark    string `json:"remark" form:"remark"`
 	PageNum   int    `json:"pageNum" form:"pageNum"`
 	PageSize  int    `json:"pageSize" form:"pageSize"`
+	SyncState uint   `json:"syncState" form:"syncState" `
 }
 
 // GroupListAllReq 获取资源列表结构体，不分页
@@ -109,4 +110,9 @@ type SyncFeiShuDeptsReq struct {
 
 // SyncOpenLdapDeptsReq 同步原ldap部门信息
 type SyncOpenLdapDeptsReq struct {
+}
+
+// SyncOpenLdapDeptsReq 同步原ldap部门信息
+type SyncSqlGrooupsReq struct {
+	GroupIds []uint `json:"groupIds" validate:"required"`
 }

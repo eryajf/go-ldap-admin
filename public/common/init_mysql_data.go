@@ -369,6 +369,13 @@ func InitData() {
 			Creator:  "系统",
 		},
 		{
+			Method:   "POST",
+			Path:     "/user/syncSqlUsers",
+			Category: "user",
+			Remark:   "将数据库中的用户同步到Ldap",
+			Creator:  "系统",
+		},
+		{
 			Method:   "GET",
 			Path:     "/group/list",
 			Category: "group",
@@ -457,6 +464,13 @@ func InitData() {
 			Path:     "/group/syncOpenLdapDepts",
 			Category: "group",
 			Remark:   "从openldap拉取部门信息",
+			Creator:  "系统",
+		},
+		{
+			Method:   "POST",
+			Path:     "/group/syncSqlGroups",
+			Category: "group",
+			Remark:   "将数据库中的分组同步到Ldap",
 			Creator:  "系统",
 		},
 		{

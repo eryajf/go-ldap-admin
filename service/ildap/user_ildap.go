@@ -125,3 +125,34 @@ func (x UserService) NewPwd(username string) (string, error) {
 	}
 	return newpass.GeneratedPassword, nil
 }
+func (x UserService) ListUserDN() (users []*model.User, err error) {
+	// Construct query request
+	searchRequest := ldap.NewSearchRequest(
+		config.Conf.Ldap.BaseDN,                                     // This is basedn, we will start searching from this node.
+		ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false, // Here several parameters are respectively scope, derefAliases, sizeLimit, timeLimit,  typesOnly
+		"(|(objectClass=inetOrgPerson)(objectClass=simpleSecurityObject))", // This is Filter for LDAP query
+		[]string{"DN"}, // Here are the attributes returned by the query, provided as an array. If empty, all attributes are returned
+		nil,
+	)
+
+	// 获取 LDAP 连接
+	conn, err := common.GetLDAPConn()
+	defer common.PutLADPConn(conn)
+	if err != nil {
+		return users, err
+	}
+	var sr *ldap.SearchResult
+	// Search through ldap built-in search
+	sr, err = conn.Search(searchRequest)
+	if err != nil {
+		return nil, err
+	}
+	if len(sr.Entries) > 0 {
+		for _, v := range sr.Entries {
+			users = append(users, &model.User{
+				UserDN: v.DN,
+			})
+		}
+	}
+	return
+}

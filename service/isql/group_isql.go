@@ -28,6 +28,10 @@ func (s GroupService) List(req *request.GroupListReq) ([]*model.Group, error) {
 	if groupRemark != "" {
 		db = db.Where("remark LIKE ?", fmt.Sprintf("%%%s%%", groupRemark))
 	}
+	syncState := req.SyncState
+	if syncState != 0 {
+		db = db.Where("sync_state = ?", syncState)
+	}
 
 	pageReq := tools.NewPageOption(req.PageNum, req.PageSize)
 	err := db.Offset(pageReq.PageNum).Limit(pageReq.PageSize).Preload("Users").Find(&list).Error
@@ -54,36 +58,9 @@ func (s GroupService) ListTree(req *request.GroupListReq) ([]*model.Group, error
 }
 
 // List 获取数据列表
-func (s GroupService) ListAll(req *request.GroupListAllReq) ([]*model.Group, error) {
-	var list []*model.Group
-	db := common.DB.Model(&model.Group{}).Order("created_at DESC")
+func (s GroupService) ListAll() (list []*model.Group, err error) {
+	err = common.DB.Model(&model.Group{}).Order("created_at DESC").Find(&list).Error
 
-	groupName := strings.TrimSpace(req.GroupName)
-	if groupName != "" {
-		db = db.Where("group_name LIKE ?", fmt.Sprintf("%%%s%%", groupName))
-	}
-	groupRemark := strings.TrimSpace(req.Remark)
-	if groupRemark != "" {
-		db = db.Where("remark LIKE ?", fmt.Sprintf("%%%s%%", groupRemark))
-	}
-	groupType := strings.TrimSpace(req.GroupType)
-	if groupType != "" {
-		db = db.Where("group_type = ?", groupType)
-	}
-	source := strings.TrimSpace(req.Source)
-	if source != "" {
-		db = db.Where("source = ?", source)
-	}
-	sourceDeptId := strings.TrimSpace(req.SourceDeptId)
-	if sourceDeptId != "" {
-		db = db.Where("source_dept_id = ?", sourceDeptId)
-	}
-	sourceDeptParentId := strings.TrimSpace(req.SourceDeptParentId)
-	if sourceDeptParentId != "" {
-		db = db.Where("source_dept_parent_id = ?", sourceDeptParentId)
-	}
-
-	err := db.Find(&list).Error
 	return list, err
 }
 

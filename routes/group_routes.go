@@ -26,10 +26,11 @@ func InitGroupRoutes(r *gin.RouterGroup, authMiddleware *jwt.GinJWTMiddleware) g
 		group.GET("/useringroup", controller.Group.UserInGroup)
 		group.GET("/usernoingroup", controller.Group.UserNoInGroup)
 
-		group.POST("/syncDingTalkDepts", controller.Group.SyncDingTalkDepts) // 同步部门
-		group.POST("/syncWeComDepts", controller.Group.SyncWeComDepts)       // 同步部门
-		group.POST("/syncFeiShuDepts", controller.Group.SyncFeiShuDepts)     // 同步部门
-		group.POST("/syncOpenLdapDepts", controller.Group.SyncOpenLdapDepts) // 同步部门
+		group.POST("/syncDingTalkDepts", controller.Group.SyncDingTalkDepts) // 同步钉钉部门到平台
+		group.POST("/syncWeComDepts", controller.Group.SyncWeComDepts)       // 同步企业微信部门到平台
+		group.POST("/syncFeiShuDepts", controller.Group.SyncFeiShuDepts)     // 同步飞书部门到平台
+		group.POST("/syncOpenLdapDepts", controller.Group.SyncOpenLdapDepts) // 同步ldap的分组到平台InitGroupRoutes
+		group.POST("/syncSqlGroups", controller.Group.SyncSqlGroups)         // 同步Sql分组到Ldap
 	}
 
 	return r

@@ -112,3 +112,11 @@ func (m *GroupController) SyncOpenLdapDepts(c *gin.Context) {
 		return logic.OpenLdap.SyncOpenLdapDepts(c, req)
 	})
 }
+
+//同步Sql中的分组信息到ldap
+func (m *GroupController) SyncSqlGroups(c *gin.Context) {
+	req := new(request.SyncSqlGrooupsReq)
+	Run(c, req, func() (interface{}, interface{}) {
+		return logic.Sql.SyncSqlGroups(c, req)
+	})
+}
