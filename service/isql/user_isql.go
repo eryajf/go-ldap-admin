@@ -59,9 +59,13 @@ func (s UserService) List(req *request.UserListReq) ([]*model.User, error) {
 	if status != 0 {
 		db = db.Where("status = ?", status)
 	}
+	syncState := req.SyncState
+	if syncState != 0 {
+		db = db.Where("sync_state = ?", syncState)
+	}
 
 	pageReq := tools.NewPageOption(req.PageNum, req.PageSize)
-	err := db.Offset(pageReq.PageNum).Limit(pageReq.PageSize).Preload("Roles").Find(&list).Error
+	err := db.Offset(pageReq.PageNum).Limit(pageReq.PageSize).Preload("Roles").Find(&list).Debug().Error
 	return list, err
 }
 
@@ -93,6 +97,10 @@ func (s UserService) ListCount(req *request.UserListReq) (int64, error) {
 	status := req.Status
 	if status != 0 {
 		db = db.Where("status = ?", status)
+	}
+	syncState := req.SyncState
+	if syncState != 0 {
+		db = db.Where("sync_state = ?", syncState)
 	}
 
 	err := db.Count(&count).Error

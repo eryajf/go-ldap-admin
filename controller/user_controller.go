@@ -96,3 +96,11 @@ func (uc UserController) SyncOpenLdapUsers(c *gin.Context) {
 		return logic.OpenLdap.SyncOpenLdapUsers(c, req)
 	})
 }
+
+// 同步sql用户信息到ldap
+func (uc UserController) SyncSqlUsers(c *gin.Context) {
+	req := new(request.SyncSqlUserReq)
+	Run(c, req, func() (interface{}, interface{}) {
+		return logic.Sql.SyncSqlUsers(c, req)
+	})
+}

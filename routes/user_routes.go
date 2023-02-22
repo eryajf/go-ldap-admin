@@ -24,10 +24,11 @@ func InitUserRoutes(r *gin.RouterGroup, authMiddleware *jwt.GinJWTMiddleware) gi
 		user.POST("/changePwd", controller.User.ChangePwd)               // 修改用户密码
 		user.POST("/changeUserStatus", controller.User.ChangeUserStatus) // 修改用户状态
 
-		user.POST("/syncDingTalkUsers", controller.User.SyncDingTalkUsers) // 同步用户
-		user.POST("/syncWeComUsers", controller.User.SyncWeComUsers)       // 同步用户
-		user.POST("/syncFeiShuUsers", controller.User.SyncFeiShuUsers)     // 同步用户
-		user.POST("/syncOpenLdapUsers", controller.User.SyncOpenLdapUsers) // 同步用户
+		user.POST("/syncDingTalkUsers", controller.User.SyncDingTalkUsers) // 同步钉钉用户到平台
+		user.POST("/syncWeComUsers", controller.User.SyncWeComUsers)       // 同步企业微信用户到平台
+		user.POST("/syncFeiShuUsers", controller.User.SyncFeiShuUsers)     // 同步飞书用户到平台
+		user.POST("/syncOpenLdapUsers", controller.User.SyncOpenLdapUsers) // 同步Ldap用户到平台
+		user.POST("/syncSqlUsers", controller.User.SyncSqlUsers)           // 同步Sql用户到Ldap
 	}
 	return r
 }
