@@ -38,6 +38,12 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+## ℹ️ 项目简介
+
+`go-ldap-admin`旨在为`OpenLDAP`服务端提供一个简单易用，清晰美观的现代化管理后台。
+
+> 在完成针对`OpenLDAP`的管理能力之下，支持对`钉钉`，`企业微信`，`飞书`的集成，用户可以选择手动或者自动同步组织架构以及员工信息到平台中，让`go-ldap-admin`项目成为打通企业IM与企业内网应用之间的桥梁。
+
 ## 🏊 在线体验
 
 提供在线体验地址如下：
