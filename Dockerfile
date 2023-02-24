@@ -1,4 +1,4 @@
-FROM golang:1.17.13-alpine3.15  AS builder
+FROM golang:1.18.10-alpine3.16  AS builder
 
 # ENV GOPROXY      https://goproxy.io
 
@@ -15,7 +15,7 @@ RUN sed -i 's@localhost:389@openldap:389@g' /app/config.yml \
     && sed -i 's@host: localhost@host: mysql@g'  /app/config.yml && go build -o go-ldap-admin .
 
 ### build final image
-FROM alpine:3.15
+FROM alpine:3.16
 
 # we set the timezone `Asia/Shanghai` by default, you can be modified
 # by `docker build --build-arg="TZ=Other_Timezone ..."`
