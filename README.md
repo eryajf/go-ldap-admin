@@ -4,7 +4,7 @@
 [![Auth](https://img.shields.io/badge/Auth-eryajf-ff69b4)](https://github.com/eryajf)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/eryajf-world/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin)
 [![Gin Version](https://img.shields.io/badge/Gin-1.6.3-brightgreen)](https://github.com/eryajf/go-ldap-admin)
-[![Gorm Version](https://img.shields.io/badge/Gorm-1.20.12-brightgreen)](https://github.com/eryajf/go-ldap-admin)
+[![Gorm Version](https://img.shields.io/badge/Gorm-1.24.5-brightgreen)](https://github.com/eryajf/go-ldap-admin)
 [![GitHub Issues](https://img.shields.io/github/issues/eryajf/go-ldap-admin.svg)](https://github.com/eryajf/go-ldap-admin/issues)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/eryajf/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin/pulls)
 [![GitHub Pull Requests](https://img.shields.io/github/stars/eryajf/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin/stargazers)
@@ -81,12 +81,13 @@
 
 - 后端技术栈
   - [Gin-v1.6.3](https://github.com/gin-gonic/gin)
-  - [Gorm-v1.20.12](https://github.com/go-gorm/gorm)
+  - [Gorm-v1.24.5](https://github.com/go-gorm/gorm)
+  - [Sqlite-v1.7.0](https://github.com/glebarez/sqlite)
   - [Go-ldap-v3.4.2](https://github.com/go-ldap/ldap)
   - [Casbin-v2.22.0](https://github.com/casbin/casbin)
 - 前端技术栈
-  - [element-ui](https://github.com/ElemeFE/element)
   - [axios](https://github.com/axios/axios)
+  - [element-ui](https://github.com/ElemeFE/element)
 
 - 另外感谢
   - [go-web-mini](https://github.com/gnimli/go-web-mini)：项目基于该项目重构而成，感谢作者的付出。
