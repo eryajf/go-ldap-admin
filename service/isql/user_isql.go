@@ -269,6 +269,11 @@ func (s UserService) ChangeStatus(id, status int) error {
 	return common.DB.Model(&model.User{}).Where("id = ?", id).Update("status", status).Error
 }
 
+// ChangeSyncState 更新用户的同步状态
+func (s UserService) ChangeSyncState(id, status int) error {
+	return common.DB.Model(&model.User{}).Where("id = ?", id).Update("sync_state", status).Error
+}
+
 // GetCurrentLoginUser 获取当前登录用户信息
 // 需要缓存，减少数据库访问
 func (s UserService) GetCurrentLoginUser(c *gin.Context) (model.User, error) {
