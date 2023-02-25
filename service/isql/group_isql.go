@@ -95,6 +95,11 @@ func (s GroupService) Update(dataObj *model.Group) error {
 	return common.DB.Model(dataObj).Where("id = ?", dataObj.ID).Updates(dataObj).Error
 }
 
+// ChangeSyncState 更新分组的同步状态
+func (s GroupService) ChangeSyncState(id, status int) error {
+	return common.DB.Model(&model.Group{}).Where("id = ?", id).Update("sync_state", status).Error
+}
+
 // Find 获取单个资源
 func (s GroupService) Find(filter map[string]interface{}, data *model.Group, args ...interface{}) error {
 	return common.DB.Where(filter, args).Preload("Users").First(&data).Error
