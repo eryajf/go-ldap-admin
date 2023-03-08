@@ -46,6 +46,12 @@ func ConnSqlite() *gorm.DB {
 	if err != nil {
 		Log.Panicf("failed to connect sqlite3: %v", err)
 	}
+	dbObj, err := db.DB()
+	if err != nil {
+		Log.Panicf("failed to get sqlite3 obj: %v", err)
+	}
+	// 参见： https://github.com/glebarez/sqlite/issues/52
+	dbObj.SetMaxOpenConns(1)
 	return db
 }
 
