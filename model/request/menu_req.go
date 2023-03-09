@@ -49,3 +49,8 @@ type MenuDeleteReq struct {
 // MenuGetTreeReq 获取菜单树结构体
 type MenuGetTreeReq struct {
 }
+
+// MenuGetAccessTreeReq 获取用户菜单树
+type MenuGetAccessTreeReq struct {
+	ID uint `json:"id" form:"id"`
+}

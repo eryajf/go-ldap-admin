@@ -6,7 +6,7 @@ type GroupListReq struct {
 	Remark    string `json:"remark" form:"remark"`
 	PageNum   int    `json:"pageNum" form:"pageNum"`
 	PageSize  int    `json:"pageSize" form:"pageSize"`
-	SyncState uint   `json:"syncState" form:"syncState" `
+	SyncState uint   `json:"syncState" form:"syncState"`
 }
 
 // GroupListAllReq 获取资源列表结构体，不分页
