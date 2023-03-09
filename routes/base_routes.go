@@ -18,6 +18,7 @@ func InitBaseRoutes(r *gin.RouterGroup, authMiddleware *jwt.GinJWTMiddleware) gi
 		base.POST("/login", authMiddleware.LoginHandler)
 		base.POST("/logout", authMiddleware.LogoutHandler)
 		base.POST("/refreshToken", authMiddleware.RefreshHandler)
+		base.POST("/sendcode", controller.Base.SendCode)   // 给用户邮箱发送验证码
 		base.POST("/changePwd", controller.Base.ChangePwd) // 修改用户密码
 		base.GET("/dashboard", controller.Base.Dashboard)  // 系统首页展示数据
 	}

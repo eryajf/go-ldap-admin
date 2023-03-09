@@ -15,17 +15,45 @@ import (
 
 type BaseLogic struct{}
 
-// Add 添加数据
+// SendCode 发送验证码
+func (l BaseLogic) SendCode(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
+	r, ok := req.(*request.BaseSendCodeReq)
+	if !ok {
+		return nil, ReqAssertErr
+	}
+	_ = c
+	// 判断邮箱是否正确
+	if !isql.User.Exist(tools.H{"mail": r.Mail}) {
+		return nil, tools.NewValidatorError(fmt.Errorf("邮箱不存在,请检查邮箱是否正确"))
+	}
+
+	err := tools.SendCode([]string{r.Mail})
+	if err != nil {
+		return nil, tools.NewLdapError(fmt.Errorf("邮件发送失败" + err.Error()))
+	}
+
+	return nil, nil
+}
+
+// ChangePwd 重置密码
 func (l BaseLogic) ChangePwd(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
 	r, ok := req.(*request.BaseChangePwdReq)
 	if !ok {
 		return nil, ReqAssertErr
 	}
 	_ = c
-
 	// 判断邮箱是否正确
 	if !isql.User.Exist(tools.H{"mail": r.Mail}) {
 		return nil, tools.NewValidatorError(fmt.Errorf("邮箱不存在,请检查邮箱是否正确"))
+	}
+	// 判断验证码是否过期
+	cacheCode, ok := tools.VerificationCodeCache.Get(r.Mail)
+	if !ok {
+		return nil, tools.NewValidatorError(fmt.Errorf("对不起，该验证码已超过5分钟有效期，请重新重新密码"))
+	}
+	// 判断验证码是否正确
+	if cacheCode != r.Code {
+		return nil, tools.NewValidatorError(fmt.Errorf("验证码错误，请检查邮箱中正确的验证码，如果点击多次发送验证码，请用最后一次生成的验证码来验证"))
 	}
 
 	user := new(model.User)
@@ -41,7 +69,7 @@ func (l BaseLogic) ChangePwd(c *gin.Context, req interface{}) (data interface{},
 
 	err = tools.SendMail([]string{user.Mail}, newpass)
 	if err != nil {
-		return nil, tools.NewLdapError(fmt.Errorf("发送邮件失败" + err.Error()))
+		return nil, tools.NewLdapError(fmt.Errorf("邮件发送失败" + err.Error()))
 	}
 
 	// 更新数据库密码

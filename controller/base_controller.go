@@ -9,6 +9,14 @@ import (
 
 type BaseController struct{}
 
+// SendCode 给用户邮箱发送验证码
+func (m *BaseController) SendCode(c *gin.Context) {
+	req := new(request.BaseSendCodeReq)
+	Run(c, req, func() (interface{}, interface{}) {
+		return logic.Base.SendCode(c, req)
+	})
+}
+
 // ChangePwd 用户通过邮箱修改密码
 func (m *BaseController) ChangePwd(c *gin.Context) {
 	req := new(request.BaseChangePwdReq)
