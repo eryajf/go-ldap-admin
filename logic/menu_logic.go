@@ -168,8 +168,38 @@ func (l MenuLogic) GetTree(c *gin.Context, req interface{}) (data interface{}, r
 		return nil, ReqAssertErr
 	}
 	_ = c
-
 	menus, err := isql.Menu.List()
+	if err != nil {
+		return nil, tools.NewMySqlError(fmt.Errorf("获取资源列表失败: " + err.Error()))
+	}
+
+	tree := isql.GenMenuTree(0, menus)
+
+	return tree, nil
+}
+
+// GetAccessTree 获取用户菜单树
+func (l MenuLogic) GetAccessTree(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
+	r, ok := req.(*request.MenuGetAccessTreeReq)
+	if !ok {
+		return nil, ReqAssertErr
+	}
+	_ = c
+	// 校验
+	filter := tools.H{"id": r.ID}
+	if !isql.User.Exist(filter) {
+		return nil, tools.NewValidatorError(fmt.Errorf("该用户不存在"))
+	}
+	user := new(model.User)
+	err := isql.User.Find(filter, user)
+	if err != nil {
+		return nil, tools.NewMySqlError(fmt.Errorf("在MySQL查询用户失败: " + err.Error()))
+	}
+	var roleIds []uint
+	for _, role := range user.Roles {
+		roleIds = append(roleIds, role.ID)
+	}
+	menus, err := isql.Menu.ListUserMenus(roleIds)
 	if err != nil {
 		return nil, tools.NewMySqlError(fmt.Errorf("获取资源列表失败: " + err.Error()))
 	}

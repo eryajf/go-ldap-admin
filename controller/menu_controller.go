@@ -9,19 +9,19 @@ import (
 
 type MenuController struct{}
 
-// // List 记录列表
-// func (m *MenuController) List(c *gin.Context) {
-// 	req := new(request.MenuListReq)
-// 	Run(c, req, func() (interface{}, interface{}) {
-// 		return logic.Menu.List(c, req)
-// 	})
-// }
-
 // GetTree 菜单树
 func (m *MenuController) GetTree(c *gin.Context) {
 	req := new(request.MenuGetTreeReq)
 	Run(c, req, func() (interface{}, interface{}) {
 		return logic.Menu.GetTree(c, req)
+	})
+}
+
+// GetUserMenuTreeByUserId 获取用户菜单树
+func (m *MenuController) GetAccessTree(c *gin.Context) {
+	req := new(request.MenuGetAccessTreeReq)
+	Run(c, req, func() (interface{}, interface{}) {
+		return logic.Menu.GetAccessTree(c, req)
 	})
 }
 
