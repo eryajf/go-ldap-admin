@@ -31,7 +31,7 @@ COPY --from=builder /app/ .
 
 
 RUN apk upgrade \
-    && apk add bash tzdata \
+    && apk add bash tzdata sqlite vim \
     && ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime \
     && echo ${TZ} > /etc/timezone
 

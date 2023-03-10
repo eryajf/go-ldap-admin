@@ -286,6 +286,13 @@ func InitData() {
 		},
 		{
 			Method:   "POST",
+			Path:     "/base/sendcode",
+			Category: "base",
+			Remark:   "给用户邮箱发送验证码",
+			Creator:  "系统",
+		},
+		{
+			Method:   "POST",
 			Path:     "/base/changePwd",
 			Category: "base",
 			Remark:   "通过邮箱修改密码",
@@ -531,13 +538,6 @@ func InitData() {
 		},
 		{
 			Method:   "GET",
-			Path:     "/menu/list",
-			Category: "menu",
-			Remark:   "获取菜单列表",
-			Creator:  "系统",
-		},
-		{
-			Method:   "GET",
 			Path:     "/menu/tree",
 			Category: "menu",
 			Remark:   "获取菜单树",
@@ -671,6 +671,7 @@ func InitData() {
 				"/base/login",
 				"/base/logout",
 				"/base/refreshToken",
+				"/base/sendcode",
 				"/base/changePwd",
 				"/base/dashboard",
 				"/user/info",
