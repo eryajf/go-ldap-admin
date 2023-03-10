@@ -62,5 +62,5 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           # 给清单打上多个标签
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.GITHUB_REPOSITORY_NAME_PART }}:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.GITHUB_REPOSITORY_NAME_PART }}:${{ steps.date.outputs.today }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/go-ldap-admin-server:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/go-ldap-admin-server:${{ steps.date.outputs.today }}
