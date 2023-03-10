@@ -23,11 +23,15 @@ func (l BaseLogic) SendCode(c *gin.Context, req interface{}) (data interface{}, 
 	}
 	_ = c
 	// 判断邮箱是否正确
-	if !isql.User.Exist(tools.H{"mail": r.Mail}) {
-		return nil, tools.NewValidatorError(fmt.Errorf("邮箱不存在,请检查邮箱是否正确"))
+	user := new(model.User)
+	err := isql.User.Find(tools.H{"mail": r.Mail}, user)
+	if err != nil {
+		return nil, tools.NewMySqlError(fmt.Errorf("通过邮箱查询用户失败" + err.Error()))
 	}
-
-	err := tools.SendCode([]string{r.Mail})
+	if user.Status != 1 || user.SyncState != 1 {
+		return nil, tools.NewMySqlError(fmt.Errorf("该用户已离职或者未同步在ldap，无法重置密码，如有疑问，请联系管理员"))
+	}
+	err = tools.SendCode([]string{r.Mail})
 	if err != nil {
 		return nil, tools.NewLdapError(fmt.Errorf("邮件发送失败" + err.Error()))
 	}
