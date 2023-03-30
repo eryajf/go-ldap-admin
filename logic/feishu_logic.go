@@ -30,7 +30,7 @@ func (d *FeiShuLogic) SyncFeiShuDepts(c *gin.Context, req interface{}) (data int
 	}
 
 	// 2.将远程数据转换成树
-	deptTree := GroupListToTree(fmt.Sprintf("%s_0", config.Conf.FeiShu.Flag), depts)
+	deptTree := GroupListToTree(fmt.Sprintf("%s_%s", config.Conf.FeiShu.Flag, config.Conf.FeiShu.RootDept), depts)
 
 	// 3.根据树进行创建
 	err = d.addDepts(deptTree.Children)

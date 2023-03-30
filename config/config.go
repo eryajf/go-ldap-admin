@@ -186,4 +186,5 @@ type FeiShuConfig struct {
 	EnableSync   bool   `mapstructure:"enable-sync" json:"enableSync"`
 	DeptSyncTime string `mapstructure:"dept-sync-time" json:"deptSyncTime"`
 	UserSyncTime string `mapstructure:"user-sync-time" json:"userSyncTime"`
+	RootDept     string `mapstructure:"root-dept-openid" json:"rootDeptOpenid"`
 }

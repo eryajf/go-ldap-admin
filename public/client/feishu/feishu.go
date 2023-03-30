@@ -21,7 +21,8 @@ func GetAllDepts() (ret []map[string]interface{}, err error) {
 	req := lark.GetDepartmentListReq{
 		FetchChild:   &fetchChild,
 		PageSize:     &pageSize,
-		DepartmentID: "0"}
+		DepartmentID: config.Conf.FeiShu.RootDept,
+	}
 
 	for {
 		res, _, err := InitFeiShuClient().Contact.GetDepartmentList(context.TODO(), &req)
@@ -59,7 +60,7 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 	}
 
 	deptids := make([]string, 0)
-	deptids = append(deptids, "0") // 0 代表根部门
+	deptids = append(deptids, config.Conf.FeiShu.RootDept)
 	for _, dept := range depts {
 		deptids = append(deptids, dept["open_department_id"].(string))
 	}
