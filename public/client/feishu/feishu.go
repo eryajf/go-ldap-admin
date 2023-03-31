@@ -24,11 +24,33 @@ func GetAllDepts() (ret []map[string]interface{}, err error) {
 		DepartmentID: config.Conf.FeiShu.RootDept,
 	}
 
+	root_req := lark.GetDepartmentReq{
+		DepartmentID: config.Conf.FeiShu.RootDept,
+	}
+
 	for {
 		res, _, err := InitFeiShuClient().Contact.GetDepartmentList(context.TODO(), &req)
 		if err != nil {
 			return nil, err
 		}
+
+		if config.Conf.FeiShu.RootDept != "0" {
+			//添加root部门
+			root_res, _, err := InitFeiShuClient().Contact.GetDepartment(context.TODO(), &root_req)
+			if err != nil {
+				return nil, err
+			}
+			root_ele := make(map[string]interface{})
+			root_ele["name"] = root_res.Department.Name
+			root_ele["custom_name_pinyin"] = tools.ConvertToPinYin(root_res.Department.Name)
+			root_ele["parent_department_id"] = "0"
+			root_ele["department_id"] = root_res.Department.DepartmentID
+			root_ele["open_department_id"] = root_res.Department.OpenDepartmentID
+			root_ele["leader_user_id"] = root_res.Department.LeaderUserID
+			root_ele["unit_ids"] = root_res.Department.UnitIDs
+			ret = append(ret, root_ele)
+		}
+
 		for _, dept := range res.Items {
 			ele := make(map[string]interface{})
 			ele["name"] = dept.Name
@@ -60,7 +82,7 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 	}
 
 	deptids := make([]string, 0)
-	deptids = append(deptids, config.Conf.FeiShu.RootDept)
+	// deptids = append(deptids, "0")
 	for _, dept := range depts {
 		deptids = append(deptids, dept["open_department_id"].(string))
 	}

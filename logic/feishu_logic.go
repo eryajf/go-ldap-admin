@@ -17,7 +17,7 @@ import (
 type FeiShuLogic struct {
 }
 
-//通过飞书获取部门信息
+// 通过飞书获取部门信息
 func (d *FeiShuLogic) SyncFeiShuDepts(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
 	// 1.获取所有部门
 	deptSource, err := feishu.GetAllDepts()
@@ -30,7 +30,7 @@ func (d *FeiShuLogic) SyncFeiShuDepts(c *gin.Context, req interface{}) (data int
 	}
 
 	// 2.将远程数据转换成树
-	deptTree := GroupListToTree(fmt.Sprintf("%s_%s", config.Conf.FeiShu.Flag, config.Conf.FeiShu.RootDept), depts)
+	deptTree := GroupListToTree(fmt.Sprintf("%s_0", config.Conf.FeiShu.Flag), depts)
 
 	// 3.根据树进行创建
 	err = d.addDepts(deptTree.Children)
@@ -80,7 +80,7 @@ func (d FeiShuLogic) AddDepts(group *model.Group) error {
 	return nil
 }
 
-//根据现有数据库同步到的部门信息，开启用户同步
+// 根据现有数据库同步到的部门信息，开启用户同步
 func (d FeiShuLogic) SyncFeiShuUsers(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
 	// 1.获取飞书用户列表
 	staffSource, err := feishu.GetAllUsers()
