@@ -18,54 +18,116 @@ func GetAllDepts() (ret []map[string]interface{}, err error) {
 		pageSize   int64 = 50
 	)
 
-	req := lark.GetDepartmentListReq{
-		FetchChild:   &fetchChild,
-		PageSize:     &pageSize,
-		DepartmentID: config.Conf.FeiShu.RootDept,
-	}
-
-	root_req := lark.GetDepartmentReq{
-		DepartmentID: config.Conf.FeiShu.RootDept,
-	}
-
-	for {
-		res, _, err := InitFeiShuClient().Contact.GetDepartmentList(context.TODO(), &req)
-		if err != nil {
-			return nil, err
+	if len(config.Conf.FeiShu.DeptList) == 0 {
+		req := lark.GetDepartmentListReq{
+			// DepartmentIDType: &DeptID,
+			FetchChild:   &fetchChild,
+			PageSize:     &pageSize,
+			DepartmentID: "0",
 		}
-
-		if config.Conf.FeiShu.RootDept != "0" {
-			//添加root部门
-			root_res, _, err := InitFeiShuClient().Contact.GetDepartment(context.TODO(), &root_req)
+		for {
+			res, _, err := InitFeiShuClient().Contact.GetDepartmentList(context.TODO(), &req)
 			if err != nil {
 				return nil, err
 			}
-			root_ele := make(map[string]interface{})
-			root_ele["name"] = root_res.Department.Name
-			root_ele["custom_name_pinyin"] = tools.ConvertToPinYin(root_res.Department.Name)
-			root_ele["parent_department_id"] = "0"
-			root_ele["department_id"] = root_res.Department.DepartmentID
-			root_ele["open_department_id"] = root_res.Department.OpenDepartmentID
-			root_ele["leader_user_id"] = root_res.Department.LeaderUserID
-			root_ele["unit_ids"] = root_res.Department.UnitIDs
-			ret = append(ret, root_ele)
-		}
 
-		for _, dept := range res.Items {
+			for _, dept := range res.Items {
+				ele := make(map[string]interface{})
+				ele["name"] = dept.Name
+				ele["custom_name_pinyin"] = tools.ConvertToPinYin(dept.Name)
+				ele["parent_department_id"] = dept.ParentDepartmentID
+				ele["department_id"] = dept.DepartmentID
+				ele["open_department_id"] = dept.OpenDepartmentID
+				ele["leader_user_id"] = dept.LeaderUserID
+				ele["unit_ids"] = dept.UnitIDs
+				ret = append(ret, ele)
+			}
+			if !res.HasMore {
+				break
+			}
+			req.PageToken = &res.PageToken
+		}
+	} else {
+		//使用dept-list来一个一个添加部门，开头为^的不添加子部门
+		isInDeptList := func(id string) bool {
+			for _, v := range config.Conf.FeiShu.DeptList {
+				if strings.HasPrefix(v, "^") {
+					v = v[1:]
+				}
+				if id == v {
+					return true
+				}
+			}
+			return false
+		}
+		dep_append_norepeat := func(ret []map[string]interface{}, dept map[string]interface{}) []map[string]interface{} {
+			for _, v := range ret {
+				if v["open_department_id"] == dept["open_department_id"] {
+					return ret
+				}
+			}
+			return append(ret, dept)
+		}
+		for _, dep_s := range config.Conf.FeiShu.DeptList {
+			dept_id := dep_s
+			no_add_children := false
+			if strings.HasPrefix(dep_s, "^") {
+				no_add_children = true
+				dept_id = dep_s[1:]
+			}
+			req := lark.GetDepartmentReq{
+				DepartmentID: dept_id,
+			}
+			res, _, err := InitFeiShuClient().Contact.GetDepartment(context.TODO(), &req)
+			if err != nil {
+				return nil, err
+			}
 			ele := make(map[string]interface{})
-			ele["name"] = dept.Name
-			ele["custom_name_pinyin"] = tools.ConvertToPinYin(dept.Name)
-			ele["parent_department_id"] = dept.ParentDepartmentID
-			ele["department_id"] = dept.DepartmentID
-			ele["open_department_id"] = dept.OpenDepartmentID
-			ele["leader_user_id"] = dept.LeaderUserID
-			ele["unit_ids"] = dept.UnitIDs
-			ret = append(ret, ele)
+
+			ele["name"] = res.Department.Name
+			ele["custom_name_pinyin"] = tools.ConvertToPinYin(res.Department.Name)
+			if isInDeptList(res.Department.ParentDepartmentID) {
+				ele["parent_department_id"] = res.Department.ParentDepartmentID
+			} else {
+				ele["parent_department_id"] = "0"
+			}
+			ele["department_id"] = res.Department.DepartmentID
+			ele["open_department_id"] = res.Department.OpenDepartmentID
+			ele["leader_user_id"] = res.Department.LeaderUserID
+			ele["unit_ids"] = res.Department.UnitIDs
+			ret = dep_append_norepeat(ret, ele)
+
+			if !no_add_children {
+				req := lark.GetDepartmentListReq{
+					// DepartmentIDType: &DeptID,
+					FetchChild:   &fetchChild,
+					PageSize:     &pageSize,
+					DepartmentID: dept_id,
+				}
+				for {
+					res, _, err := InitFeiShuClient().Contact.GetDepartmentList(context.TODO(), &req)
+					if err != nil {
+						return nil, err
+					}
+
+					for _, dept := range res.Items {
+						ele := make(map[string]interface{})
+						ele["name"] = dept.Name
+						ele["custom_name_pinyin"] = tools.ConvertToPinYin(dept.Name)
+						ele["parent_department_id"] = dept.ParentDepartmentID
+						ele["department_id"] = dept.DepartmentID
+						ele["open_department_id"] = dept.OpenDepartmentID
+						ele["leader_user_id"] = dept.LeaderUserID
+						ele["unit_ids"] = dept.UnitIDs
+						ret = dep_append_norepeat(ret, ele)
+					}
+					if !res.HasMore {
+						break
+					}
+					req.PageToken = &res.PageToken
+				}
+			}
 		}
-		if !res.HasMore {
-			break
-		}
-		req.PageToken = &res.PageToken
 	}
 	return
 }
