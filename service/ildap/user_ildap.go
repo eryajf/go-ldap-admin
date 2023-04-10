@@ -74,6 +74,39 @@ func (x UserService) Update(oldusername string, user *model.User) error {
 	return nil
 }
 
+func (x UserService) Exist(filter map[string]interface{}) (bool, error) {
+	filter_str := ""
+	for key, value := range filter {
+		filter_str += fmt.Sprintf("(%s=%s)", key, value)
+	}
+	search_filter := fmt.Sprintf("(&(|(objectClass=inetOrgPerson)(objectClass=simpleSecurityObject))%s)", filter_str)
+	// Construct query request
+	searchRequest := ldap.NewSearchRequest(
+		config.Conf.Ldap.BaseDN,                                     // This is basedn, we will start searching from this node.
+		ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false, // Here several parameters are respectively scope, derefAliases, sizeLimit, timeLimit,  typesOnly
+		search_filter,  // This is Filter for LDAP query
+		[]string{"DN"}, // Here are the attributes returned by the query, provided as an array. If empty, all attributes are returned
+		nil,
+	)
+
+	// 获取 LDAP 连接
+	conn, err := common.GetLDAPConn()
+	defer common.PutLADPConn(conn)
+	if err != nil {
+		return false, err
+	}
+	var sr *ldap.SearchResult
+	// Search through ldap built-in search
+	sr, err = conn.Search(searchRequest)
+	if err != nil {
+		return false, err
+	}
+	if len(sr.Entries) > 0 {
+		return true, nil
+	}
+	return false, nil
+}
+
 // Delete 删除资源
 func (x UserService) Delete(udn string) error {
 	del := ldap.NewDelRequest(udn, nil)

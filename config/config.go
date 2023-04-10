@@ -180,10 +180,11 @@ type WeComConfig struct {
 }
 
 type FeiShuConfig struct {
-	Flag         string `mapstructure:"flag" json:"flag"`
-	AppID        string `mapstructure:"app-id" json:"appId"`
-	AppSecret    string `mapstructure:"app-secret" json:"appSecret"`
-	EnableSync   bool   `mapstructure:"enable-sync" json:"enableSync"`
-	DeptSyncTime string `mapstructure:"dept-sync-time" json:"deptSyncTime"`
-	UserSyncTime string `mapstructure:"user-sync-time" json:"userSyncTime"`
+	Flag         string   `mapstructure:"flag" json:"flag"`
+	AppID        string   `mapstructure:"app-id" json:"appId"`
+	AppSecret    string   `mapstructure:"app-secret" json:"appSecret"`
+	EnableSync   bool     `mapstructure:"enable-sync" json:"enableSync"`
+	DeptSyncTime string   `mapstructure:"dept-sync-time" json:"deptSyncTime"`
+	UserSyncTime string   `mapstructure:"user-sync-time" json:"userSyncTime"`
+	DeptList     []string `mapstructure:"dept-list" json:"deptList"`
 }
