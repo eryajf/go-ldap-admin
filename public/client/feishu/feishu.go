@@ -14,13 +14,16 @@ import (
 // GetAllDepts 获取所有部门
 func GetAllDepts() (ret []map[string]interface{}, err error) {
 	var (
-		fetchChild bool  = true
-		pageSize   int64 = 50
+		fetchChild bool   = true
+		pageSize   int64  = 50
+		pageToken  string = ""
+		// DeptID     lark.DepartmentIDType = "department_id"
 	)
 
 	if len(config.Conf.FeiShu.DeptList) == 0 {
 		req := lark.GetDepartmentListReq{
 			// DepartmentIDType: &DeptID,
+			PageToken:    &pageToken,
 			FetchChild:   &fetchChild,
 			PageSize:     &pageSize,
 			DepartmentID: "0",
@@ -45,7 +48,7 @@ func GetAllDepts() (ret []map[string]interface{}, err error) {
 			if !res.HasMore {
 				break
 			}
-			req.PageToken = &res.PageToken
+			pageToken = res.PageToken
 		}
 	} else {
 		//使用dept-list来一个一个添加部门，开头为^的不添加子部门
@@ -98,8 +101,10 @@ func GetAllDepts() (ret []map[string]interface{}, err error) {
 			ret = dep_append_norepeat(ret, ele)
 
 			if !no_add_children {
+				pageToken = ""
 				req := lark.GetDepartmentListReq{
 					// DepartmentIDType: &DeptID,
+					PageToken:    &pageToken,
 					FetchChild:   &fetchChild,
 					PageSize:     &pageSize,
 					DepartmentID: dept_id,
@@ -124,7 +129,7 @@ func GetAllDepts() (ret []map[string]interface{}, err error) {
 					if !res.HasMore {
 						break
 					}
-					req.PageToken = &res.PageToken
+					pageToken = res.PageToken
 				}
 			}
 		}
@@ -136,7 +141,9 @@ func GetAllDepts() (ret []map[string]interface{}, err error) {
 // GetAllUsers 获取所有员工信息
 func GetAllUsers() (ret []map[string]interface{}, err error) {
 	var (
-		pageSize int64 = 50
+		pageSize  int64  = 50
+		pageToken string = ""
+		// deptidtype lark.DepartmentIDType = "department_id"
 	)
 	depts, err := GetAllDepts()
 	if err != nil {
@@ -151,8 +158,9 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 
 	for _, deptid := range deptids {
 		req := lark.GetUserListReq{
-			PageSize:     &pageSize,
-			PageToken:    new(string),
+			PageSize:  &pageSize,
+			PageToken: &pageToken,
+			// DepartmentIDType: &deptidtype,
 			DepartmentID: deptid,
 		}
 		for {
@@ -197,7 +205,7 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 			if !res.HasMore {
 				break
 			}
-			req.PageToken = &res.PageToken
+			pageToken = res.PageToken
 		}
 	}
 	return
