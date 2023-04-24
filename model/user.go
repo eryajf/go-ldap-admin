@@ -13,7 +13,7 @@ type User struct {
 	Mobile        string  `gorm:"type:varchar(15);not null;unique;comment:'手机号'" json:"mobile"`                      // 手机号
 	Avatar        string  `gorm:"type:varchar(255);comment:'头像'" json:"avatar"`                                      // 头像
 	PostalAddress string  `gorm:"type:varchar(255);comment:'地址'" json:"postalAddress"`                               // 地址
-	Departments   string  `gorm:"type:varchar(128);comment:'部门'" json:"departments"`                                 // 部门
+	Departments   string  `gorm:"type:varchar(512);comment:'部门'" json:"departments"`                                 // 部门
 	Position      string  `gorm:"type:varchar(128);comment:'职位'" json:"position"`                                    //  职位
 	Introduction  string  `gorm:"type:varchar(255);comment:'个人简介'" json:"introduction"`                              // 个人简介
 	Status        uint    `gorm:"type:tinyint(1);default:1;comment:'状态:1在职, 2离职'" json:"status"`                     // 状态

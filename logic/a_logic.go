@@ -2,7 +2,6 @@ package logic
 
 import (
 	"fmt"
-
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/model"
 	"github.com/eryajf/go-ldap-admin/public/common"
@@ -255,6 +254,13 @@ func BuildUserData(flag string, remoteData map[string]interface{}) (*model.User,
 		return nil, tools.NewOperationError(err)
 	}
 
+	// 校验username是否为空，username为必填项
+	name := gjson.Get(string(output), fieldRelation["username"]).String()
+	if len(name) == 0 {
+		common.Log.Warnf("%s 该用户未填写username", output)
+		return nil, nil
+	}
+
 	u := &model.User{}
 	for system, remote := range fieldRelation {
 		switch system {
@@ -310,8 +316,10 @@ func ConvertUserData(flag string, remoteData []map[string]interface{}) (users []
 		if err != nil {
 			return nil, err
 		}
-		user.DepartmentId = tools.SliceToString(groupIds, ",")
-		users = append(users, user)
+		if user != nil {
+			user.DepartmentId = tools.SliceToString(groupIds, ",")
+			users = append(users, user)
+		}
 	}
 	return
 }
