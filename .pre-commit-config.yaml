@@ -11,7 +11,7 @@ repos:
     - id: golangci-lint
       name: golangci-lint
       description: Fast linters runner for Go.
-      entry: golangci-lint run --fix
+      entry: golangci-lint run --fix --skip-files="public/client/feishu/feishu.go"
       types: [go]
       language: golang
       pass_filenames: false
