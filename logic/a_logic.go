@@ -2,6 +2,9 @@ package logic
 
 import (
 	"fmt"
+	"math/rand"
+	"time"
+
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/model"
 	"github.com/eryajf/go-ldap-admin/public/common"
@@ -93,7 +96,7 @@ func CommonAddUser(user *model.User, groups []*model.Group) error {
 		user.Introduction = user.Nickname
 	}
 	if user.Mail == "" {
-		user.Mail = "noone@eryajf.net"
+		user.Mail = user.Username + "@eryajf.net"
 	}
 	if user.JobNumber == "" {
 		user.JobNumber = "0000"
@@ -108,7 +111,7 @@ func CommonAddUser(user *model.User, groups []*model.Group) error {
 		user.PostalAddress = "默认:地球"
 	}
 	if user.Mobile == "" {
-		user.Mobile = "18888888888"
+		user.Mobile = generateMobile()
 	}
 
 	// 先将用户添加到MySQL
@@ -405,4 +408,14 @@ func groupListToTree(rootGroup *model.Group, list []*model.Group) []*model.Group
 		group.Children = groupListToTree(group, list)
 	}
 	return children
+}
+
+func generateMobile() string {
+	rand.Seed(time.Now().UnixNano())
+	randNum := rand.Intn(9000000000) + 1000000000
+	randNum = randNum + 10000000000
+	if isql.User.Exist(tools.H{"mobile": randNum}) {
+		generateMobile()
+	}
+	return fmt.Sprintf("%v", randNum)
 }
