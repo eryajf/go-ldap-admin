@@ -25,3 +25,15 @@ func TestSliceToString(t *testing.T) {
 	a := []uint{1}
 	fmt.Printf("%s\n", SliceToString(a, ","))
 }
+
+func TestEncodePass(t *testing.T) {
+	// to encode a password into ssha
+	hashed := EncodePass([]byte("testpass"))
+	fmt.Println(string(hashed))
+	// to validate a password against saved hash.
+	if Matches([]byte(hashed), []byte("testpass")) {
+		fmt.Println("Its a match.")
+	} else {
+		fmt.Println("its not match")
+	}
+}

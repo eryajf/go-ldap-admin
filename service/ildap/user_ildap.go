@@ -29,7 +29,7 @@ func (x UserService) Add(user *model.User) error {
 	add.Attribute("postalAddress", []string{user.PostalAddress})
 	add.Attribute("mobile", []string{user.Mobile})
 	add.Attribute("uid", []string{user.Username})
-	add.Attribute("userPassword", []string{tools.NewParPasswd(user.Password)})
+	add.Attribute("userPassword", []string{tools.EncodePass([]byte(tools.NewParPasswd(user.Password)))})
 
 	// 获取 LDAP 连接
 	conn, err := common.GetLDAPConn()
