@@ -37,4 +37,5 @@ RUN apk upgrade \
 
 RUN chmod +x wait go-ldap-admin
 
+# see wait repo: https://github.com/ufoscout/docker-compose-wait
 CMD ./wait && ./go-ldap-admin
