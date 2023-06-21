@@ -6,7 +6,7 @@ networks:
 
 services:
   mysql:
-    image: dockerproxy.com/mysql/mysql-server:5.7
+    image: registry.cn-hangzhou.aliyuncs.com/ali_eryajf/mysql-server:5.7
     container_name: go-ldap-admin-mysql # 指定容器名称，如果不设置此参数，则由系统自动生成
     hostname: go-ldap-admin-mysql
     restart: always # 设置容器自启模式
@@ -27,7 +27,7 @@ services:
       - go-ldap-admin
 
   openldap:
-    image: dockerproxy.com/osixia/openldap:1.4.0
+    image: registry.cn-hangzhou.aliyuncs.com/ali_eryajf/openldap:1.4.0
     container_name: go-ldap-admin-openldap
     hostname: go-ldap-admin-openldap
     restart: always
@@ -47,7 +47,7 @@ services:
       - go-ldap-admin
 
   phpldapadmin:
-    image: dockerproxy.com/osixia/phpldapadmin:0.9.0
+    image: registry.cn-hangzhou.aliyuncs.com/ali_eryajf/phpldapadmin:0.9.0
     container_name: go-ldap-admin-phpldapadmin
     hostname: go-ldap-admin-phpldapadmin
     restart: always
@@ -67,7 +67,7 @@ services:
       - go-ldap-admin
 
   go-ldap-admin-server:
-    image: dockerproxy.com/eryajf/go-ldap-admin-server
+    image: registry.cn-hangzhou.aliyuncs.com/ali_eryajf/go-ldap-admin-server
     container_name: go-ldap-admin-server
     hostname: go-ldap-admin-server
     restart: always
@@ -88,7 +88,7 @@ services:
       - go-ldap-admin
 
   go-ldap-admin-ui:
-    image: dockerproxy.com/eryajf/go-ldap-admin-ui
+    image: registry.cn-hangzhou.aliyuncs.com/ali_eryajf/go-ldap-admin-ui
     container_name: go-ldap-admin-ui
     hostname: go-ldap-admin-ui
     restart: always
