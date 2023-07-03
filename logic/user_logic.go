@@ -50,7 +50,10 @@ func (l UserLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspEr
 			return nil, tools.NewValidatorError(fmt.Errorf("密码长度至少为6位"))
 		}
 	} else {
-		r.Password = config.Conf.Ldap.UserInitPassword
+		//取消默认密码为123456 改为随时生成8位
+		//r.Password = config.Conf.Ldap.UserInitPassword
+		r.Password = tools.GenerateRandomPassword()
+
 	}
 
 	// 当前登陆用户角色排序最小值（最高等级角色）以及当前登陆的用户
@@ -118,6 +121,14 @@ func (l UserLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspEr
 	if err != nil {
 		return nil, tools.NewOperationError(fmt.Errorf("添加用户失败" + err.Error()))
 	}
+
+
+	//用户注册成功后通过邮件发送
+	err = tools.SendResigtryMail([]string{user.Mail}, user.Username, r.Password)
+	if err != nil {
+		return nil, tools.NewLdapError(fmt.Errorf("注册用户邮件发送失败" + err.Error()))
+	}
+
 	return nil, nil
 }
 

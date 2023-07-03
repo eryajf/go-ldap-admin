@@ -102,7 +102,7 @@ ldap:
   # ldap用户OU
   user-dn: "ou=people,dc=eryajf,dc=net"
   # ldap用户初始默认密码
-  user-init-password: "123456"
+ # user-init-password: "123456"
   # 是否允许更改分组DN
   group-name-modify: false
   # 是否允许更改用户DN

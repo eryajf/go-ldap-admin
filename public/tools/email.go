@@ -36,6 +36,24 @@ func email(mailTo []string, subject string, body string) error {
 	return do.DialAndSend(newmail)
 }
 
+func SendResigtryMail(sendto []string, user string, passwd string) error {
+	subject := "新注册用户"
+	body := fmt.Sprintf(`<div>
+	<div>
+		尊敬的用户 %s ，您好！
+	</div>
+	<div style="padding: 8px 40px 8px 50px;">
+		<p>你注册的用户密码为:  %s ,为了保证账号安全，切勿向他人泄露，感谢您的理解与使用。</p>
+	</div>
+	<div>
+		<p>此邮箱为系统邮箱，请勿回复。</p>
+	</div>
+	</div>`, user, passwd)
+	return email(sendto, subject, body)
+
+}
+
+
 func SendMail(sendto []string, pass string) error {
 	subject := "重置LDAP密码成功"
 	// 邮件正文
