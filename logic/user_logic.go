@@ -411,6 +411,25 @@ func (l UserLogic) ChangeUserStatus(c *gin.Context, req interface{}) (data inter
 		if err != nil {
 			return nil, tools.NewLdapError(fmt.Errorf("在LDAP添加用户失败" + err.Error()))
 		}
+
+	//修复，当用户状态为离职时，定时任务会将ldap用户同步sql，发现用户已离职并且ldap已删除，会将sql中同步状态设置为2
+	//再次将用户状态设置为在职时，信息会再次从sql同步至ldap，但同步状态依然为2，点击同步时会提示用户已存在。
+	//将离职人员再次设置为在职时，先查询用户是否被正常创建，如创建成功则将同步状态修改为1(已同步)
+	filter := map[string]interface{}{
+		"uid": user.Username,
+	}
+	exist, err := ildap.User.Exist(filter)
+	if err != nil {
+		return nil, tools.NewLdapError(fmt.Errorf("查询用户失败" + err.Error()))
+	}
+
+	if exist {
+		isql.User.ChangeSyncState(int(r.ID), 1)
+	} else {
+		return nil, tools.NewLdapError(fmt.Errorf("用户不存在" + err.Error()))
+	}
+
+
 	}
 	err = isql.User.ChangeStatus(int(r.ID), int(r.Status))
 	if err != nil {
