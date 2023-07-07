@@ -53,6 +53,23 @@ func SendResigtryMail(sendto []string, user string, passwd string) error {
 
 }
 
+// 发送检查用户更新密码时间
+func SendCheckUserMail(sendto []string, user string, day int) error {
+	subject := "用户过期"
+	body := fmt.Sprintf(`<div>
+	<div>
+		尊敬的用户:  %s ，您好！
+	</div>
+	<div style="padding: 8px 40px 8px 50px;">
+		<p>你的用户密码将于 %d 后到期, 为不影响正常使用，请及时修改密码。</p>
+	</div>
+	<div>
+		<p>此邮箱为系统邮箱，请勿回复。</p>
+	</div>
+	</div>`, user, day)
+	return email(sendto, subject, body)
+
+}
 
 func SendMail(sendto []string, pass string) error {
 	subject := "重置LDAP密码成功"

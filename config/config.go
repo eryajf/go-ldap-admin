@@ -86,14 +86,16 @@ func RSAReadKeyFromFile(filename string) []byte {
 }
 
 type SystemConfig struct {
-	Mode            string `mapstructure:"mode" json:"mode"`
-	UrlPathPrefix   string `mapstructure:"url-path-prefix" json:"urlPathPrefix"`
-	Port            int    `mapstructure:"port" json:"port"`
-	InitData        bool   `mapstructure:"init-data" json:"initData"`
-	RSAPublicKey    string `mapstructure:"rsa-public-key" json:"rsaPublicKey"`
-	RSAPrivateKey   string `mapstructure:"rsa-private-key" json:"rsaPrivateKey"`
-	RSAPublicBytes  []byte `mapstructure:"-" json:"-"`
-	RSAPrivateBytes []byte `mapstructure:"-" json:"-"`
+	Mode              string `mapstructure:"mode" json:"mode"`
+	UrlPathPrefix     string `mapstructure:"url-path-prefix" json:"urlPathPrefix"`
+	Port              int    `mapstructure:"port" json:"port"`
+	InitData          bool   `mapstructure:"init-data" json:"initData"`
+	RSAPublicKey      string `mapstructure:"rsa-public-key" json:"rsaPublicKey"`
+	RSAPrivateKey     string `mapstructure:"rsa-private-key" json:"rsaPrivateKey"`
+	RSAPublicBytes    []byte `mapstructure:"-" json:"-"`
+	RSAPrivateBytes   []byte `mapstructure:"-" json:"-"`
+	EnableCheckUser   bool   `mapstructure:"enable-check-user" json:"enableCheckUser"`
+	CheckUserSyncTime string `mapstructure:"check-user-sync-time" json:"checkUserSyncTime"`
 }
 
 type LogsConfig struct {
