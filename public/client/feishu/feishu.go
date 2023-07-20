@@ -203,6 +203,7 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 				ret = append(ret, ele)
 			}
 			if !res.HasMore {
+				pageToken = ""
 				break
 			}
 			pageToken = res.PageToken
