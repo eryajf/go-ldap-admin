@@ -2,6 +2,7 @@ package dingtalk
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/eryajf/go-ldap-admin/config"
@@ -14,16 +15,69 @@ import (
 func GetAllDepts() (ret []map[string]interface{}, err error) {
 	depts, err := InitDingTalkClient().FetchDeptList(1, true, "zh_CN")
 	if err != nil {
-		return ret, err
-	}
-	ret = make([]map[string]interface{}, 0)
-	for _, dept := range depts.Dept {
-		ele := make(map[string]interface{})
-		ele["id"] = dept.Id
-		ele["name"] = dept.Name
-		ele["parentid"] = dept.ParentId
-		ele["custom_name_pinyin"] = tools.ConvertToPinYin(dept.Name)
-		ret = append(ret, ele)
+			return ret, err
+		}
+	if len(config.Conf.DingTalk.DeptList) == 0 {
+		
+		ret = make([]map[string]interface{}, 0)
+		for _, dept := range depts.Dept {
+			ele := make(map[string]interface{})
+			ele["id"] = dept.Id
+			ele["name"] = dept.Name
+			ele["parentid"] = dept.ParentId
+			ele["custom_name_pinyin"] = tools.ConvertToPinYin(dept.Name)
+			ret = append(ret, ele)
+		}
+	} else {
+
+		// 遍历配置的部门ID列表获取数据进行处理
+		// 从取得的所有部门列表中将配置的部门ID筛选出来再去请求其子部门过滤为1和为配置值的部门ID
+		ret = make([]map[string]interface{}, 0)
+
+		for _, dept := range depts.Dept {
+			inset := false
+			for _, dep_s := range config.Conf.DingTalk.DeptList {
+				if strings.HasPrefix(dep_s, "^") {
+					continue
+				}
+				setdepid, _ := strconv.Atoi(dep_s)
+				if dept.Id == setdepid {
+					inset = true
+					break
+				}
+			}
+			if dept.Id == 1 || inset {
+				ele := make(map[string]interface{})
+				ele["id"] = dept.Id
+				ele["name"] = dept.Name
+				ele["parentid"] = dept.ParentId
+				ele["custom_name_pinyin"] = tools.ConvertToPinYin(dept.Name)
+				ret = append(ret, ele)
+			}
+		}
+
+		for _, dep_s := range config.Conf.DingTalk.DeptList {
+			dept_id := dep_s
+
+			if strings.HasPrefix(dep_s, "^") || dept_id == "1" {
+				continue
+			}
+			depid, _ := strconv.Atoi(dept_id)
+			depts, err := InitDingTalkClient().FetchDeptList(depid, true, "zh_CN")
+
+			if err != nil {
+				return ret, err
+			}
+
+			for _, dept := range depts.Dept {
+				ele := make(map[string]interface{})
+				ele["id"] = dept.Id
+				ele["name"] = dept.Name
+				ele["parentid"] = dept.ParentId
+				ele["custom_name_pinyin"] = tools.ConvertToPinYin(dept.Name)
+				ret = append(ret, ele)
+			}
+		}
 	}
 	return
 }
