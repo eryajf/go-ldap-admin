@@ -159,15 +159,16 @@ type EmailConfig struct {
 }
 
 type DingTalkConfig struct {
-	AppKey       string `mapstructure:"app-key" json:"appKey"`
-	AppSecret    string `mapstructure:"app-secret" json:"appSecret"`
-	AgentId      string `mapstructure:"agent-id" json:"agentId"`
-	RootOuName   string `mapstructure:"root-ou-name" json:"rootOuName"`
-	Flag         string `mapstructure:"flag" json:"flag"`
-	EnableSync   bool   `mapstructure:"enable-sync" json:"enableSync"`
-	DeptSyncTime string `mapstructure:"dept-sync-time" json:"deptSyncTime"`
-	UserSyncTime string `mapstructure:"user-sync-time" json:"userSyncTime"`
-	DeptList     []string `mapstructure:"dept-list" json:"deptList"`
+	AppKey         string   `mapstructure:"app-key" json:"appKey"`
+	AppSecret      string   `mapstructure:"app-secret" json:"appSecret"`
+	AgentId        string   `mapstructure:"agent-id" json:"agentId"`
+	RootOuName     string   `mapstructure:"root-ou-name" json:"rootOuName"`
+	Flag           string   `mapstructure:"flag" json:"flag"`
+	EnableSync     bool     `mapstructure:"enable-sync" json:"enableSync"`
+	DeptSyncTime   string   `mapstructure:"dept-sync-time" json:"deptSyncTime"`
+	UserSyncTime   string   `mapstructure:"user-sync-time" json:"userSyncTime"`
+	DeptList       []string `mapstructure:"dept-list" json:"deptList"`
+	UserLevelRange int      `mapstructure:"user-level-range" json:"userLevelRange"`
 }
 
 type WeComConfig struct {

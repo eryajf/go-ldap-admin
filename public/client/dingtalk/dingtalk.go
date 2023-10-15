@@ -2,8 +2,10 @@ package dingtalk
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/public/tools"
@@ -15,10 +17,9 @@ import (
 func GetAllDepts() (ret []map[string]interface{}, err error) {
 	depts, err := InitDingTalkClient().FetchDeptList(1, true, "zh_CN")
 	if err != nil {
-			return ret, err
-		}
+		return ret, err
+	}
 	if len(config.Conf.DingTalk.DeptList) == 0 {
-		
 		ret = make([]map[string]interface{}, 0)
 		for _, dept := range depts.Dept {
 			ele := make(map[string]interface{})
@@ -162,6 +163,44 @@ func GetLeaveUserIds() ([]string, error) {
 			break
 		}
 		ReqParm.Cursor = rsp.NextCursor
+	}
+	return ids, nil
+}
+
+// 官方文档：https://open.dingtalk.com/document/orgapp/query-the-details-of-employees-who-have-left-office
+// GetLeaveUserIdsByDateRange 新接口根据时间范围获取离职人员ID列表
+// GetHrmempLeaveRecordsKey    = "/v1.0/contact/empLeaveRecords"
+func GetLeaveUserIdsDateRange() ([]string, error) {
+	var ids []string
+	// 数据参数确保为负数往前推指定的天数
+	var levelRangeDays = -int(math.Abs(float64(config.Conf.DingTalk.UserLevelRange)))
+	startTime := time.Now().AddDate(0, 0, levelRangeDays).Format("2023-01-01T00:00:00Z")
+	endTime := time.Now().Format("2023-01-01T00:00:00Z")
+	ReqParm := struct {
+		StartTime  string `json:"startTime"`
+		EndTime    string `json:"endTime"`
+		NextToken  string `json:"nextToken"`
+		MaxResults int    `json:"maxResults"`
+	}{
+		StartTime:  startTime,
+		EndTime:    endTime,
+		NextToken:  "0",
+		MaxResults: 50,
+	}
+	// 使用新的使用时间范围查询离职人员接口获取离职用户ID
+	for {
+		rsp, err := InitDingTalkClient().GetHrmEmpLeaveRecords(ReqParm.StartTime, ReqParm.EndTime, ReqParm.NextToken, ReqParm.MaxResults)
+		if err != nil {
+			return nil, err
+		}
+		for _, g := range rsp.Records {
+			ids = append(ids, g.UserId)
+		}
+
+		if rsp.NextToken == "0" || rsp.NextToken == "" {
+			break
+		}
+		ReqParm.NextToken = rsp.NextToken
 	}
 	return ids, nil
 }

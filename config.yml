@@ -114,13 +114,14 @@ dingtalk:
   app-key: "xxxxxxxxxxxxxxx" # 应用的key
   app-secret: "xxxxxxxxxxxxxxxxxxxxxxxxxxxx" # 应用的secret
   agent-id: "12121212" # 目前agent-id未使用到，可忽略
-  enable-sync: false  # 是否开启定时同步钉钉的任务
+  enable-sync: false # 是否开启定时同步钉钉的任务
   dept-sync-time: "0 30 2 * * *" # 部门同步任务的时间点 * * * * * * 秒 分 时 日 月 周, 请把时间设置在凌晨 1 ~ 5 点
   user-sync-time: "0 30 3 * * *" # 用户同步任务的时间点 * * * * * * 秒 分 时 日 月 周, 请把时间设置在凌晨 1 ~ 5 点,注意请把用户同步的任务滞后于部门同步时间,比如部门为2点,则用户为3点
-  dept-list:      #部门列表，不设置则使用公司根部门，在开头加^表示不同步此部门，只需配置需要同步的部门ID
-     #- "1"   #根组织ID
-     - "48456726"   #需要同步的部门ID
-     #- "^61213417"  #不同步的ID,不配置即只同步上一ID
+  dept-list: #部门列表，不设置则使用公司根部门，在开头加^表示不同步此部门，只需配置需要同步的部门ID
+    #- "1"   #根组织ID
+    - "48456726" #需要同步的部门ID
+    #- "^61213417"  #不同步的ID,不配置即只同步上一ID
+  user-level-range: 1 #按配置天数查离职时间范围内的用户,为0时不限制
 wecom:
   # 配置获取详细文档参考：http://ldapdoc.eryajf.net/pages/cf1698/
   flag: "wecom" # 作为微信在平台的标识
@@ -135,10 +136,10 @@ feishu:
   flag: "feishu" # 作为飞书在平台的标识
   app-id: "xxxxxxx" # 飞书的app-id
   app-secret: "xxxxxxxxxxx" # 飞书的app-secret
-  enable-sync: false  # 是否开启定时同步飞书的任务
+  enable-sync: false # 是否开启定时同步飞书的任务
   dept-sync-time: "0 20 0 * * *" # 部门同步任务的时间点 * * * * * * 秒 分 时 日 月 周, 请把时间设置在凌晨 1 ~ 5 点
   user-sync-time: "0 40 0 * * *" # 用户同步任务的时间点 * * * * * * 秒 分 时 日 月 周, 请把时间设置在凌晨 1 ~ 5 点,注意请把用户同步的任务滞后于部门同步时间,比如部门为2点,则用户为3点
-  dept-list:      #部门列表，不设置则使用公司根部门，如果不希望添加子部门，在开头加上^
+  dept-list:#部门列表，不设置则使用公司根部门，如果不希望添加子部门，在开头加上^
     # - "^od-xxx"
     # - "od-xxx"
   enable-bot-inform: false
