@@ -159,33 +159,36 @@ type EmailConfig struct {
 }
 
 type DingTalkConfig struct {
-	AppKey       string `mapstructure:"app-key" json:"appKey"`
-	AppSecret    string `mapstructure:"app-secret" json:"appSecret"`
-	AgentId      string `mapstructure:"agent-id" json:"agentId"`
-	RootOuName   string `mapstructure:"root-ou-name" json:"rootOuName"`
-	Flag         string `mapstructure:"flag" json:"flag"`
-	EnableSync   bool   `mapstructure:"enable-sync" json:"enableSync"`
-	DeptSyncTime string `mapstructure:"dept-sync-time" json:"deptSyncTime"`
-	UserSyncTime string `mapstructure:"user-sync-time" json:"userSyncTime"`
-	DeptList     []string `mapstructure:"dept-list" json:"deptList"`
+	AppKey        string   `mapstructure:"app-key" json:"appKey"`
+	AppSecret     string   `mapstructure:"app-secret" json:"appSecret"`
+	AgentId       string   `mapstructure:"agent-id" json:"agentId"`
+	RootOuName    string   `mapstructure:"root-ou-name" json:"rootOuName"`
+	Flag          string   `mapstructure:"flag" json:"flag"`
+	EnableSync    bool     `mapstructure:"enable-sync" json:"enableSync"`
+	DeptSyncTime  string   `mapstructure:"dept-sync-time" json:"deptSyncTime"`
+	UserSyncTime  string   `mapstructure:"user-sync-time" json:"userSyncTime"`
+	DeptList      []string `mapstructure:"dept-list" json:"deptList"`
+	IsUpdateSyncd bool     `mapstructure:"is-update-syncd" json:"isUpdateSyncd"`
 }
 
 type WeComConfig struct {
-	Flag         string `mapstructure:"flag" json:"flag"`
-	CorpID       string `mapstructure:"corp-id" json:"corpId"`
-	AgentID      int    `mapstructure:"agent-id" json:"agentId"`
-	CorpSecret   string `mapstructure:"corp-secret" json:"corpSecret"`
-	EnableSync   bool   `mapstructure:"enable-sync" json:"enableSync"`
-	DeptSyncTime string `mapstructure:"dept-sync-time" json:"deptSyncTime"`
-	UserSyncTime string `mapstructure:"user-sync-time" json:"userSyncTime"`
+	Flag          string `mapstructure:"flag" json:"flag"`
+	CorpID        string `mapstructure:"corp-id" json:"corpId"`
+	AgentID       int    `mapstructure:"agent-id" json:"agentId"`
+	CorpSecret    string `mapstructure:"corp-secret" json:"corpSecret"`
+	EnableSync    bool   `mapstructure:"enable-sync" json:"enableSync"`
+	DeptSyncTime  string `mapstructure:"dept-sync-time" json:"deptSyncTime"`
+	UserSyncTime  string `mapstructure:"user-sync-time" json:"userSyncTime"`
+	IsUpdateSyncd bool   `mapstructure:"is-update-syncd" json:"isUpdateSyncd"`
 }
 
 type FeiShuConfig struct {
-	Flag         string   `mapstructure:"flag" json:"flag"`
-	AppID        string   `mapstructure:"app-id" json:"appId"`
-	AppSecret    string   `mapstructure:"app-secret" json:"appSecret"`
-	EnableSync   bool     `mapstructure:"enable-sync" json:"enableSync"`
-	DeptSyncTime string   `mapstructure:"dept-sync-time" json:"deptSyncTime"`
-	UserSyncTime string   `mapstructure:"user-sync-time" json:"userSyncTime"`
-	DeptList     []string `mapstructure:"dept-list" json:"deptList"`
+	Flag          string   `mapstructure:"flag" json:"flag"`
+	AppID         string   `mapstructure:"app-id" json:"appId"`
+	AppSecret     string   `mapstructure:"app-secret" json:"appSecret"`
+	EnableSync    bool     `mapstructure:"enable-sync" json:"enableSync"`
+	DeptSyncTime  string   `mapstructure:"dept-sync-time" json:"deptSyncTime"`
+	UserSyncTime  string   `mapstructure:"user-sync-time" json:"userSyncTime"`
+	DeptList      []string `mapstructure:"dept-list" json:"deptList"`
+	IsUpdateSyncd bool     `mapstructure:"is-update-syncd" json:"isUpdateSyncd"`
 }

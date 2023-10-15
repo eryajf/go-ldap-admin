@@ -15,10 +15,9 @@
 <img src="https://camo.githubusercontent.com/82291b0fe831bfc6781e07fc5090cbd0a8b912bb8b8d4fec0696c881834f81ac/68747470733a2f2f70726f626f742e6d656469612f394575424971676170492e676966" width="800"  height="3">
 </div><br>
 
-
 <p align="center">
   <a href="" rel="noopener">
- <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220614_131521.jpg" alt="Project logo"></a>
+ <img src="https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220614_131521.jpg" alt="Project logo"></a>
 </p>
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -42,31 +41,31 @@
 
 `go-ldap-admin`旨在为`OpenLDAP`服务端提供一个简单易用，清晰美观的现代化管理后台。
 
-> 在完成针对`OpenLDAP`的管理能力之下，支持对`钉钉`，`企业微信`，`飞书`的集成，用户可以选择手动或者自动同步组织架构以及员工信息到平台中，让`go-ldap-admin`项目成为打通企业IM与企业内网应用之间的桥梁。
+> 在完成针对`OpenLDAP`的管理能力之下，支持对`钉钉`，`企业微信`，`飞书`的集成，用户可以选择手动或者自动同步组织架构以及员工信息到平台中，让`go-ldap-admin`项目成为打通企业 IM 与企业内网应用之间的桥梁。
 
 ## 🏊 在线体验
 
 提供在线体验地址如下：
 
-|     分类      |                             地址                             |          用户名           | 密码   |
-| :-----------: | :----------------------------------------------------------: | :-----------------------: | ------ |
-| go-ldap-admin | [http://demo-go-ldap-admin.eryajf.net](http://demo-go-ldap-admin.eryajf.net) |           admin           | 123456 |
+|     分类      |                                           地址                                           |          用户名           | 密码   |
+| :-----------: | :--------------------------------------------------------------------------------------: | :-----------------------: | ------ |
+| go-ldap-admin |       [http://demo-go-ldap-admin.eryajf.net](http://demo-go-ldap-admin.eryajf.net)       |           admin           | 123456 |
 | phpLdapAdmin  | [http://demo-go-ldap-admin.eryajf.net:8091/](http://demo-go-ldap-admin.eryajf.net:8091/) | cn=admin,dc=eryajf,dc=net | 123456 |
 
 在线环境可能不稳，如果遇到访问异常，或者数据错乱，请联系我进行修复。
 
 **页面功能概览：**
 
-| ![登录页](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_165411.png) | ![首页](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_165545.png) |
-| :----------------------------------------------------------: | ------------------------------------------------------------ |
-| ![用户管理](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_165623.png) | ![分组管理](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_165701.png) |
-| ![字段关系管理](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_165853.png) | ![菜单管理](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_165954.png) |
-| ![接口管理](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_170015.png) | ![操作日志](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20220724_170035.png) |
+|    ![登录页](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165411.png)    | ![首页](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165545.png)     |
+| :----------------------------------------------------------------------------------: | -------------------------------------------------------------------------------- |
+|   ![用户管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165623.png)   | ![分组管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165701.png) |
+| ![字段关系管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165853.png) | ![菜单管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165954.png) |
+|   ![接口管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_170015.png)   | ![操作日志](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_170035.png) |
 
 ## 👨‍💻 项目地址
 
-| 分类 |                        GitHub                        |                        Gitee                        |
-| :--: | :--------------------------------------------------: | :-------------------------------------------------: |
+| 分类 |                     GitHub                     |                        Gitee                        |
+| :--: | :--------------------------------------------: | :-------------------------------------------------: |
 | 后端 |  https://github.com/eryajf/go-ldap-admin.git   |  https://gitee.com/eryajf-world/go-ldap-admin.git   |
 | 前端 | https://github.com/eryajf/go-ldap-admin-ui.git | https://gitee.com/eryajf-world/go-ldap-admin-ui.git |
 
@@ -83,7 +82,7 @@
 
 ## 🥰 感谢
 
-感谢如下优秀的项目，没有这些项目，不可能会有go-ldap-admin：
+感谢如下优秀的项目，没有这些项目，不可能会有 go-ldap-admin：
 
 - 后端技术栈
   - [Gin-v1.6.3](https://github.com/gin-gonic/gin)
@@ -92,6 +91,7 @@
   - [Go-ldap-v3.4.2](https://github.com/go-ldap/ldap)
   - [Casbin-v2.22.0](https://github.com/casbin/casbin)
 - 前端技术栈
+
   - [axios](https://github.com/axios/axios)
   - [element-ui](https://github.com/ElemeFE/element)
 
@@ -100,8 +100,8 @@
 
 ## 🤗 另外
 
-- 如果觉得项目不错，麻烦动动小手点个⭐️star⭐️!
-- 如果你还有其他想法或者需求，欢迎在issue中交流！
+- 如果觉得项目不错，麻烦动动小手点个 ⭐️star⭐️!
+- 如果你还有其他想法或者需求，欢迎在 issue 中交流！
 
 ## 🤑 捐赠
 
@@ -109,11 +109,11 @@
 
 ## 📝 使用登记
 
-如果你所在公司使用了该项目，烦请在这里留下脚印，感谢支持🥳 [点我](https://github.com/eryajf/go-ldap-admin/issues/18)
+如果你所在公司使用了该项目，烦请在这里留下脚印，感谢支持 🥳 [点我](https://github.com/eryajf/go-ldap-admin/issues/18)
 
 ## 💎 优秀软件推荐
 
-- [🦄 ConsulManager：高效易用的Consul Web运维平台](https://github.com/starsliao/ConsulManager)
+- [🦄 ConsulManager：高效易用的 Consul Web 运维平台](https://github.com/starsliao/ConsulManager)
 
 ## 🤝 贡献者
 
