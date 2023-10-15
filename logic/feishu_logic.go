@@ -160,6 +160,64 @@ func (d FeiShuLogic) AddUsers(user *model.User) error {
 		if err != nil {
 			return tools.NewOperationError(fmt.Errorf("添加用户: %s, 失败: %s", user.Username, err.Error()))
 		}
+	} else {
+		// 此处逻辑未经实际验证，如在使用中有问题，请反馈
+		if config.Conf.FeiShu.IsUpdateSyncd {
+			// 先获取用户信息
+			oldData := new(model.User)
+			err = isql.User.Find(tools.H{"user_dn": user.UserDN}, oldData)
+			if err != nil {
+				return err
+			}
+			// 获取用户将要添加的分组
+			groups, err := isql.Group.GetGroupByIds(tools.StringToSlice(user.DepartmentId, ","))
+			if err != nil {
+				return tools.NewMySqlError(fmt.Errorf("根据部门ID获取部门信息失败" + err.Error()))
+			}
+			var deptTmp string
+			for _, group := range groups {
+				deptTmp = deptTmp + group.GroupName + ","
+			}
+			user.Model = oldData.Model
+			user.Roles = oldData.Roles
+			user.Creator = oldData.Creator
+			user.Source = oldData.Source
+			user.Password = oldData.Password
+			user.UserDN = oldData.UserDN
+			user.Departments = strings.TrimRight(deptTmp, ",")
+
+			// 用户信息的预置处理
+			if user.Nickname == "" {
+				user.Nickname = oldData.Nickname
+			}
+			if user.GivenName == "" {
+				user.GivenName = user.Nickname
+			}
+			if user.Introduction == "" {
+				user.Introduction = user.Nickname
+			}
+			if user.Mail == "" {
+				user.Mail = oldData.Mail
+			}
+			if user.JobNumber == "" {
+				user.JobNumber = oldData.JobNumber
+			}
+			if user.Departments == "" {
+				user.Departments = oldData.Departments
+			}
+			if user.Position == "" {
+				user.Position = oldData.Position
+			}
+			if user.PostalAddress == "" {
+				user.PostalAddress = oldData.PostalAddress
+			}
+			if user.Mobile == "" {
+				user.Mobile = oldData.Mobile
+			}
+			if err = CommonUpdateUser(oldData, user, tools.StringToSlice(user.DepartmentId, ",")); err != nil {
+				return err
+			}
+		}
 	}
 	return nil
 }
