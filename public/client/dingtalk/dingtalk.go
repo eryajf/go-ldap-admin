@@ -173,8 +173,13 @@ func GetLeaveUserIds() ([]string, error) {
 func GetLeaveUserIdsDateRange(pushDays uint) ([]string, error) {
 	var ids []string
 	// 配置值为正数,往前推转为负数
-	startTime := time.Now().AddDate(0, 0, -int(pushDays)).Format("2023-01-01T00:00:00Z")
-	endTime := time.Now().Format("2023-01-01T00:00:00Z")
+	var leaveDays = int(0 - pushDays)
+	now := time.Now()
+	var leaveStartTime = now.AddDate(0, 0, leaveDays)
+	startTime := fmt.Sprintf("%d-%d-%dT%d:%d:%dZ", leaveStartTime.Year(), leaveStartTime.Month(), leaveStartTime.Day(),
+		leaveStartTime.Hour(), leaveStartTime.Minute(), leaveStartTime.Second())
+	endTime := fmt.Sprintf("%d-%d-%dT%d:%d:%dZ", now.Year(), now.Month(), now.Day(),
+		now.Hour(), now.Minute(), now.Second())
 	ReqParm := struct {
 		StartTime  string `json:"startTime"`
 		EndTime    string `json:"endTime"`
