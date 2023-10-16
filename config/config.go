@@ -169,6 +169,7 @@ type DingTalkConfig struct {
 	UserSyncTime  string   `mapstructure:"user-sync-time" json:"userSyncTime"`
 	DeptList      []string `mapstructure:"dept-list" json:"deptList"`
 	IsUpdateSyncd bool     `mapstructure:"is-update-syncd" json:"isUpdateSyncd"`
+	ULeaveRange   uint     `mapstructure:"user-leave-range" json:"userLevelRange"`
 }
 
 type WeComConfig struct {
