@@ -99,7 +99,13 @@ func (d DingTalkLogic) SyncDingTalkUsers(c *gin.Context, req interface{}) (data 
 	}
 
 	// 3.获取钉钉已离职用户id列表
-	userIds, err := dingtalk.GetLeaveUserIds()
+	// 根据配置判断是查全部离职用户还是只查指定时间范围内的离职用户
+	var userIds []string
+	if config.Conf.DingTalk.ULeaveRange == 0 {
+		userIds, err = dingtalk.GetLeaveUserIds()
+	} else {
+		userIds, err = dingtalk.GetLeaveUserIdsDateRange(config.Conf.DingTalk.ULeaveRange)
+	}
 	if err != nil {
 		return nil, tools.NewOperationError(fmt.Errorf("SyncDingTalkUsers获取钉钉离职用户列表失败：%s", err.Error()))
 	}

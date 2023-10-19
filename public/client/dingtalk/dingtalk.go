@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/public/tools"
@@ -15,10 +16,10 @@ import (
 func GetAllDepts() (ret []map[string]interface{}, err error) {
 	depts, err := InitDingTalkClient().FetchDeptList(1, true, "zh_CN")
 	if err != nil {
-			return ret, err
-		}
+		return ret, err
+	}
 	if len(config.Conf.DingTalk.DeptList) == 0 {
-		
+
 		ret = make([]map[string]interface{}, 0)
 		for _, dept := range depts.Dept {
 			ele := make(map[string]interface{})
@@ -102,7 +103,7 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 			if err != nil {
 				return nil, err
 			}
-			for _, user := range rsp.DeptDetailUsers {
+			for _, user := range rsp.Page.List {
 				ele := make(map[string]interface{})
 				ele["userid"] = user.UserId
 				ele["unionid"] = user.UnionId
@@ -131,10 +132,10 @@ func GetAllUsers() (ret []map[string]interface{}, err error) {
 				ele["department_ids"] = sourceDeptIds
 				ret = append(ret, ele)
 			}
-			if !rsp.HasMore {
+			if !rsp.Page.HasMore {
 				break
 			}
-			r.Cursor = rsp.NextCursor
+			r.Cursor = rsp.Page.NextCursor
 		}
 	}
 	return
@@ -157,11 +158,49 @@ func GetLeaveUserIds() ([]string, error) {
 		if err != nil {
 			return nil, err
 		}
-		ids = append(ids, rsp.UserIds...)
-		if rsp.NextCursor == 0 {
+		ids = append(ids, rsp.Result.UserIds...)
+		if rsp.Result.NextCursor == 0 {
 			break
 		}
-		ReqParm.Cursor = rsp.NextCursor
+		ReqParm.Cursor = rsp.Result.NextCursor
+	}
+	return ids, nil
+}
+
+// 官方文档：https://open.dingtalk.com/document/orgapp/query-the-details-of-employees-who-have-left-office
+// GetLeaveUserIdsByDateRange 新接口根据时间范围获取离职人员ID列表
+// GetHrmempLeaveRecordsKey    = "/v1.0/contact/empLeaveRecords"
+func GetLeaveUserIdsDateRange(pushDays uint) ([]string, error) {
+	var ids []string
+	// 配置值为正数,往前推转为负数
+	var leaveDays = int(0 - pushDays)
+	startTime := time.Now().AddDate(0, 0, leaveDays).Format("2006-01-02T15:04:05Z")
+	endTime := time.Now().Format("2006-01-02T15:04:05Z")
+	ReqParm := struct {
+		StartTime  string `json:"startTime"`
+		EndTime    string `json:"endTime"`
+		NextToken  string `json:"nextToken"`
+		MaxResults int    `json:"maxResults"`
+	}{
+		StartTime:  startTime,
+		EndTime:    endTime,
+		NextToken:  "0",
+		MaxResults: 50,
+	}
+	// 使用新的使用时间范围查询离职人员接口获取离职用户ID
+	for {
+		rsp, err := InitDingTalkClient().GetHrmEmpLeaveRecords(ReqParm.StartTime, ReqParm.EndTime, ReqParm.NextToken, ReqParm.MaxResults)
+		if err != nil {
+			return nil, err
+		}
+		for _, g := range rsp.Records {
+			ids = append(ids, g.UserId)
+		}
+
+		if rsp.NextToken == "0" || rsp.NextToken == "" {
+			break
+		}
+		ReqParm.NextToken = rsp.NextToken
 	}
 	return ids, nil
 }
