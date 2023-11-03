@@ -43,7 +43,7 @@ mysql:
   # 主机地址
   host: localhost
   # 端口
-  port: 3307
+  port: 3306
   # 连接字符串参数
   query: parseTime=True&loc=Local&timeout=10000ms
   # 是否打印日志
