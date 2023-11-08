@@ -16,7 +16,7 @@ import (
 type DingTalkLogic struct {
 }
 
-//通过钉钉获取部门信息
+// 通过钉钉获取部门信息
 func (d *DingTalkLogic) SyncDingTalkDepts(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
 	// 1.获取所有部门
 	deptSource, err := dingtalk.GetAllDepts()
@@ -78,7 +78,7 @@ func (d DingTalkLogic) AddDepts(group *model.Group) error {
 	return nil
 }
 
-//根据现有数据库同步到的部门信息，开启用户同步
+// 根据现有数据库同步到的部门信息，开启用户同步
 func (d DingTalkLogic) SyncDingTalkUsers(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
 	// 1.获取钉钉用户列表
 	staffSource, err := dingtalk.GetAllUsers()
@@ -111,7 +111,11 @@ func (d DingTalkLogic) SyncDingTalkUsers(c *gin.Context, req interface{}) (data 
 	}
 	// 4.遍历id，开始处理
 	for _, uid := range userIds {
-		if isql.User.Exist(tools.H{"source_user_id": fmt.Sprintf("%s_%s", config.Conf.DingTalk.Flag, uid)}) {
+		if isql.User.Exist(
+			tools.H{
+				"source_user_id": fmt.Sprintf("%s_%s", config.Conf.DingTalk.Flag, uid),
+				"status":         1, //只处理1在职的
+			}) {
 			user := new(model.User)
 			err = isql.User.Find(tools.H{"source_user_id": fmt.Sprintf("%s_%s", config.Conf.DingTalk.Flag, uid)}, user)
 			if err != nil {
