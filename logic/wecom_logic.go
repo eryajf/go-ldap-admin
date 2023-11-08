@@ -17,7 +17,7 @@ import (
 type WeComLogic struct {
 }
 
-//通过企业微信获取部门信息
+// 通过企业微信获取部门信息
 func (d *WeComLogic) SyncWeComDepts(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
 	// 1.获取所有部门
 	deptSource, err := wechat.GetAllDepts()
@@ -80,7 +80,7 @@ func (d WeComLogic) AddDepts(group *model.Group) error {
 	return nil
 }
 
-//根据现有数据库同步到的部门信息，开启用户同步
+// 根据现有数据库同步到的部门信息，开启用户同步
 func (d WeComLogic) SyncWeComUsers(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
 	// 1.获取企业微信用户列表
 	staffSource, err := wechat.GetAllUsers()
@@ -126,7 +126,7 @@ func (d WeComLogic) SyncWeComUsers(c *gin.Context, req interface{}) (data interf
 	// 4.遍历id，开始处理
 	for _, userTmp := range res {
 		user := new(model.User)
-		err = isql.User.Find(tools.H{"source_user_id": userTmp.SourceUserId}, user)
+		err = isql.User.Find(tools.H{"source_user_id": userTmp.SourceUserId, "status": 1}, user)
 		if err != nil {
 			return nil, tools.NewMySqlError(fmt.Errorf("在MySQL查询用户失败: " + err.Error()))
 		}
