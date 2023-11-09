@@ -140,15 +140,16 @@ type RateLimitConfig struct {
 }
 
 type LdapConfig struct {
-	Url              string `mapstructure:"url" json:"url"`
-	MaxConn          int    `mapstructure:"max-conn" json:"maxConn"`
-	BaseDN           string `mapstructure:"base-dn" json:"baseDN"`
-	AdminDN          string `mapstructure:"admin-dn" json:"adminDN"`
-	AdminPass        string `mapstructure:"admin-pass" json:"adminPass"`
-	UserDN           string `mapstructure:"user-dn" json:"userDN"`
-	UserInitPassword string `mapstructure:"user-init-password" json:"userInitPassword"`
-	GroupNameModify  bool   `mapstructure:"group-name-modify" json:"groupNameModify"`
-	UserNameModify   bool   `mapstructure:"user-name-modify" json:"userNameModify"`
+	Url                string `mapstructure:"url" json:"url"`
+	MaxConn            int    `mapstructure:"max-conn" json:"maxConn"`
+	BaseDN             string `mapstructure:"base-dn" json:"baseDN"`
+	AdminDN            string `mapstructure:"admin-dn" json:"adminDN"`
+	AdminPass          string `mapstructure:"admin-pass" json:"adminPass"`
+	UserDN             string `mapstructure:"user-dn" json:"userDN"`
+	UserInitPassword   string `mapstructure:"user-init-password" json:"userInitPassword"`
+	GroupNameModify    bool   `mapstructure:"group-name-modify" json:"groupNameModify"`
+	UserNameModify     bool   `mapstructure:"user-name-modify" json:"userNameModify"`
+	DefaultEmailSuffix string `mapstructure:"default-email-suffix" json:"defaultEmailSuffix"`
 }
 type EmailConfig struct {
 	Host string `mapstructure:"host" json:"host"`
