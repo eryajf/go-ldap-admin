@@ -96,7 +96,12 @@ func CommonAddUser(user *model.User, groups []*model.Group) error {
 		user.Introduction = user.Nickname
 	}
 	if user.Mail == "" {
-		user.Mail = user.Username + "@eryajf.net"
+		// 兼容
+		if len(config.Conf.Ldap.DefaultEmailSuffix) > 0 {
+			user.Mail = user.Username + "@" + config.Conf.Ldap.DefaultEmailSuffix
+		} else {
+			user.Mail = user.Username + "@eryajf.net"
+		}
 	}
 	if user.JobNumber == "" {
 		user.JobNumber = "0000"
