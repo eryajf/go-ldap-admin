@@ -12,6 +12,9 @@ system:
   rsa-public-key: go-ldap-admin-pub.pem
   # rsa私钥文件路径(config.yml相对路径, 也可以填绝对路径)
   rsa-private-key: go-ldap-admin-priv.pem
+#定时扫描用户过期时间 90天自动将状态修改为不可用
+  enable-check-user: true
+  check-user-sync-time: "0 */1 * * * *"
 
 logs:
   # 日志等级(-1:Debug, 0:Info, 1:Warn, 2:Error, 3:DPanic, 4:Panic, 5:Fatal, -1<=level<=5, 参照zap.level源码)
@@ -102,7 +105,7 @@ ldap:
   # ldap用户OU
   user-dn: "ou=people,dc=eryajf,dc=net"
   # ldap用户初始默认密码
-  user-init-password: "123456"
+ # user-init-password: "123456"
   # 是否允许更改分组DN
   group-name-modify: false
   # 是否允许更改用户DN

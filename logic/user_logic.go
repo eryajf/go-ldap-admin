@@ -2,6 +2,7 @@ package logic
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/model"
@@ -50,7 +51,10 @@ func (l UserLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspEr
 			return nil, tools.NewValidatorError(fmt.Errorf("密码长度至少为6位"))
 		}
 	} else {
-		r.Password = config.Conf.Ldap.UserInitPassword
+		//取消默认密码为123456 改为随时生成8位
+		//r.Password = config.Conf.Ldap.UserInitPassword
+		r.Password = tools.GenerateRandomPassword()
+
 	}
 
 	// 当前登陆用户角色排序最小值（最高等级角色）以及当前登陆的用户
@@ -118,6 +122,13 @@ func (l UserLogic) Add(c *gin.Context, req interface{}) (data interface{}, rspEr
 	if err != nil {
 		return nil, tools.NewOperationError(fmt.Errorf("添加用户失败" + err.Error()))
 	}
+
+	//用户注册成功后通过邮件发送
+	err = tools.SendResigtryMail([]string{user.Mail}, user.Username, r.Password)
+	if err != nil {
+		return nil, tools.NewLdapError(fmt.Errorf("注册用户邮件发送失败" + err.Error()))
+	}
+
 	return nil, nil
 }
 
@@ -400,6 +411,24 @@ func (l UserLogic) ChangeUserStatus(c *gin.Context, req interface{}) (data inter
 		if err != nil {
 			return nil, tools.NewLdapError(fmt.Errorf("在LDAP添加用户失败" + err.Error()))
 		}
+
+		//修复，当用户状态为离职时，定时任务会将ldap用户同步sql，发现用户已离职并且ldap已删除，会将sql中同步状态设置为2
+		//再次将用户状态设置为在职时，信息会再次从sql同步至ldap，但同步状态依然为2，点击同步时会提示用户已存在。
+		//将离职人员再次设置为在职时，先查询用户是否被正常创建，如创建成功则将同步状态修改为1(已同步)
+		filter := map[string]interface{}{
+			"uid": user.Username,
+		}
+		exist, err := ildap.User.Exist(filter)
+		if err != nil {
+			return nil, tools.NewLdapError(fmt.Errorf("查询用户失败" + err.Error()))
+		}
+
+		if exist {
+			isql.User.ChangeSyncState(int(r.ID), 1)
+		} else {
+			return nil, tools.NewLdapError(fmt.Errorf("用户不存在" + err.Error()))
+		}
+
 	}
 	err = isql.User.ChangeStatus(int(r.ID), int(r.Status))
 	if err != nil {
@@ -423,4 +452,50 @@ func (l UserLogic) GetUserInfo(c *gin.Context, req interface{}) (data interface{
 		return nil, tools.NewMySqlError(fmt.Errorf("获取当前用户信息失败: " + err.Error()))
 	}
 	return user, nil
+}
+
+// 检查用户时间，超过90天禁用账号。提前15天邮件通知
+func (l UserLogic) CheckUserTime(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
+
+	//获取所有用户信息
+	users, err := isql.User.ListAll()
+	if err != nil {
+		return nil, tools.NewMySqlError(fmt.Errorf("获取用户列表失败：" + err.Error()))
+	}
+
+	for _, user := range users {
+		//当前时间
+		currentTime := time.Now()
+		//用户更新时间转换成时间戳
+		updatetimestamp := tools.ConvertToTimestamp(user.UpdatedAt)
+		//当前时间转换成时间戳
+		nowtimestamp := tools.ConvertToTimestamp(currentTime)
+		//计算更新时间与当前时间差值，大于75邮件通知
+		days := tools.CalculateDaysBetweenTimestamps(updatetimestamp, nowtimestamp)
+		//排除dev-jeknis-git、admin两个用户的检查
+		if user.Username != "dev-jenkins-git" && user.Username != "admin" && user.Status != 2 {
+			if days >= 75 {
+				err = tools.SendCheckUserMail([]string{user.Mail}, user.Username, int(days))
+				if err != nil {
+					return nil, tools.NewLdapError(fmt.Errorf("检查用户密码过期邮件发送失败" + err.Error()))
+				}
+			}
+
+			//大于91天则将账号设置为离职状态
+			if days > 91 {
+				//修改用户状态为2，离职
+				err = isql.User.ChangeStatus(int(user.ID), 2)
+				if err != nil {
+					return nil, tools.NewMySqlError(fmt.Errorf("获取用户列表失败：" + err.Error()))
+				}
+				//并同步删除ldap用户信息
+				err = ildap.User.Delete(user.UserDN)
+				if err != nil {
+					return nil, tools.NewLdapError(fmt.Errorf("在LDAP删除用户失败" + err.Error()))
+				}
+			}
+		}
+
+	}
+	return nil, nil
 }

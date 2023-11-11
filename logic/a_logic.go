@@ -335,6 +335,15 @@ func ConvertUserData(flag string, remoteData []map[string]interface{}) (users []
 func InitCron() {
 	c := cron.New(cron.WithSeconds())
 
+	if config.Conf.System.EnableCheckUser {
+		_, err := c.AddFunc(config.Conf.System.CheckUserSyncTime, func() {
+			User.CheckUserTime(nil, nil)
+		})
+		if err != nil {
+			common.Log.Errorf("eteststset: %v", err)
+		}
+	}
+
 	if config.Conf.DingTalk.EnableSync {
 		//启动定时任务
 		_, err := c.AddFunc(config.Conf.DingTalk.DeptSyncTime, func() {

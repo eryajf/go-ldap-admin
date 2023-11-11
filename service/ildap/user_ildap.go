@@ -143,7 +143,9 @@ func (x UserService) NewPwd(username string) (string, error) {
 	if username == "admin" {
 		udn = config.Conf.Ldap.AdminDN
 	}
-	modifyPass := ldap.NewPasswordModifyRequest(udn, "", "")
+	//默认产生8位随机密码，不符合公司规范，故生成16位随机密码
+	newPasswd := tools.GenerateRandomPassword()
+	modifyPass := ldap.NewPasswordModifyRequest(udn, "", newPasswd)
 
 	// 获取 LDAP 连接
 	conn, err := common.GetLDAPConn()
@@ -156,6 +158,8 @@ func (x UserService) NewPwd(username string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("password modify failed for %s, err: %v", username, err)
 	}
+
+	newpass.GeneratedPassword = newPasswd
 	return newpass.GeneratedPassword, nil
 }
 func (x UserService) ListUserDN() (users []*model.User, err error) {
