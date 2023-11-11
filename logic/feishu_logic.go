@@ -109,8 +109,8 @@ func (d FeiShuLogic) SyncFeiShuUsers(c *gin.Context, req interface{}) (data inte
 	for _, uid := range userIds {
 		if isql.User.Exist(
 			tools.H{
-				"status":         1, //只处理1在职的
-				"source_user_id": fmt.Sprintf("%s_%s", config.Conf.FeiShu.Flag, uid),
+				"status":          1, //只处理1在职的
+				"source_union_id": fmt.Sprintf("%s_%s", config.Conf.FeiShu.Flag, uid),
 			}) {
 			user := new(model.User)
 			err = isql.User.Find(tools.H{"source_union_id": fmt.Sprintf("%s_%s", config.Conf.FeiShu.Flag, uid)}, user)
