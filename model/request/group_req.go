@@ -22,19 +22,19 @@ type GroupListAllReq struct {
 // GroupAddReq 添加资源结构体
 type GroupAddReq struct {
 	GroupType string `json:"groupType" validate:"required,min=1,max=20"`
-	GroupName string `json:"groupName" validate:"required,min=1,max=20"`
+	GroupName string `json:"groupName" validate:"required,min=1,max=128"`
 	//父级Id 大于等于0 必填
 	ParentId uint   `json:"parentId" validate:"omitempty,min=0"`
-	Remark   string `json:"remark" validate:"min=0,max=100"` // 分组的中文描述
+	Remark   string `json:"remark" validate:"min=0,max=128"` // 分组的中文描述
 }
 
 // DingTalkGroupAddReq 添加钉钉资源结构体
 type DingGroupAddReq struct {
 	GroupType string `json:"groupType" validate:"required,min=1,max=20"`
-	GroupName string `json:"groupName" validate:"required,min=1,max=20"`
+	GroupName string `json:"groupName" validate:"required,min=1,max=128"`
 	//父级Id 大于等于0 必填
 	ParentId           uint   `json:"parentId" validate:"omitempty,min=0"`
-	Remark             string `json:"remark" validate:"min=0,max=100"` // 分组的中文描述
+	Remark             string `json:"remark" validate:"min=0,max=128"` // 分组的中文描述
 	SourceDeptId       string `json:"sourceDeptId"`
 	Source             string `json:"source"`
 	SourceDeptParentId string `json:"SourceDeptParentId"`
@@ -44,10 +44,10 @@ type DingGroupAddReq struct {
 // WeComGroupAddReq 添加企业微信资源结构体
 type WeComGroupAddReq struct {
 	GroupType string `json:"groupType" validate:"required,min=1,max=20"`
-	GroupName string `json:"groupName" validate:"required,min=1,max=20"`
+	GroupName string `json:"groupName" validate:"required,min=1,max=128"`
 	//父级Id 大于等于0 必填
 	ParentId           uint   `json:"parentId" validate:"omitempty,min=0"`
-	Remark             string `json:"remark" validate:"min=0,max=100"` // 分组的中文描述
+	Remark             string `json:"remark" validate:"min=0,max=128"` // 分组的中文描述
 	SourceDeptId       string `json:"sourceDeptId"`
 	Source             string `json:"source"`
 	SourceDeptParentId string `json:"SourceDeptParentId"`
@@ -57,8 +57,8 @@ type WeComGroupAddReq struct {
 // GroupUpdateReq 更新资源结构体
 type GroupUpdateReq struct {
 	ID        uint   `json:"id" form:"id" validate:"required"`
-	GroupName string `json:"groupName" validate:"required,min=1,max=20"`
-	Remark    string `json:"remark" validate:"min=0,max=100"` // 分组的中文描述
+	GroupName string `json:"groupName" validate:"required,min=1,max=128"`
+	Remark    string `json:"remark" validate:"min=0,max=128"` // 分组的中文描述
 }
 
 // GroupDeleteReq 删除资源结构体
