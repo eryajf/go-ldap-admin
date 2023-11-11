@@ -232,7 +232,7 @@ func InitData() {
 			Password:      tools.NewGenPasswd(config.Conf.Ldap.AdminPass),
 			Nickname:      "管理员",
 			GivenName:     "最强后台",
-			Mail:          "admin@eryajf.net",
+			Mail:          "admin@" + config.Conf.Ldap.DefaultEmailSuffix,
 			JobNumber:     "0000",
 			Mobile:        "18888888888",
 			Avatar:        "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
