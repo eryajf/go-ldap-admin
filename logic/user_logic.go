@@ -2,6 +2,7 @@ package logic
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/model"
@@ -216,6 +217,24 @@ func (l UserLogic) Update(c *gin.Context, req interface{}) (data interface{}, rs
 		return nil, tools.NewMySqlError(err)
 	}
 
+	var (
+		depts   string
+		deptids []uint
+	)
+	if strings.Contains(r.Departments, "请选择部门信息") {
+		for _, v := range strings.Split(r.Departments, ",") {
+			if v != "请选择部门信息" {
+				depts += v + ","
+			}
+		}
+		for _, j := range r.DepartmentId {
+			if j != 0 {
+				deptids = append(deptids, j)
+			}
+		}
+	}
+	// fmt.Println(depts, deptids)
+
 	// 拼装新的用户信息
 	user := model.User{
 		Model:         oldData.Model,
@@ -227,11 +246,11 @@ func (l UserLogic) Update(c *gin.Context, req interface{}) (data interface{}, rs
 		Mobile:        r.Mobile,
 		Avatar:        r.Avatar,
 		PostalAddress: r.PostalAddress,
-		Departments:   r.Departments,
+		Departments:   depts,
 		Position:      r.Position,
 		Introduction:  r.Introduction,
 		Creator:       ctxUser.Username,
-		DepartmentId:  tools.SliceToString(r.DepartmentId, ","),
+		DepartmentId:  tools.SliceToString(deptids, ","),
 		Source:        oldData.Source,
 		Roles:         roles,
 		UserDN:        oldData.UserDN,
