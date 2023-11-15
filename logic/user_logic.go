@@ -217,23 +217,21 @@ func (l UserLogic) Update(c *gin.Context, req interface{}) (data interface{}, rs
 		return nil, tools.NewMySqlError(err)
 	}
 
+	// 过滤掉前端会选择到的 请选择部门信息 这个选项
 	var (
 		depts   string
 		deptids []uint
 	)
-	if strings.Contains(r.Departments, "请选择部门信息") {
-		for _, v := range strings.Split(r.Departments, ",") {
-			if v != "请选择部门信息" {
-				depts += v + ","
-			}
-		}
-		for _, j := range r.DepartmentId {
-			if j != 0 {
-				deptids = append(deptids, j)
-			}
+	for _, v := range strings.Split(r.Departments, ",") {
+		if v != "请选择部门信息" {
+			depts += v + ","
 		}
 	}
-	// fmt.Println(depts, deptids)
+	for _, j := range r.DepartmentId {
+		if j != 0 {
+			deptids = append(deptids, j)
+		}
+	}
 
 	// 拼装新的用户信息
 	user := model.User{
