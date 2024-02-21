@@ -107,6 +107,8 @@ ldap:
   group-name-modify: false
   # 是否允许更改用户DN
   user-name-modify: false
+  # 用户密码加密方式 默认为 ssha 还可指定为 clear(表示不加密)
+  user-password-encryption-type: "ssha"
   # 默认邮箱后缀
   default-email-suffix: "eryajf.net"
 # 📢 即便用不到如下三段配置信息，也不要删除，否则会有一些奇怪的错误出现
