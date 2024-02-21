@@ -38,7 +38,7 @@ type MenuUpdateReq struct {
 	AlwaysShow uint   `json:"alwaysShow" validate:"oneof=1 2"`
 	Breadcrumb uint   `json:"breadcrumb" validate:"oneof=1 2"`
 	ActiveMenu string `json:"activeMenu" validate:"min=0,max=100"`
-	ParentId   uint   `json:"parentId" validate:"required"`
+	ParentId   uint   `json:"parentId" validate:"gte=0"`
 }
 
 // MenuDeleteReq 删除资源结构体

@@ -9,6 +9,7 @@ import (
 	"github.com/eryajf/go-ldap-admin/public/tools"
 
 	"github.com/thoas/go-funk"
+	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
 
@@ -760,6 +761,18 @@ func InitData() {
 			SourceDeptParentId: fmt.Sprintf("%s_%d", config.Conf.FeiShu.Flag, 0),
 			GroupDN:            fmt.Sprintf("ou=%s,%s", config.Conf.FeiShu.Flag+"root", config.Conf.Ldap.BaseDN),
 		},
+		{
+			Model:              gorm.Model{ID: 5},
+			GroupName:          "group",
+			Remark:             "默认分组",
+			Creator:            "system",
+			GroupType:          "cn",
+			ParentId:           1,
+			SourceDeptId:       "platform_0",
+			Source:             "platform",
+			SourceDeptParentId: "openldap_1",
+			GroupDN:            fmt.Sprintf("cn=%s,%s", "group", config.Conf.Ldap.BaseDN),
+		},
 	}
 
 	for _, group := range groups {
@@ -772,6 +785,49 @@ func InitData() {
 		err := DB.Create(&newGroups).Error
 		if err != nil {
 			Log.Errorf("写入分组数据失败：%v", err)
+		}
+	}
+
+	// 7.写入关系管理
+	filedRelation := []model.FieldRelation{
+		{
+			Flag:       "dingtalk_group",
+			Attributes: datatypes.JSON(`{"groupName":"custom_name_pinyin","remark":"name","sourceDeptId":"id","sourceDeptParentId":"parentid"}`),
+		},
+		{
+			Flag:       "dingtalk_user",
+			Attributes: datatypes.JSON(`{"avatar":"avatar","givenName":"name","introduction":"remark","jobNumber":"job_number","mail":"email","mobile":"mobile","nickname":"name","position":"title","postalAddress":"work_place","sourceUnionId":"unionid","sourceUserId":"userid","username":"custom_name_pinyin"}`),
+		},
+		{
+			Flag:       "feishu_group",
+			Attributes: datatypes.JSON(`{"groupName":"custom_name_pinyin","remark":"name","sourceDeptId":"open_department_id","sourceDeptParentId":"parent_department_id"}`),
+		},
+		{
+			Flag:       "feishu_user",
+			Attributes: datatypes.JSON(`{"avatar":"avatar","givenName":"name","introduction":"name","jobNumber":"employee_no","mail":"email","mobile":"mobile","nickname":"name","position":"job_title","postalAddress":"work_station","sourceUnionId":"union_id","sourceUserId":"user_id","username":"custom_name_pinyin"}`),
+		},
+		{
+			Flag:       "wecom_group",
+			Attributes: datatypes.JSON(`{"groupName":"custom_name_pinyin","remark":"name","sourceDeptId":"parentid","sourceDeptParentId":"id"}`),
+		},
+		{
+			Flag:       "wecom_user",
+			Attributes: datatypes.JSON(`{"avatar":"avatar","givenName":"alias","introduction":"name","jobNumber":"mobile","mail":"email","mobile":"mobile","nickname":"name","position":"external_position","postalAddress":"address","sourceUnionId":"userid","sourceUserId":"userid","username":"custom_name_pinyin"}`),
+		},
+	}
+
+	newFieldRelations := make([]model.FieldRelation, 0)
+	for i, newFieldRelation := range filedRelation {
+		newFieldRelation.ID = uint(i + 1)
+		err := DB.First(&newFieldRelation, newFieldRelation.ID).Error
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			newFieldRelations = append(newFieldRelations, newFieldRelation)
+		}
+	}
+
+	if len(newFieldRelations) > 0 {
+		if err := DB.Create(&newFieldRelations).Error; err != nil {
+			Log.Errorf("写入关系数据失败：%v", err)
 		}
 	}
 }

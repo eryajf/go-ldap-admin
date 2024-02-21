@@ -20,3 +20,9 @@ ou: feishuroot
 description: 飞书根部门
 objectClass: top
 objectClass: organizationalUnit
+
+dn: cn=group,dc=eryajf,dc=net
+cn: group
+description: 默认分组
+objectClass: top
+objectClass: groupOfUniqueNames
