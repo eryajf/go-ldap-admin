@@ -113,7 +113,8 @@
 
 ## 💎 优秀软件推荐
 
-- [🦄 ConsulManager：高效易用的 Consul Web 运维平台](https://github.com/starsliao/ConsulManager)
+- [🦄 TenSunS：高效易用的 Consul Web 运维平台](https://github.com/starsliao/TenSunS)
+- [ Next Terminal：一个简单好用安全的开源交互审计堡垒机系统](https://github.com/dushixiang/next-terminal)
 
 ## 🤝 贡献者
 
