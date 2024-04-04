@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
@@ -72,6 +73,65 @@ func InitConfig() {
 	Conf.System.RSAPublicBytes = pub
 	Conf.System.RSAPrivateBytes = priv
 
+	// 部分配合通过环境变量加载
+	dbDriver := os.Getenv("DB_DRIVER")
+	if dbDriver != "" {
+		Conf.Database.Driver = dbDriver
+	}
+	mysqlHost := os.Getenv("MYSQL_HOST")
+	if mysqlHost != "" {
+		Conf.Mysql.Host = mysqlHost
+	}
+	mysqlUsername := os.Getenv("MYSQL_USERNAME")
+	if mysqlUsername != "" {
+		Conf.Mysql.Username = mysqlUsername
+	}
+	mysqlPassword := os.Getenv("MYSQL_PASSWORD")
+	if mysqlPassword != "" {
+		Conf.Mysql.Password = mysqlPassword
+	}
+	mysqlDatabase := os.Getenv("MYSQL_DATABASE")
+	if mysqlDatabase != "" {
+		Conf.Mysql.Database = mysqlDatabase
+	}
+	mysqlPort := os.Getenv("MYSQL_PORT")
+	if mysqlPort != "" {
+		Conf.Mysql.Port, _ = strconv.Atoi(mysqlPort)
+	}
+
+	ldapUrl := os.Getenv("LDAP_URL")
+	if ldapUrl != "" {
+		Conf.Ldap.Url = ldapUrl
+	}
+	ldapBaseDN := os.Getenv("LDAP_BASE_DN")
+	if ldapBaseDN != "" {
+		Conf.Ldap.BaseDN = ldapBaseDN
+	}
+	ldapAdminDN := os.Getenv("LDAP_ADMIN_DN")
+	if ldapAdminDN != "" {
+		Conf.Ldap.AdminDN = ldapAdminDN
+	}
+	ldapAdminPass := os.Getenv("LDAP_ADMIN_PASS")
+	if ldapAdminPass != "" {
+		Conf.Ldap.AdminPass = ldapAdminPass
+	}
+	ldapUserDN := os.Getenv("LDAP_USER_DN")
+	if ldapUserDN != "" {
+		Conf.Ldap.UserDN = ldapUserDN
+	}
+	ldapUserInitPassword := os.Getenv("LDAP_USER_INIT_PASSWORD")
+	if ldapUserInitPassword != "" {
+
+		Conf.Ldap.UserInitPassword = ldapUserInitPassword
+	}
+	ldapDefaultEmailSuffix := os.Getenv("LDAP_DEFAULT_EMAIL_SUFFIX")
+	if ldapDefaultEmailSuffix != "" {
+		Conf.Ldap.DefaultEmailSuffix = ldapDefaultEmailSuffix
+	}
+	ldapUserPasswordEncryptionType := os.Getenv("LDAP_USER_PASSWORD_ENCRYPTION_TYPE")
+	if ldapUserPasswordEncryptionType != "" {
+		Conf.Ldap.UserPasswordEncryptionType = ldapUserPasswordEncryptionType
+	}
 }
 
 type SystemConfig struct {
