@@ -68,7 +68,7 @@ func main() {
 	// 启动定时任务
 	logic.InitCron()
 
-	common.Log.Info(fmt.Sprintf("Server is running at %s:%d/%s", host, port, config.Conf.System.UrlPathPrefix))
+	common.Log.Info(fmt.Sprintf("Server is running at http://%s:%d", host, port))
 
 	// Wait for interrupt signal to gracefully shutdown the server with
 	// a timeout of 5 seconds.

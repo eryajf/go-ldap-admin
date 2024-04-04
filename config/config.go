@@ -1,6 +1,7 @@
 package config
 
 import (
+	_ "embed"
 	"fmt"
 	"os"
 
@@ -15,12 +16,18 @@ import (
 // 全局配置变量
 var Conf = new(config)
 
+//go:embed go-ldap-admin-priv.pem
+var priv []byte
+
+//go:embed go-ldap-admin-pub.pem
+var pub []byte
+
 type config struct {
-	System    *SystemConfig    `mapstructure:"system" json:"system"`
-	Logs      *LogsConfig      `mapstructure:"logs" json:"logs"`
-	Database  *Database        `mapstructure:"database" json:"database"`
-	Mysql     *MysqlConfig     `mapstructure:"mysql" json:"mysql"`
-	Casbin    *CasbinConfig    `mapstructure:"casbin" json:"casbin"`
+	System   *SystemConfig `mapstructure:"system" json:"system"`
+	Logs     *LogsConfig   `mapstructure:"logs" json:"logs"`
+	Database *Database     `mapstructure:"database" json:"database"`
+	Mysql    *MysqlConfig  `mapstructure:"mysql" json:"mysql"`
+	// Casbin    *CasbinConfig    `mapstructure:"casbin" json:"casbin"`
 	Jwt       *JwtConfig       `mapstructure:"jwt" json:"jwt"`
 	RateLimit *RateLimitConfig `mapstructure:"rate-limit" json:"rateLimit"`
 	Ldap      *LdapConfig      `mapstructure:"ldap" json:"ldap"`
@@ -50,8 +57,8 @@ func InitConfig() {
 			panic(fmt.Errorf("初始化配置文件失败:%s", err))
 		}
 		// 读取rsa key
-		Conf.System.RSAPublicBytes = RSAReadKeyFromFile(Conf.System.RSAPublicKey)
-		Conf.System.RSAPrivateBytes = RSAReadKeyFromFile(Conf.System.RSAPrivateKey)
+		Conf.System.RSAPublicBytes = pub
+		Conf.System.RSAPrivateBytes = priv
 	})
 
 	if err != nil {
@@ -62,27 +69,9 @@ func InitConfig() {
 		panic(fmt.Errorf("初始化配置文件失败:%s", err))
 	}
 	// 读取rsa key
-	Conf.System.RSAPublicBytes = RSAReadKeyFromFile(Conf.System.RSAPublicKey)
-	Conf.System.RSAPrivateBytes = RSAReadKeyFromFile(Conf.System.RSAPrivateKey)
+	Conf.System.RSAPublicBytes = pub
+	Conf.System.RSAPrivateBytes = priv
 
-}
-
-// 从文件中读取RSA key
-func RSAReadKeyFromFile(filename string) []byte {
-	f, err := os.Open(filename)
-	var b []byte
-
-	if err != nil {
-		return b
-	}
-	defer f.Close()
-	fileInfo, _ := f.Stat()
-	b = make([]byte, fileInfo.Size())
-	_, err = f.Read(b)
-	if err != nil {
-		return b
-	}
-	return b
 }
 
 type SystemConfig struct {
@@ -90,8 +79,6 @@ type SystemConfig struct {
 	UrlPathPrefix   string `mapstructure:"url-path-prefix" json:"urlPathPrefix"`
 	Port            int    `mapstructure:"port" json:"port"`
 	InitData        bool   `mapstructure:"init-data" json:"initData"`
-	RSAPublicKey    string `mapstructure:"rsa-public-key" json:"rsaPublicKey"`
-	RSAPrivateKey   string `mapstructure:"rsa-private-key" json:"rsaPrivateKey"`
 	RSAPublicBytes  []byte `mapstructure:"-" json:"-"`
 	RSAPrivateBytes []byte `mapstructure:"-" json:"-"`
 }
@@ -123,9 +110,9 @@ type MysqlConfig struct {
 	Collation   string `mapstructure:"collation" json:"collation"`
 }
 
-type CasbinConfig struct {
-	ModelPath string `mapstructure:"model-path" json:"modelPath"`
-}
+// type CasbinConfig struct {
+// 	ModelPath string `mapstructure:"model-path" json:"modelPath"`
+// }
 
 type JwtConfig struct {
 	Realm      string `mapstructure:"realm" json:"realm"`

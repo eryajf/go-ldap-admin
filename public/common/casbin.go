@@ -3,9 +3,8 @@ package common
 import (
 	"fmt"
 
-	"github.com/eryajf/go-ldap-admin/config"
-
 	"github.com/casbin/casbin/v2"
+	"github.com/casbin/casbin/v2/model"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 )
 
@@ -24,12 +23,33 @@ func InitCasbinEnforcer() {
 	Log.Info("初始化Casbin完成!")
 }
 
+var casbinModel = `
+[request_definition]
+r = sub, obj, act
+
+[policy_definition]
+p = sub, obj, act
+
+[role_definition]
+g = _, _
+
+[policy_effect]
+e = some(where (p.eft == allow))
+
+[matchers]
+m = r.sub == p.sub && (keyMatch2(r.obj, p.obj) || keyMatch(r.obj, p.obj)) && (r.act == p.act || p.act == "*")
+`
+
 func mysqlCasbin() (*casbin.Enforcer, error) {
 	a, err := gormadapter.NewAdapterByDB(DB)
 	if err != nil {
 		return nil, err
 	}
-	e, err := casbin.NewEnforcer(config.Conf.Casbin.ModelPath, a)
+	m, err := model.NewModelFromString(casbinModel)
+	if err != nil {
+		return nil, err
+	}
+	e, err := casbin.NewEnforcer(m, a)
 	if err != nil {
 		return nil, err
 	}
