@@ -2,11 +2,13 @@ package routes
 
 import (
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/eryajf/go-ldap-admin/config"
 	"github.com/eryajf/go-ldap-admin/middleware"
 	"github.com/eryajf/go-ldap-admin/public/common"
+	"github.com/eryajf/go-ldap-admin/public/static"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,6 +24,16 @@ func InitRoutes() *gin.Engine {
 	// 创建不带中间件的路由:
 	// r := gin.New()
 	// r.Use(gin.Recovery())
+
+	r.Use(middleware.Serve("/", middleware.EmbedFolder(static.Static, "dist")))
+	r.NoRoute(func(c *gin.Context) {
+		data, err := static.Static.ReadFile("dist/index.html")
+		if err != nil {
+			_ = c.AbortWithError(http.StatusInternalServerError, err)
+			return
+		}
+		c.Data(http.StatusOK, "text/html; charset=utf-8", data)
+	})
 
 	// 启用限流中间件
 	// 默认每50毫秒填充一个令牌，最多填充200个
