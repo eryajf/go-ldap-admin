@@ -29,7 +29,7 @@ func InitRoutes() *gin.Engine {
 	r.NoRoute(func(c *gin.Context) {
 		data, err := static.Static.ReadFile("dist/index.html")
 		if err != nil {
-			c.AbortWithError(http.StatusInternalServerError, err)
+			_ = c.AbortWithError(http.StatusInternalServerError, err)
 			return
 		}
 		c.Data(http.StatusOK, "text/html; charset=utf-8", data)
