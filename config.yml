@@ -13,7 +13,7 @@ logs:
   # 日志等级(-1:Debug, 0:Info, 1:Warn, 2:Error, 3:DPanic, 4:Panic, 5:Fatal, -1<=level<=5, 参照zap.level源码)
   level: -1
   # 日志路径
-  path: logs
+  path: data/logs
   # 文件最大大小, M
   max-size: 50
   # 备份数
@@ -27,7 +27,7 @@ database:
   # 数据库类型 mysql sqlite3
   driver: mysql
   # 数据库连接sqlite3数据文件的路径
-  source: go-ldap-admin.db
+  source: data/go-ldap-admin.db
 
 mysql:
   # 用户名
