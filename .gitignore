@@ -8,11 +8,7 @@
 .vscode
 .token
 
-build.sh
-logs
-go-web-mini
 go-ldap-admin
-go-ldap-admin.db
 
 # Test binary, built with `go test -c`
 *.test
@@ -25,3 +21,4 @@ go-ldap-admin.db
 tmp
 docs/docker-compose/data
 dist
+data
