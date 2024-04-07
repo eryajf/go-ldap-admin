@@ -1,3 +1,4 @@
+# 更多部署方式详见：http://ldapdoc.eryajf.net/pages/f081dc/
 version: '3'
 
 networks:
@@ -5,25 +6,27 @@ networks:
     driver: bridge
 
 services:
-  mysql:
-    image: registry.cn-hangzhou.aliyuncs.com/ali_eryajf/mysql:8.3
-    container_name: go-ldap-admin-mysql # 指定容器名称，如果不设置此参数，则由系统自动生成
-    hostname: go-ldap-admin-mysql
-    restart: always # 设置容器自启模式
-    ports:
-      - '3307:3306'
+  go-ldap-admin:
+    image: registry.cn-hangzhou.aliyuncs.com/eryajf/go-ldap-admin
+    container_name: go-ldap-admin
+    hostname: go-ldap-admin
+    restart: always
     environment:
-      TZ: Asia/Shanghai # 设置容器时区与宿主机保持一致
-      MYSQL_ROOT_PASSWORD: 123456 # 设置root密码
-      MYSQL_ROOT_HOST: "%"
-      MYSQL_DATABASE: go_ldap_admin
+      WAIT_HOSTS: openldap:389
+      DB_DRIVER: sqlite3
+    ports:
+      - 8888:8888
     volumes:
-      - ./data/mysql:/var/lib/mysql # 映射数据库保存目录到宿主机，防止数据丢失
+      - ./data/go-ldap-admin:/app/data
+    depends_on:
+      - openldap
+    links:
+      - openldap:go-ldap-admin-openldap
     networks:
       - go-ldap-admin
 
   openldap:
-    image: registry.cn-hangzhou.aliyuncs.com/ali_eryajf/openldap:1.4.1
+    image: registry.cn-hangzhou.aliyuncs.com/eryajf/openldap:1.4.1
     container_name: go-ldap-admin-openldap
     hostname: go-ldap-admin-openldap
     restart: always
@@ -38,45 +41,5 @@ services:
       - ./data/openldap/config:/etc/ldap/slapd.d
     ports:
       - 388:389
-    networks:
-      - go-ldap-admin
-
-  phpldapadmin:
-    image: registry.cn-hangzhou.aliyuncs.com/ali_eryajf/phpldapadmin:0.9.0
-    container_name: go-ldap-admin-phpldapadmin
-    hostname: go-ldap-admin-phpldapadmin
-    restart: always
-    environment:
-      TZ: Asia/Shanghai # 设置容器时区与宿主机保持一致
-      PHPLDAPADMIN_HTTPS: "false" # 是否使用https
-      PHPLDAPADMIN_LDAP_HOSTS: go-ldap-admin-openldap # 指定LDAP容器名称
-    ports:
-      - 8091:80
-    volumes:
-      - ./data/phpadmin:/var/www/phpldapadmin
-    depends_on:
-      - openldap
-    links:
-      - openldap:go-ldap-admin-openldap # ldap容器的 service_name:container_name
-    networks:
-      - go-ldap-admin
-
-  go-ldap-admin:
-    image: registry.cn-hangzhou.aliyuncs.com/ali_eryajf/go-ldap-admin
-    container_name: go-ldap-admin
-    hostname: go-ldap-admin
-    restart: always
-    environment:
-      WAIT_HOSTS: mysql:3306, openldap:389
-    ports:
-      - 8888:8888
-    volumes:
-      - ./data/go-ldap-admin:/app/data
-    depends_on:
-      - mysql
-      - openldap
-    links:
-      - mysql:go-ldap-admin-mysql # ldap容器的 service_name:container_name
-      - openldap:go-ldap-admin-openldap # ldap容器的 service_name:container_name
     networks:
       - go-ldap-admin

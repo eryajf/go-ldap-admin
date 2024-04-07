@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/ali_eryajf/openldap:1.4.0
+FROM registry.cn-hangzhou.aliyuncs.com/eryajf/openldap:1.4.0
 
 LABEL maintainer https://github.com/eryajf
 
