@@ -808,7 +808,7 @@ func InitData() {
 		},
 		{
 			Flag:       "wecom_group",
-			Attributes: datatypes.JSON(`{"groupName":"custom_name_pinyin","remark":"name","sourceDeptId":"parentid","sourceDeptParentId":"id"}`),
+			Attributes: datatypes.JSON(`{"groupName":"custom_name_pinyin","remark":"name","sourceDeptId":"id","sourceDeptParentId":"parentid"}`),
 		},
 		{
 			Flag:       "wecom_user",
