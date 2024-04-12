@@ -80,6 +80,8 @@
 - [本地开发](http://ldapdoc.eryajf.net/pages/cb7497/)
 - [生产部署](http://ldapdoc.eryajf.net/pages/5769c4/)
 
+> 如果你在安装部署时遇到问题，可通过[付费服务](http://ldapdoc.eryajf.net/pages/7eab1c/)寻求专业支持。
+
 ## 🥰 感谢
 
 感谢如下优秀的项目，没有这些项目，不可能会有 go-ldap-admin：
