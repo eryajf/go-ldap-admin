@@ -40,6 +40,6 @@ services:
       - ./data/openldap/database:/var/lib/ldap
       - ./data/openldap/config:/etc/ldap/slapd.d
     ports:
-      - 388:389
+      - 389:389
     networks:
       - go-ldap-admin
