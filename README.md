@@ -47,12 +47,10 @@
 
 提供在线体验地址如下：
 
-|     分类      |                                           地址                                           |          用户名           | 密码   |
-| :-----------: | :--------------------------------------------------------------------------------------: | :-----------------------: | ------ |
-| go-ldap-admin |       [http://demo-go-ldap-admin.eryajf.net](http://demo-go-ldap-admin.eryajf.net)       |           admin           | 123456 |
-| phpLdapAdmin  | [http://demo-go-ldap-admin.eryajf.net:8091/](http://demo-go-ldap-admin.eryajf.net:8091/) | cn=admin,dc=eryajf,dc=net | 123456 |
+- 地址：[http://demo-go-ldap-admin.eryajf.net](http://demo-go-ldap-admin.eryajf.net)
+- 登陆信息：admin/123456
 
-在线环境可能不稳，如果遇到访问异常，或者数据错乱，请联系我进行修复。
+在线环境可能不稳，如果遇到访问异常，或者数据错乱，请联系我进行修复。请勿填写个人敏感信息。
 
 **页面功能概览：**
 
@@ -78,9 +76,11 @@
 - [快速开始](http://ldapdoc.eryajf.net/pages/706e78/)
 - [功能概览](http://ldapdoc.eryajf.net/pages/7a40de/)
 - [本地开发](http://ldapdoc.eryajf.net/pages/cb7497/)
-- [生产部署](http://ldapdoc.eryajf.net/pages/5769c4/)
 
-> 如果你在安装部署时遇到问题，可通过[付费服务](http://ldapdoc.eryajf.net/pages/7eab1c/)寻求专业支持。
+> **说明：**
+>
+> - 本项目的部署与使用需要你对OpenLDAP有一定的掌握，如果想要配置IM同步，可能还需要一定的go基础来调试(如有异常时)。
+> - 文档已足够详尽，所有文档已讲过的，将不再提供免费的服务。如果你在安装部署时遇到问题，可通过[付费服务](http://ldapdoc.eryajf.net/pages/7eab1c/)寻求支持。
 
 ## 🥰 感谢
 
