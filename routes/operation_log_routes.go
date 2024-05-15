@@ -17,6 +17,7 @@ func InitOperationLogRoutes(r *gin.RouterGroup, authMiddleware *jwt.GinJWTMiddle
 	{
 		operation_log.GET("/operation/list", controller.OperationLog.List)
 		operation_log.POST("/operation/delete", controller.OperationLog.Delete)
+		operation_log.DELETE("/operation/clean", controller.OperationLog.Clean)
 	}
 	return r
 }
