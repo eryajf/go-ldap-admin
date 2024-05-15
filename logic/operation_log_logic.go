@@ -79,6 +79,7 @@ func (l OperationLogLogic) Clean(c *gin.Context, req interface{}) (data interfac
 		return nil, ReqAssertErr
 	}
 	_ = c
+	fmt.Println(r)
 	err := isql.OperationLog.Clean()
 	if err != nil {
 		return err, nil
