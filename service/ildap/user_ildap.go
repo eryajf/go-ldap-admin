@@ -31,7 +31,7 @@ func (x UserService) Add(user *model.User) error {
 	add.Attribute("uid", []string{user.Username})
 	var pass string
 	if config.Conf.Ldap.UserPasswordEncryptionType == "clear" {
-		pass = user.Password
+		pass = tools.NewParPasswd(user.Password)
 	} else {
 		pass = tools.EncodePass([]byte(tools.NewParPasswd(user.Password)))
 	}
