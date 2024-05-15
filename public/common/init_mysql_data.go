@@ -649,6 +649,13 @@ func InitData() {
 			Remark:   "批量删除操作日志",
 			Creator:  "系统",
 		},
+		{
+			Method:   "DELETE",
+			Path:     "/log/operation/clean",
+			Category: "log",
+			Remark:   "清空操作日志",
+			Creator:  "系统",
+		},
 	}
 
 	// 5. 将角色绑定给菜单
