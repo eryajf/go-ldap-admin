@@ -74,12 +74,11 @@ func (l OperationLogLogic) Delete(c *gin.Context, req interface{}) (data interfa
 }
 
 func (l OperationLogLogic) Clean(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
-	r, ok := req.(*request.OperationLogListReq)
+	_, ok := req.(*request.OperationLogListReq)
 	if !ok {
 		return nil, ReqAssertErr
 	}
 	_ = c
-	fmt.Println(r)
 	err := isql.OperationLog.Clean()
 	if err != nil {
 		return err, nil
