@@ -21,7 +21,7 @@ func (l OperationLogLogic) List(c *gin.Context, req interface{}) (data interface
 		return nil, ReqAssertErr
 	}
 	_ = c
-
+	fmt.Println(r)
 	// 获取数据列表
 	logs, err := isql.OperationLog.List(r)
 	if err != nil {
@@ -71,4 +71,17 @@ func (l OperationLogLogic) Delete(c *gin.Context, req interface{}) (data interfa
 		return nil, tools.NewMySqlError(fmt.Errorf("删除该改条记录失败: %s", err.Error()))
 	}
 	return nil, nil
+}
+
+func (l OperationLogLogic) Clean(c *gin.Context, req interface{}) (data interface{}, rspError interface{}) {
+	_, ok := req.(*request.OperationLogListReq)
+	if !ok {
+		return nil, ReqAssertErr
+	}
+	_ = c
+	err := isql.OperationLog.Clean()
+	if err != nil {
+		return err, nil
+	}
+	return "操作日志情况完成", nil
 }

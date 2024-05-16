@@ -24,3 +24,11 @@ func (m *OperationLogController) Delete(c *gin.Context) {
 		return logic.OperationLog.Delete(c, req)
 	})
 }
+
+// Clean 清空记录
+func (m *OperationLogController) Clean(c *gin.Context) {
+	req := new(request.OperationLogListReq)
+	Run(c, req, func() (interface{}, interface{}) {
+		return logic.OperationLog.Clean(c, req)
+	})
+}
