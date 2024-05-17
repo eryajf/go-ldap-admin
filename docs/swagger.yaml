@@ -1,0 +1,225 @@
+basePath: /api
+definitions:
+  request.BaseChangePwdReq:
+    properties:
+      code:
+        type: string
+      mail:
+        maxLength: 100
+        minLength: 0
+        type: string
+    required:
+    - code
+    - mail
+    type: object
+  request.BaseSendCodeReq:
+    properties:
+      mail:
+        maxLength: 100
+        minLength: 0
+        type: string
+    required:
+    - mail
+    type: object
+  request.RegisterAndLoginReq:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  response.ResponseBody:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+host: 127.0.0.1:8888
+info:
+  contact:
+    email: https://github.com/eryajf/go-ldap-admin
+    name: 项目作者：二丫讲梵 、 swagger作者：南宫乘风
+    url: https://github.com/eryajf/go-ldap-admin
+  description: 基于Go+Vue实现的openLDAP后台管理项目
+  termsOfService: https://github.com/eryajf/go-ldap-admin
+  title: Go Ldap Admin
+  version: "1.0"
+paths:
+  /base/changePwd:
+    post:
+      consumes:
+      - application/json
+      description: 使用邮箱验证码修改密码
+      parameters:
+      - description: 发送验证码请求数据
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.BaseChangePwdReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      summary: 用户通过邮箱修改密码
+      tags:
+      - 用户管理
+  /base/dashboard:
+    get:
+      consumes:
+      - application/json
+      description: 获取系统仪表盘概览数据
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      summary: 获取仪表盘数据
+      tags:
+      - 用户管理
+  /base/decryptpwd:
+    get:
+      consumes:
+      - application/json
+      description: 将加密后的密码解密为明文
+      parameters:
+      - description: 需要解密的加密密码
+        in: query
+        name: passwd
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      summary: 密码解密
+      tags:
+      - 用户管理
+  /base/encryptpwd:
+    get:
+      consumes:
+      - application/json
+      description: 将明文密码加密
+      parameters:
+      - description: 需要加密的明文密码
+        in: query
+        name: passwd
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      summary: 密码加密
+      tags:
+      - 用户管理
+  /base/login:
+    post:
+      consumes:
+      - application/json
+      description: 用户登录
+      parameters:
+      - description: 用户登录信息账号和密码
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RegisterAndLoginReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      summary: 登录接口 (异常，缺少私钥)
+      tags:
+      - 用户管理
+  /base/logout:
+    post:
+      consumes:
+      - application/json
+      description: 用户退出登录
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      summary: 退出登录
+      tags:
+      - 用户管理
+  /base/ping:
+    get:
+      description: 健康检测
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      summary: 健康检测
+      tags:
+      - 用户管理
+  /base/refreshToken:
+    post:
+      consumes:
+      - application/json
+      description: 使用旧的 Token 获取新的 Token
+      parameters:
+      - description: Bearer 旧的 Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      summary: 刷新 Token
+      tags:
+      - 用户管理
+  /base/sendcode:
+    post:
+      consumes:
+      - application/json
+      description: 向指定邮箱发送验证码
+      parameters:
+      - description: 发送验证码请求数据
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.BaseSendCodeReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      summary: 发送验证码
+      tags:
+      - 用户管理
+swagger: "2.0"

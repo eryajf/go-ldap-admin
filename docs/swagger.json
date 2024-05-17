@@ -1,0 +1,341 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "基于Go+Vue实现的openLDAP后台管理项目",
+        "title": "Go Ldap Admin",
+        "termsOfService": "https://github.com/eryajf/go-ldap-admin",
+        "contact": {
+            "name": "项目作者：二丫讲梵 、 swagger作者：南宫乘风",
+            "url": "https://github.com/eryajf/go-ldap-admin",
+            "email": "https://github.com/eryajf/go-ldap-admin"
+        },
+        "version": "1.0"
+    },
+    "host": "127.0.0.1:8888",
+    "basePath": "/api",
+    "paths": {
+        "/base/changePwd": {
+            "post": {
+                "description": "使用邮箱验证码修改密码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "用户通过邮箱修改密码",
+                "parameters": [
+                    {
+                        "description": "发送验证码请求数据",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.BaseChangePwdReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/base/dashboard": {
+            "get": {
+                "description": "获取系统仪表盘概览数据",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "获取仪表盘数据",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/base/decryptpwd": {
+            "get": {
+                "description": "将加密后的密码解密为明文",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "密码解密",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "需要解密的加密密码",
+                        "name": "passwd",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/base/encryptpwd": {
+            "get": {
+                "description": "将明文密码加密",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "密码加密",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "需要加密的明文密码",
+                        "name": "passwd",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/base/login": {
+            "post": {
+                "description": "用户登录",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "登录接口 (异常，缺少私钥)",
+                "parameters": [
+                    {
+                        "description": "用户登录信息账号和密码",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RegisterAndLoginReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/base/logout": {
+            "post": {
+                "description": "用户退出登录",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "退出登录",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/base/ping": {
+            "get": {
+                "description": "健康检测",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "健康检测",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/base/refreshToken": {
+            "post": {
+                "description": "使用旧的 Token 获取新的 Token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "刷新 Token",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 旧的 Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/base/sendcode": {
+            "post": {
+                "description": "向指定邮箱发送验证码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "发送验证码",
+                "parameters": [
+                    {
+                        "description": "发送验证码请求数据",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.BaseSendCodeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "request.BaseChangePwdReq": {
+            "type": "object",
+            "required": [
+                "code",
+                "mail"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "mail": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 0
+                }
+            }
+        },
+        "request.BaseSendCodeReq": {
+            "type": "object",
+            "required": [
+                "mail"
+            ],
+            "properties": {
+                "mail": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 0
+                }
+            }
+        },
+        "request.RegisterAndLoginReq": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.ResponseBody": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {},
+                "msg": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
