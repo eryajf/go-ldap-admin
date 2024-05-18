@@ -3,9 +3,6 @@ module github.com/eryajf/go-ldap-admin
 go 1.18
 
 require (
-	github.com/swaggo/files v1.0.1
-	github.com/swaggo/gin-swagger v1.6.0
-	github.com/swaggo/swag v1.16.2
 	github.com/appleboy/gin-jwt/v2 v2.6.4
 	github.com/casbin/casbin/v2 v2.22.0
 	github.com/casbin/gorm-adapter/v3 v3.1.0
@@ -20,6 +17,9 @@ require (
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/robfig/cron/v3 v3.0.0
 	github.com/spf13/viper v1.11.0
+	github.com/swaggo/files v1.0.1
+	github.com/swaggo/gin-swagger v1.6.0
+	github.com/swaggo/swag v1.16.2
 	github.com/thoas/go-funk v0.7.0
 	github.com/zhaoyunxing92/dingtalk/v2 v2.1.1-0.20231013102126-c1568b7fbac5
 	go.uber.org/zap v1.19.1
