@@ -9,7 +9,7 @@ import (
 // LoginHandler
 // @Summary 登录接口 (异常，缺少私钥)
 // @Description 用户登录
-// @Tags 用户管理
+// @Tags 基础管理
 // @Accept application/json
 // @Produce application/json
 // @Param  data body request.RegisterAndLoginReq true "用户登录信息账号和密码"
@@ -20,7 +20,7 @@ func LoginHandler() {}
 // LogoutHandler
 // @Summary 退出登录
 // @Description 用户退出登录
-// @Tags 用户管理
+// @Tags 基础管理
 // @Accept application/json
 // @Produce application/json
 // @Success 200 {object} response.ResponseBody
@@ -31,7 +31,7 @@ func LogoutHandler() {
 // RefreshHandler
 // @Summary 刷新 Token
 // @Description 使用旧的 Token 获取新的 Token
-// @Tags 用户管理
+// @Tags 基础管理
 // @Accept application/json
 // @Produce application/json
 // @Param Authorization header string true "Bearer 旧的 Token"

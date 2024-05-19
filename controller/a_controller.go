@@ -67,7 +67,7 @@ func Run(c *gin.Context, req interface{}, fn func() (interface{}, interface{})) 
 
 // Demo
 // @Summary 健康检测
-// @Tags 用户管理
+// @Tags 基础管理
 // @Produce json
 // @Description 健康检测
 // @Success 200 {object} response.ResponseBody

@@ -12,7 +12,7 @@ type BaseController struct{}
 // SendCode 给用户邮箱发送验证码
 // @Summary 发送验证码
 // @Description 向指定邮箱发送验证码
-// @Tags 用户管理
+// @Tags 基础管理
 // @Accept application/json
 // @Produce application/json
 // @Param data body request.BaseSendCodeReq true "发送验证码请求数据"
@@ -28,7 +28,7 @@ func (m *BaseController) SendCode(c *gin.Context) {
 // ChangePwd 用户通过邮箱修改密码
 // @Summary 用户通过邮箱修改密码
 // @Description 使用邮箱验证码修改密码
-// @Tags 用户管理
+// @Tags 基础管理
 // @Accept application/json
 // @Produce application/json
 // @Param  data body request.BaseChangePwdReq true "发送验证码请求数据"
@@ -44,7 +44,7 @@ func (m *BaseController) ChangePwd(c *gin.Context) {
 // Dashboard 系统首页展示数据
 // @Summary 获取仪表盘数据
 // @Description 获取系统仪表盘概览数据
-// @Tags 用户管理
+// @Tags 基础管理
 // @Accept application/json
 // @Produce application/json
 // @Success 200 {object} response.ResponseBody
@@ -59,7 +59,7 @@ func (m *BaseController) Dashboard(c *gin.Context) {
 // EncryptPasswd 密码加密
 // @Summary 密码加密
 // @Description 将明文密码加密
-// @Tags 用户管理
+// @Tags 基础管理
 // @Accept application/json
 // @Produce application/json
 // @Param passwd query string true "需要加密的明文密码"
@@ -75,7 +75,7 @@ func (m *BaseController) EncryptPasswd(c *gin.Context) {
 // DecryptPasswd 密码解密为明文
 // @Summary 密码解密
 // @Description 将加密后的密码解密为明文
-// @Tags 用户管理
+// @Tags 基础管理
 // @Accept application/json
 // @Produce application/json
 // @Param passwd query string true "需要解密的加密密码"
