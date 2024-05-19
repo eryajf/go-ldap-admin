@@ -28,6 +28,9 @@ import (
 
 // @host 127.0.0.1:8888
 // @BasePath /api
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 
 	// 加载配置文件到全局配置结构体

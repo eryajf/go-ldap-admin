@@ -31,6 +31,186 @@ definitions:
     - password
     - username
     type: object
+  request.SyncDingUserReq:
+    type: object
+  request.SyncFeiShuUserReq:
+    type: object
+  request.SyncOpenLdapUserReq:
+    type: object
+  request.SyncSqlUserReq:
+    properties:
+      userIds:
+        items:
+          type: integer
+        type: array
+    required:
+    - userIds
+    type: object
+  request.SyncWeComUserReq:
+    type: object
+  request.UserAddReq:
+    properties:
+      avatar:
+        type: string
+      departmentId:
+        items:
+          type: integer
+        type: array
+      departments:
+        maxLength: 512
+        minLength: 0
+        type: string
+      givenName:
+        maxLength: 50
+        minLength: 0
+        type: string
+      introduction:
+        maxLength: 255
+        minLength: 0
+        type: string
+      jobNumber:
+        maxLength: 20
+        minLength: 0
+        type: string
+      mail:
+        maxLength: 100
+        minLength: 0
+        type: string
+      mobile:
+        type: string
+      nickname:
+        maxLength: 50
+        minLength: 0
+        type: string
+      password:
+        type: string
+      position:
+        maxLength: 128
+        minLength: 0
+        type: string
+      postalAddress:
+        maxLength: 255
+        minLength: 0
+        type: string
+      roleIds:
+        items:
+          type: integer
+        type: array
+      source:
+        maxLength: 50
+        minLength: 0
+        type: string
+      status:
+        enum:
+        - 1
+        - 2
+        type: integer
+      username:
+        maxLength: 50
+        minLength: 2
+        type: string
+    required:
+    - departmentId
+    - jobNumber
+    - mail
+    - mobile
+    - nickname
+    - roleIds
+    - username
+    type: object
+  request.UserChangePwdReq:
+    properties:
+      newPassword:
+        type: string
+      oldPassword:
+        type: string
+    required:
+    - newPassword
+    - oldPassword
+    type: object
+  request.UserChangeUserStatusReq:
+    properties:
+      id:
+        type: integer
+      status:
+        enum:
+        - 1
+        - 2
+        type: integer
+    required:
+    - id
+    type: object
+  request.UserDeleteReq:
+    properties:
+      userIds:
+        items:
+          type: integer
+        type: array
+    required:
+    - userIds
+    type: object
+  request.UserUpdateReq:
+    properties:
+      avatar:
+        type: string
+      departmentId:
+        items:
+          type: integer
+        type: array
+      departments:
+        maxLength: 512
+        minLength: 0
+        type: string
+      givenName:
+        maxLength: 50
+        minLength: 0
+        type: string
+      id:
+        type: integer
+      introduction:
+        maxLength: 255
+        minLength: 0
+        type: string
+      jobNumber:
+        maxLength: 20
+        minLength: 0
+        type: string
+      mail:
+        maxLength: 100
+        minLength: 0
+        type: string
+      mobile:
+        type: string
+      nickname:
+        maxLength: 20
+        minLength: 0
+        type: string
+      position:
+        maxLength: 128
+        minLength: 0
+        type: string
+      postalAddress:
+        maxLength: 255
+        minLength: 0
+        type: string
+      roleIds:
+        items:
+          type: integer
+        type: array
+      source:
+        maxLength: 50
+        minLength: 0
+        type: string
+      username:
+        maxLength: 50
+        minLength: 2
+        type: string
+    required:
+    - departmentId
+    - id
+    - roleIds
+    - username
+    type: object
   response.ResponseBody:
     properties:
       code:
@@ -71,7 +251,7 @@ paths:
             $ref: '#/definitions/response.ResponseBody'
       summary: 用户通过邮箱修改密码
       tags:
-      - 用户管理
+      - 基础管理
   /base/dashboard:
     get:
       consumes:
@@ -86,7 +266,7 @@ paths:
             $ref: '#/definitions/response.ResponseBody'
       summary: 获取仪表盘数据
       tags:
-      - 用户管理
+      - 基础管理
   /base/decryptpwd:
     get:
       consumes:
@@ -107,7 +287,7 @@ paths:
             $ref: '#/definitions/response.ResponseBody'
       summary: 密码解密
       tags:
-      - 用户管理
+      - 基础管理
   /base/encryptpwd:
     get:
       consumes:
@@ -128,7 +308,7 @@ paths:
             $ref: '#/definitions/response.ResponseBody'
       summary: 密码加密
       tags:
-      - 用户管理
+      - 基础管理
   /base/login:
     post:
       consumes:
@@ -150,7 +330,7 @@ paths:
             $ref: '#/definitions/response.ResponseBody'
       summary: 登录接口 (异常，缺少私钥)
       tags:
-      - 用户管理
+      - 基础管理
   /base/logout:
     post:
       consumes:
@@ -165,7 +345,7 @@ paths:
             $ref: '#/definitions/response.ResponseBody'
       summary: 退出登录
       tags:
-      - 用户管理
+      - 基础管理
   /base/ping:
     get:
       description: 健康检测
@@ -178,7 +358,7 @@ paths:
             $ref: '#/definitions/response.ResponseBody'
       summary: 健康检测
       tags:
-      - 用户管理
+      - 基础管理
   /base/refreshToken:
     post:
       consumes:
@@ -199,7 +379,7 @@ paths:
             $ref: '#/definitions/response.ResponseBody'
       summary: 刷新 Token
       tags:
-      - 用户管理
+      - 基础管理
   /base/sendcode:
     post:
       consumes:
@@ -221,5 +401,284 @@ paths:
             $ref: '#/definitions/response.ResponseBody'
       summary: 发送验证码
       tags:
+      - 基础管理
+  /user/add:
+    post:
+      consumes:
+      - application/json
+      description: 添加用户记录
+      parameters:
+      - description: 添加用户记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserAddReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 添加用户记录
+      tags:
       - 用户管理
+  /user/changePwd:
+    post:
+      consumes:
+      - application/json
+      description: 更新密码
+      parameters:
+      - description: 更改用户密码的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserChangePwdReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新密码
+      tags:
+      - 用户管理
+  /user/changeUserStatus:
+    post:
+      consumes:
+      - application/json
+      description: 更改用户状态
+      parameters:
+      - description: 更改用户状态的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserChangeUserStatusReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 更改用户状态
+      tags:
+      - 用户管理
+  /user/delete:
+    post:
+      consumes:
+      - application/json
+      description: 删除用户记录
+      parameters:
+      - description: 删除用户记录的结构体ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserDeleteReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除用户记录
+      tags:
+      - 用户管理
+  /user/info:
+    get:
+      consumes:
+      - application/json
+      description: 获取当前登录用户信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取当前登录用户信息
+      tags:
+      - 用户管理
+  /user/list:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有用户记录列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取所有用户记录列表
+      tags:
+      - 用户管理
+  /user/syncDingTalkUsers:
+    post:
+      consumes:
+      - application/json
+      description: 同步钉钉用户信息
+      parameters:
+      - description: 同步钉钉用户信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SyncDingUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步钉钉用户信息
+      tags:
+      - 用户管理
+  /user/syncFeiShuUsers:
+    post:
+      consumes:
+      - application/json
+      description: 同步飞书用户信息
+      parameters:
+      - description: 同步飞书用户信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SyncFeiShuUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步飞书用户信息
+      tags:
+      - 用户管理
+  /user/syncOpenLdapUsers:
+    post:
+      consumes:
+      - application/json
+      description: 同步ldap用户信息
+      parameters:
+      - description: 同步ldap用户信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SyncOpenLdapUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步ldap用户信息
+      tags:
+      - 用户管理
+  /user/syncSqlUsers:
+    post:
+      consumes:
+      - application/json
+      description: 同步sql用户信息到ldap
+      parameters:
+      - description: 更改用户状态的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SyncSqlUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步sql用户信息到ldap
+      tags:
+      - 用户管理
+  /user/syncWeComUsers:
+    post:
+      consumes:
+      - application/json
+      description: 同步企业微信用户信息
+      parameters:
+      - description: 同步企业微信用户信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SyncWeComUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步企业微信用户信息
+      tags:
+      - 用户管理
+  /user/update:
+    post:
+      consumes:
+      - application/json
+      description: 添加用户记录
+      parameters:
+      - description: 更改用户记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserUpdateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新用户记录
+      tags:
+      - 用户管理
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

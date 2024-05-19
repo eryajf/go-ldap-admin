@@ -30,7 +30,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "用户管理"
+                    "基础管理"
                 ],
                 "summary": "用户通过邮箱修改密码",
                 "parameters": [
@@ -64,7 +64,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "用户管理"
+                    "基础管理"
                 ],
                 "summary": "获取仪表盘数据",
                 "responses": {
@@ -87,7 +87,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "用户管理"
+                    "基础管理"
                 ],
                 "summary": "密码解密",
                 "parameters": [
@@ -119,7 +119,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "用户管理"
+                    "基础管理"
                 ],
                 "summary": "密码加密",
                 "parameters": [
@@ -151,7 +151,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "用户管理"
+                    "基础管理"
                 ],
                 "summary": "登录接口 (异常，缺少私钥)",
                 "parameters": [
@@ -185,7 +185,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "用户管理"
+                    "基础管理"
                 ],
                 "summary": "退出登录",
                 "responses": {
@@ -205,7 +205,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "用户管理"
+                    "基础管理"
                 ],
                 "summary": "健康检测",
                 "responses": {
@@ -228,7 +228,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "用户管理"
+                    "基础管理"
                 ],
                 "summary": "刷新 Token",
                 "parameters": [
@@ -260,7 +260,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "用户管理"
+                    "基础管理"
                 ],
                 "summary": "发送验证码",
                 "parameters": [
@@ -271,6 +271,452 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/request.BaseSendCodeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/add": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "添加用户记录",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "添加用户记录",
+                "parameters": [
+                    {
+                        "description": "添加用户记录的结构体",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UserAddReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/changePwd": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "更新密码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "更新密码",
+                "parameters": [
+                    {
+                        "description": "更改用户密码的结构体",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UserChangePwdReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/changeUserStatus": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "更改用户状态",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "更改用户状态",
+                "parameters": [
+                    {
+                        "description": "更改用户状态的结构体",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UserChangeUserStatusReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/delete": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "删除用户记录",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "删除用户记录",
+                "parameters": [
+                    {
+                        "description": "删除用户记录的结构体ID",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UserDeleteReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/info": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取当前登录用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "获取当前登录用户信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/list": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取所有用户记录列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "获取所有用户记录列表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/syncDingTalkUsers": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "同步钉钉用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "同步钉钉用户信息",
+                "parameters": [
+                    {
+                        "description": "同步钉钉用户信息",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SyncDingUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/syncFeiShuUsers": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "同步飞书用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "同步飞书用户信息",
+                "parameters": [
+                    {
+                        "description": "同步飞书用户信息",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SyncFeiShuUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/syncOpenLdapUsers": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "同步ldap用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "同步ldap用户信息",
+                "parameters": [
+                    {
+                        "description": "同步ldap用户信息",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SyncOpenLdapUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/syncSqlUsers": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "同步sql用户信息到ldap",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "同步sql用户信息到ldap",
+                "parameters": [
+                    {
+                        "description": "更改用户状态的结构体",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SyncSqlUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/syncWeComUsers": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "同步企业微信用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "同步企业微信用户信息",
+                "parameters": [
+                    {
+                        "description": "同步企业微信用户信息",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SyncWeComUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/update": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "添加用户记录",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "更新用户记录",
+                "parameters": [
+                    {
+                        "description": "更改用户记录的结构体",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UserUpdateReq"
                         }
                     }
                 ],
@@ -331,6 +777,253 @@ const docTemplate = `{
                 }
             }
         },
+        "request.SyncDingUserReq": {
+            "type": "object"
+        },
+        "request.SyncFeiShuUserReq": {
+            "type": "object"
+        },
+        "request.SyncOpenLdapUserReq": {
+            "type": "object"
+        },
+        "request.SyncSqlUserReq": {
+            "type": "object",
+            "required": [
+                "userIds"
+            ],
+            "properties": {
+                "userIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "request.SyncWeComUserReq": {
+            "type": "object"
+        },
+        "request.UserAddReq": {
+            "type": "object",
+            "required": [
+                "departmentId",
+                "jobNumber",
+                "mail",
+                "mobile",
+                "nickname",
+                "roleIds",
+                "username"
+            ],
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "departmentId": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "departments": {
+                    "type": "string",
+                    "maxLength": 512,
+                    "minLength": 0
+                },
+                "givenName": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 0
+                },
+                "introduction": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 0
+                },
+                "jobNumber": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 0
+                },
+                "mail": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 0
+                },
+                "mobile": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 0
+                },
+                "password": {
+                    "type": "string"
+                },
+                "position": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 0
+                },
+                "postalAddress": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 0
+                },
+                "roleIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "source": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 0
+                },
+                "status": {
+                    "type": "integer",
+                    "enum": [
+                        1,
+                        2
+                    ]
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 2
+                }
+            }
+        },
+        "request.UserChangePwdReq": {
+            "type": "object",
+            "required": [
+                "newPassword",
+                "oldPassword"
+            ],
+            "properties": {
+                "newPassword": {
+                    "type": "string"
+                },
+                "oldPassword": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.UserChangeUserStatusReq": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "integer",
+                    "enum": [
+                        1,
+                        2
+                    ]
+                }
+            }
+        },
+        "request.UserDeleteReq": {
+            "type": "object",
+            "required": [
+                "userIds"
+            ],
+            "properties": {
+                "userIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "request.UserUpdateReq": {
+            "type": "object",
+            "required": [
+                "departmentId",
+                "id",
+                "roleIds",
+                "username"
+            ],
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "departmentId": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "departments": {
+                    "type": "string",
+                    "maxLength": 512,
+                    "minLength": 0
+                },
+                "givenName": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 0
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "introduction": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 0
+                },
+                "jobNumber": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 0
+                },
+                "mail": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 0
+                },
+                "mobile": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 0
+                },
+                "position": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 0
+                },
+                "postalAddress": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 0
+                },
+                "roleIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "source": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 0
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 2
+                }
+            }
+        },
         "response.ResponseBody": {
             "type": "object",
             "properties": {
@@ -342,6 +1035,13 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`
