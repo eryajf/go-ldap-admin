@@ -6,11 +6,13 @@ import (
 	"time"
 
 	"github.com/eryajf/go-ldap-admin/config"
+	_ "github.com/eryajf/go-ldap-admin/docs"
 	"github.com/eryajf/go-ldap-admin/middleware"
 	"github.com/eryajf/go-ldap-admin/public/common"
 	"github.com/eryajf/go-ldap-admin/public/static"
-
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // 初始化
@@ -53,10 +55,10 @@ func InitRoutes() *gin.Engine {
 		common.Log.Panicf("初始化JWT中间件失败：%v", err)
 		panic(fmt.Sprintf("初始化JWT中间件失败：%v", err))
 	}
-
-	// 路由分组
+	// swag
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	apiGroup := r.Group("/" + config.Conf.System.UrlPathPrefix)
-
+	// swag
 	// 注册路由
 	InitBaseRoutes(apiGroup, authMiddleware)          // 注册基础路由, 不需要jwt认证中间件,不需要casbin中间件
 	InitUserRoutes(apiGroup, authMiddleware)          // 注册用户路由, jwt认证中间件,casbin鉴权中间件

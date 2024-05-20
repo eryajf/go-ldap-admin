@@ -65,7 +65,15 @@ func Run(c *gin.Context, req interface{}, fn func() (interface{}, interface{})) 
 	tools.Success(c, data)
 }
 
+// Demo
+// @Summary 健康检测
+// @Tags 基础管理
+// @Produce json
+// @Description 健康检测
+// @Success 200 {object} response.ResponseBody
+// @router /base/ping [get]
 func Demo(c *gin.Context) {
+	// 健康检测
 	CodeDebug()
 	c.JSON(http.StatusOK, tools.H{"code": 200, "msg": "ok", "data": "pong"})
 }

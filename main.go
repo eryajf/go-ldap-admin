@@ -17,6 +17,20 @@ import (
 	"github.com/eryajf/go-ldap-admin/service/isql"
 )
 
+// @title Go Ldap Admin
+// @version 1.0
+// @description 基于Go+Vue实现的openLDAP后台管理项目
+// @termsOfService https://github.com/eryajf/go-ldap-admin
+
+// @contact.name 项目作者：二丫讲梵 、 swagger作者：南宫乘风
+// @contact.url https://github.com/eryajf/go-ldap-admin
+// @contact.email https://github.com/eryajf/go-ldap-admin
+
+// @host 127.0.0.1:8888
+// @BasePath /api
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 
 	// 加载配置文件到全局配置结构体

@@ -1,0 +1,1950 @@
+basePath: /api
+definitions:
+  request.ApiAddReq:
+    properties:
+      category:
+        maxLength: 50
+        minLength: 1
+        type: string
+      method:
+        maxLength: 20
+        minLength: 1
+        type: string
+      path:
+        maxLength: 100
+        minLength: 1
+        type: string
+      remark:
+        maxLength: 100
+        minLength: 0
+        type: string
+    required:
+      - category
+      - method
+      - path
+    type: object
+  request.ApiDeleteReq:
+    properties:
+      apiIds:
+        items:
+          type: integer
+        type: array
+    required:
+      - apiIds
+    type: object
+  request.ApiUpdateReq:
+    properties:
+      category:
+        maxLength: 50
+        minLength: 1
+        type: string
+      id:
+        type: integer
+      method:
+        maxLength: 20
+        minLength: 1
+        type: string
+      path:
+        maxLength: 100
+        minLength: 1
+        type: string
+      remark:
+        maxLength: 100
+        minLength: 0
+        type: string
+    required:
+      - id
+    type: object
+  request.BaseChangePwdReq:
+    properties:
+      code:
+        type: string
+      mail:
+        maxLength: 100
+        minLength: 0
+        type: string
+    required:
+    - code
+    - mail
+    type: object
+  request.BaseSendCodeReq:
+    properties:
+      mail:
+        maxLength: 100
+        minLength: 0
+        type: string
+    required:
+    - mail
+    type: object
+  request.FieldRelationAddReq:
+    properties:
+      attributes:
+        additionalProperties:
+          type: string
+        type: object
+      flag:
+        maxLength: 20
+        minLength: 1
+        type: string
+    required:
+      - attributes
+      - flag
+    type: object
+  request.FieldRelationDeleteReq:
+    properties:
+      fieldRelationIds:
+        items:
+          type: integer
+        type: array
+    required:
+      - fieldRelationIds
+    type: object
+  request.FieldRelationUpdateReq:
+    properties:
+      attributes:
+        additionalProperties:
+          type: string
+        type: object
+      flag:
+        maxLength: 20
+        minLength: 1
+        type: string
+      id:
+        type: integer
+    required:
+      - attributes
+      - flag
+      - id
+    type: object
+  request.GroupAddReq:
+    properties:
+      groupName:
+        maxLength: 128
+        minLength: 1
+        type: string
+      groupType:
+        maxLength: 20
+        minLength: 1
+        type: string
+      parentId:
+        description: 父级Id 大于等于0 必填
+        minimum: 0
+        type: integer
+      remark:
+        description: 分组的中文描述
+        maxLength: 128
+        minLength: 0
+        type: string
+    required:
+    - groupName
+    - groupType
+    type: object
+  request.GroupAddUserReq:
+    properties:
+      groupId:
+        type: integer
+      userIds:
+        items:
+          type: integer
+        type: array
+    required:
+    - groupId
+    - userIds
+    type: object
+  request.GroupDeleteReq:
+    properties:
+      groupIds:
+        items:
+          type: integer
+        type: array
+    required:
+    - groupIds
+    type: object
+  request.GroupRemoveUserReq:
+    properties:
+      groupId:
+        type: integer
+      userIds:
+        items:
+          type: integer
+        type: array
+    required:
+    - groupId
+    - userIds
+    type: object
+  request.GroupUpdateReq:
+    properties:
+      groupName:
+        maxLength: 128
+        minLength: 1
+        type: string
+      id:
+        type: integer
+      remark:
+        description: 分组的中文描述
+        maxLength: 128
+        minLength: 0
+        type: string
+    required:
+    - groupName
+    - id
+    type: object
+  request.MenuAddReq:
+    properties:
+      activeMenu:
+        maxLength: 100
+        minLength: 0
+        type: string
+      alwaysShow:
+        enum:
+          - 1
+          - 2
+        type: integer
+      breadcrumb:
+        enum:
+          - 1
+          - 2
+        type: integer
+      component:
+        maxLength: 100
+        minLength: 1
+        type: string
+      hidden:
+        enum:
+          - 1
+          - 2
+        type: integer
+      icon:
+        maxLength: 50
+        minLength: 0
+        type: string
+      name:
+        maxLength: 50
+        minLength: 1
+        type: string
+      noCache:
+        enum:
+          - 1
+          - 2
+        type: integer
+      parentId:
+        type: integer
+      path:
+        maxLength: 100
+        minLength: 1
+        type: string
+      redirect:
+        maxLength: 100
+        minLength: 0
+        type: string
+      sort:
+        maximum: 999
+        minimum: 1
+        type: integer
+      status:
+        enum:
+          - 1
+          - 2
+        type: integer
+      title:
+        maxLength: 50
+        minLength: 1
+        type: string
+    required:
+      - component
+      - name
+      - path
+      - title
+    type: object
+  request.MenuDeleteReq:
+    properties:
+      menuIds:
+        items:
+          type: integer
+        type: array
+    required:
+      - menuIds
+    type: object
+  request.MenuUpdateReq:
+    properties:
+      activeMenu:
+        maxLength: 100
+        minLength: 0
+        type: string
+      alwaysShow:
+        enum:
+          - 1
+          - 2
+        type: integer
+      breadcrumb:
+        enum:
+          - 1
+          - 2
+        type: integer
+      component:
+        maxLength: 100
+        minLength: 0
+        type: string
+      hidden:
+        enum:
+          - 1
+          - 2
+        type: integer
+      icon:
+        maxLength: 50
+        minLength: 0
+        type: string
+      id:
+        type: integer
+      name:
+        maxLength: 50
+        minLength: 1
+        type: string
+      noCache:
+        enum:
+          - 1
+          - 2
+        type: integer
+      parentId:
+        minimum: 0
+        type: integer
+      path:
+        maxLength: 100
+        minLength: 1
+        type: string
+      redirect:
+        maxLength: 100
+        minLength: 0
+        type: string
+      sort:
+        maximum: 999
+        minimum: 1
+        type: integer
+      status:
+        enum:
+          - 1
+          - 2
+        type: integer
+      title:
+        maxLength: 50
+        minLength: 1
+        type: string
+    required:
+      - id
+      - name
+      - path
+      - title
+    type: object
+  request.OperationLogDeleteReq:
+    properties:
+      operationLogIds:
+        items:
+          type: integer
+        type: array
+    required:
+      - operationLogIds
+    type: object
+  request.RegisterAndLoginReq:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  request.RoleAddReq:
+    properties:
+      keyword:
+        maxLength: 20
+        minLength: 1
+        type: string
+      name:
+        maxLength: 20
+        minLength: 1
+        type: string
+      remark:
+        maxLength: 100
+        minLength: 0
+        type: string
+      sort:
+        maximum: 999
+        minimum: 1
+        type: integer
+      status:
+        enum:
+        - 1
+        - 2
+        type: integer
+    required:
+    - keyword
+    - name
+    type: object
+  request.RoleDeleteReq:
+    properties:
+      roleIds:
+        items:
+          type: integer
+        type: array
+    required:
+    - roleIds
+    type: object
+  request.RoleUpdateApisReq:
+    properties:
+      apiIds:
+        items:
+          type: integer
+        type: array
+      roleId:
+        type: integer
+    required:
+    - apiIds
+    - roleId
+    type: object
+  request.RoleUpdateMenusReq:
+    properties:
+      menuIds:
+        items:
+          type: integer
+        type: array
+      roleId:
+        type: integer
+    required:
+    - menuIds
+    - roleId
+    type: object
+  request.RoleUpdateReq:
+    properties:
+      id:
+        type: integer
+      keyword:
+        maxLength: 20
+        minLength: 1
+        type: string
+      name:
+        maxLength: 20
+        minLength: 1
+        type: string
+      remark:
+        maxLength: 100
+        minLength: 0
+        type: string
+      sort:
+        maximum: 999
+        minimum: 1
+        type: integer
+      status:
+        enum:
+        - 1
+        - 2
+        type: integer
+    required:
+    - id
+    - keyword
+    - name
+    type: object
+  request.SyncDingUserReq:
+    type: object
+  request.SyncFeiShuUserReq:
+    type: object
+  request.SyncOpenLdapUserReq:
+    type: object
+  request.SyncSqlUserReq:
+    properties:
+      userIds:
+        items:
+          type: integer
+        type: array
+    required:
+    - userIds
+    type: object
+  request.SyncWeComUserReq:
+    type: object
+  request.UserAddReq:
+    properties:
+      avatar:
+        type: string
+      departmentId:
+        items:
+          type: integer
+        type: array
+      departments:
+        maxLength: 512
+        minLength: 0
+        type: string
+      givenName:
+        maxLength: 50
+        minLength: 0
+        type: string
+      introduction:
+        maxLength: 255
+        minLength: 0
+        type: string
+      jobNumber:
+        maxLength: 20
+        minLength: 0
+        type: string
+      mail:
+        maxLength: 100
+        minLength: 0
+        type: string
+      mobile:
+        type: string
+      nickname:
+        maxLength: 50
+        minLength: 0
+        type: string
+      password:
+        type: string
+      position:
+        maxLength: 128
+        minLength: 0
+        type: string
+      postalAddress:
+        maxLength: 255
+        minLength: 0
+        type: string
+      roleIds:
+        items:
+          type: integer
+        type: array
+      source:
+        maxLength: 50
+        minLength: 0
+        type: string
+      status:
+        enum:
+        - 1
+        - 2
+        type: integer
+      username:
+        maxLength: 50
+        minLength: 2
+        type: string
+    required:
+    - departmentId
+    - jobNumber
+    - mail
+    - mobile
+    - nickname
+    - roleIds
+    - username
+    type: object
+  request.UserChangePwdReq:
+    properties:
+      newPassword:
+        type: string
+      oldPassword:
+        type: string
+    required:
+    - newPassword
+    - oldPassword
+    type: object
+  request.UserChangeUserStatusReq:
+    properties:
+      id:
+        type: integer
+      status:
+        enum:
+        - 1
+        - 2
+        type: integer
+    required:
+    - id
+    type: object
+  request.UserDeleteReq:
+    properties:
+      userIds:
+        items:
+          type: integer
+        type: array
+    required:
+    - userIds
+    type: object
+  request.UserUpdateReq:
+    properties:
+      avatar:
+        type: string
+      departmentId:
+        items:
+          type: integer
+        type: array
+      departments:
+        maxLength: 512
+        minLength: 0
+        type: string
+      givenName:
+        maxLength: 50
+        minLength: 0
+        type: string
+      id:
+        type: integer
+      introduction:
+        maxLength: 255
+        minLength: 0
+        type: string
+      jobNumber:
+        maxLength: 20
+        minLength: 0
+        type: string
+      mail:
+        maxLength: 100
+        minLength: 0
+        type: string
+      mobile:
+        type: string
+      nickname:
+        maxLength: 20
+        minLength: 0
+        type: string
+      position:
+        maxLength: 128
+        minLength: 0
+        type: string
+      postalAddress:
+        maxLength: 255
+        minLength: 0
+        type: string
+      roleIds:
+        items:
+          type: integer
+        type: array
+      source:
+        maxLength: 50
+        minLength: 0
+        type: string
+      username:
+        maxLength: 50
+        minLength: 2
+        type: string
+    required:
+    - departmentId
+    - id
+    - roleIds
+    - username
+    type: object
+  response.ResponseBody:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+host: 127.0.0.1:8888
+info:
+  contact:
+    email: https://github.com/eryajf/go-ldap-admin
+    name: 项目作者：二丫讲梵 、 swagger作者：南宫乘风
+    url: https://github.com/eryajf/go-ldap-admin
+  description: 基于Go+Vue实现的openLDAP后台管理项目
+  termsOfService: https://github.com/eryajf/go-ldap-admin
+  title: Go Ldap Admin
+  version: "1.0"
+paths:
+  /api/add:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: 新建API
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/request.ApiAddReq'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 新建API接口
+      tags:
+        - 接口管理
+  /api/delete:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: 删除API
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/request.ApiDeleteReq'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 删除API接口
+      tags:
+        - 接口管理
+  /api/list:
+    get:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 获取API接口列表
+      tags:
+        - 接口管理
+  /api/tree:
+    get:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 获取API接口树
+      tags:
+        - 接口管理
+  /api/update:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: 更新API
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/request.ApiUpdateReq'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 更新API接口
+      tags:
+        - 接口管理
+  /base/changePwd:
+    post:
+      consumes:
+      - application/json
+      description: 使用邮箱验证码修改密码
+      parameters:
+      - description: 发送验证码请求数据
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.BaseChangePwdReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      summary: 用户通过邮箱修改密码
+      tags:
+      - 基础管理
+  /base/dashboard:
+    get:
+      consumes:
+      - application/json
+      description: 获取系统仪表盘概览数据
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      summary: 获取仪表盘数据
+      tags:
+      - 基础管理
+  /base/decryptpwd:
+    get:
+      consumes:
+      - application/json
+      description: 将加密后的密码解密为明文
+      parameters:
+      - description: 需要解密的加密密码
+        in: query
+        name: passwd
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      summary: 密码解密
+      tags:
+      - 基础管理
+  /base/encryptpwd:
+    get:
+      consumes:
+      - application/json
+      description: 将明文密码加密
+      parameters:
+      - description: 需要加密的明文密码
+        in: query
+        name: passwd
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      summary: 密码加密
+      tags:
+      - 基础管理
+  /base/login:
+    post:
+      consumes:
+      - application/json
+      description: 用户登录
+      parameters:
+      - description: 用户登录信息账号和密码
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RegisterAndLoginReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      summary: '登录接口 (手动加上: Bearer + token(密码加密接口))'
+      tags:
+      - 基础管理
+  /base/logout:
+    post:
+      consumes:
+      - application/json
+      description: 用户退出登录
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      summary: 退出登录
+      tags:
+      - 基础管理
+  /base/ping:
+    get:
+      description: 健康检测
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      summary: 健康检测
+      tags:
+      - 基础管理
+  /base/refreshToken:
+    post:
+      consumes:
+      - application/json
+      description: 使用旧的 Token 获取新的 Token
+      parameters:
+      - description: Bearer 旧的 Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      summary: 刷新 Token
+      tags:
+      - 基础管理
+  /base/sendcode:
+    post:
+      consumes:
+      - application/json
+      description: 向指定邮箱发送验证码
+      parameters:
+      - description: 发送验证码请求数据
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.BaseSendCodeReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      summary: 发送验证码
+      tags:
+      - 基础管理
+  /fieldrelation/add:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: 新建字段关系管理记录
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/request.FieldRelationAddReq'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 新建字段关系管理记录
+      tags:
+        - 字段关系管理
+  /fieldrelation/delete:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: 删除字段关系管理记录
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/request.FieldRelationDeleteReq'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 删除字段关系管理记录
+      tags:
+        - 字段关系管理
+  /fieldrelation/list:
+    get:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 获字段关系管理列表
+      tags:
+        - 字段关系管理
+  /fieldrelation/update:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: 更新字段关系管理记录
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/request.FieldRelationUpdateReq'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 更新字段关系管理记录
+      tags:
+        - 字段关系管理
+  /group/add:
+    post:
+      consumes:
+      - application/json
+      description: 添加分组记录
+      parameters:
+      - description: 添加用户记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GroupAddReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 添加分组记录
+      tags:
+      - 分组管理
+  /group/adduser:
+    post:
+      consumes:
+      - application/json
+      description: 添加用户
+      parameters:
+      - description: 添加用户记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GroupAddUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 添加用户
+      tags:
+      - 分组管理
+  /group/delete:
+    post:
+      consumes:
+      - application/json
+      description: 删除分组记录
+      parameters:
+      - description: 删除用户记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GroupDeleteReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除分组记录
+      tags:
+      - 分组管理
+  /group/list:
+    get:
+      consumes:
+      - application/json
+      description: 获取分组记录列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取分组记录列表
+      tags:
+      - 分组管理
+  /group/removeuser:
+    post:
+      consumes:
+      - application/json
+      description: 移除用户
+      parameters:
+      - description: 移除用户记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GroupRemoveUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 移除用户
+      tags:
+      - 分组管理
+  /group/syncDingTalkDepts:
+    post:
+      consumes:
+      - application/json
+      description: 同步钉钉部门信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步钉钉部门信息
+      tags:
+      - 分组管理
+  /group/syncFeiShuDepts:
+    post:
+      consumes:
+      - application/json
+      description: 同步飞书部门信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步飞书部门信息
+      tags:
+      - 分组管理
+  /group/syncOpenLdapDepts:
+    post:
+      consumes:
+      - application/json
+      description: 同步原ldap部门信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步原ldap部门信息
+      tags:
+      - 分组管理
+  /group/syncSqlGroups:
+    post:
+      consumes:
+      - application/json
+      description: 同步Sql中的分组信息到ldap
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步Sql中的分组信息到ldap
+      tags:
+      - 分组管理
+  /group/syncWeComDepts:
+    post:
+      consumes:
+      - application/json
+      description: 同步企业微信部门信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步企业微信部门信息
+      tags:
+      - 分组管理
+  /group/tree:
+    get:
+      consumes:
+      - application/json
+      description: 获取分组接口树
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取分组接口树
+      tags:
+      - 分组管理
+  /group/update:
+    post:
+      consumes:
+      - application/json
+      description: 更新分组记录
+      parameters:
+      - description: 更新用户记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GroupUpdateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新分组记录
+      tags:
+      - 分组管理
+  /group/useringroup:
+    get:
+      consumes:
+      - application/json
+      description: 获取分组内用户
+      parameters:
+      - description: 分组ID
+        in: query
+        name: groupId
+        required: true
+        type: integer
+      - description: 昵称
+        in: query
+        name: nickname
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取分组内用户
+      tags:
+      - 分组管理
+  /group/usernoingroup:
+    get:
+      consumes:
+      - application/json
+      description: 不在分组的用户
+      parameters:
+      - description: 分组ID
+        in: query
+        name: groupId
+        required: true
+        type: integer
+      - description: 昵称
+        in: query
+        name: nickname
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 不在分组的用户
+      tags:
+      - 分组管理
+  /log/operation/clean:
+    delete:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 清空操作日志记录
+      tags:
+        - 操作日志管理
+  /log/operation/delete:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: 删除日志的ID
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/request.OperationLogDeleteReq'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 删除操作日志记录
+      tags:
+        - 操作日志管理
+  /log/operation/list:
+    get:
+      consumes:
+        - application/json
+      parameters:
+        - description: 用户名
+          in: query
+          name: username
+          type: string
+        - description: IP地址
+          in: query
+          name: ip
+          type: string
+        - description: 路径
+          in: query
+          name: path
+          type: string
+        - description: 方法
+          in: query
+          name: method
+          type: string
+        - description: 状态码
+          in: query
+          name: status
+          type: integer
+        - description: 页码
+          in: query
+          name: pageNum
+          type: integer
+        - description: 每页数量
+          in: query
+          name: pageSize
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 获取操作日志记录列表
+      tags:
+        - 操作日志管理
+  /menu/access/tree:
+    get:
+      consumes:
+        - application/json
+      parameters:
+        - description: 分组ID
+          in: query
+          name: id
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 获取用户菜单树
+      tags:
+        - 菜单管理
+  /menu/add:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: 新建菜单
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/request.MenuAddReq'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 新建菜单
+      tags:
+        - 菜单管理
+  /menu/delete:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: 删除菜单
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/request.MenuDeleteReq'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 删除菜单
+      tags:
+        - 菜单管理
+  /menu/tree:
+    get:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 获取菜单树
+      tags:
+        - 菜单管理
+  /menu/update:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: 更新菜单
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/request.MenuUpdateReq'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 更新菜单
+      tags:
+        - 菜单管理
+  /role/add:
+    post:
+      consumes:
+      - application/json
+      description: 新建角色记录
+      parameters:
+      - description: 添加角色记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RoleAddReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 新建角色记录
+      tags:
+      - 角色管理
+  /role/delete:
+    post:
+      consumes:
+      - application/json
+      description: 删除角色记录
+      parameters:
+      - description: 删除角色记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RoleDeleteReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除角色记录
+      tags:
+      - 角色管理
+  /role/getapilist:
+    get:
+      consumes:
+      - application/json
+      description: 获取接口列表
+      parameters:
+      - description: 角色ID
+        in: query
+        name: roleId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取接口列表
+      tags:
+      - 角色管理
+  /role/getmenulist:
+    get:
+      consumes:
+      - application/json
+      description: 获取菜单列表
+      parameters:
+      - description: 角色ID
+        in: query
+        name: roleId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取菜单列表
+      tags:
+      - 角色管理
+  /role/list:
+    get:
+      consumes:
+      - application/json
+      description: 获取角色记录列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取角色记录列表
+      tags:
+      - 角色管理
+  /role/update:
+    post:
+      consumes:
+      - application/json
+      description: 更新角色记录
+      parameters:
+      - description: 更新角色记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RoleUpdateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新角色记录
+      tags:
+      - 角色管理
+  /role/updateapis:
+    post:
+      consumes:
+      - application/json
+      description: 更新接口
+      parameters:
+      - description: 更新接口的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RoleUpdateApisReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新接口
+      tags:
+      - 角色管理
+  /role/updatemenus:
+    post:
+      consumes:
+      - application/json
+      description: 更新菜单
+      parameters:
+      - description: 更新菜单的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RoleUpdateMenusReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新菜单
+      tags:
+      - 角色管理
+  /user/add:
+    post:
+      consumes:
+      - application/json
+      description: 添加用户记录
+      parameters:
+      - description: 添加用户记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserAddReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 添加用户记录
+      tags:
+      - 用户管理
+  /user/changePwd:
+    post:
+      consumes:
+      - application/json
+      description: 更新密码
+      parameters:
+      - description: 更改用户密码的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserChangePwdReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新密码
+      tags:
+      - 用户管理
+  /user/changeUserStatus:
+    post:
+      consumes:
+      - application/json
+      description: 更改用户状态
+      parameters:
+      - description: 更改用户状态的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserChangeUserStatusReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 更改用户状态
+      tags:
+      - 用户管理
+  /user/delete:
+    post:
+      consumes:
+      - application/json
+      description: 删除用户记录
+      parameters:
+      - description: 删除用户记录的结构体ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserDeleteReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除用户记录
+      tags:
+      - 用户管理
+  /user/info:
+    get:
+      consumes:
+      - application/json
+      description: 获取当前登录用户信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取当前登录用户信息
+      tags:
+      - 用户管理
+  /user/list:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有用户记录列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取所有用户记录列表
+      tags:
+      - 用户管理
+  /user/syncDingTalkUsers:
+    post:
+      consumes:
+      - application/json
+      description: 同步钉钉用户信息
+      parameters:
+      - description: 同步钉钉用户信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SyncDingUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步钉钉用户信息
+      tags:
+      - 用户管理
+  /user/syncFeiShuUsers:
+    post:
+      consumes:
+      - application/json
+      description: 同步飞书用户信息
+      parameters:
+      - description: 同步飞书用户信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SyncFeiShuUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步飞书用户信息
+      tags:
+      - 用户管理
+  /user/syncOpenLdapUsers:
+    post:
+      consumes:
+      - application/json
+      description: 同步ldap用户信息
+      parameters:
+      - description: 同步ldap用户信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SyncOpenLdapUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步ldap用户信息
+      tags:
+      - 用户管理
+  /user/syncSqlUsers:
+    post:
+      consumes:
+      - application/json
+      description: 同步sql用户信息到ldap
+      parameters:
+      - description: 更改用户状态的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SyncSqlUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步sql用户信息到ldap
+      tags:
+      - 用户管理
+  /user/syncWeComUsers:
+    post:
+      consumes:
+      - application/json
+      description: 同步企业微信用户信息
+      parameters:
+      - description: 同步企业微信用户信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SyncWeComUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步企业微信用户信息
+      tags:
+      - 用户管理
+  /user/update:
+    post:
+      consumes:
+      - application/json
+      description: 添加用户记录
+      parameters:
+      - description: 更改用户记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserUpdateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新用户记录
+      tags:
+      - 用户管理
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
