@@ -104,6 +104,96 @@ definitions:
     - password
     - username
     type: object
+  request.RoleAddReq:
+    properties:
+      keyword:
+        maxLength: 20
+        minLength: 1
+        type: string
+      name:
+        maxLength: 20
+        minLength: 1
+        type: string
+      remark:
+        maxLength: 100
+        minLength: 0
+        type: string
+      sort:
+        maximum: 999
+        minimum: 1
+        type: integer
+      status:
+        enum:
+        - 1
+        - 2
+        type: integer
+    required:
+    - keyword
+    - name
+    type: object
+  request.RoleDeleteReq:
+    properties:
+      roleIds:
+        items:
+          type: integer
+        type: array
+    required:
+    - roleIds
+    type: object
+  request.RoleUpdateApisReq:
+    properties:
+      apiIds:
+        items:
+          type: integer
+        type: array
+      roleId:
+        type: integer
+    required:
+    - apiIds
+    - roleId
+    type: object
+  request.RoleUpdateMenusReq:
+    properties:
+      menuIds:
+        items:
+          type: integer
+        type: array
+      roleId:
+        type: integer
+    required:
+    - menuIds
+    - roleId
+    type: object
+  request.RoleUpdateReq:
+    properties:
+      id:
+        type: integer
+      keyword:
+        maxLength: 20
+        minLength: 1
+        type: string
+      name:
+        maxLength: 20
+        minLength: 1
+        type: string
+      remark:
+        maxLength: 100
+        minLength: 0
+        type: string
+      sort:
+        maximum: 999
+        minimum: 1
+        type: integer
+      status:
+        enum:
+        - 1
+        - 2
+        type: integer
+    required:
+    - id
+    - keyword
+    - name
+    type: object
   request.SyncDingUserReq:
     type: object
   request.SyncFeiShuUserReq:
@@ -768,6 +858,189 @@ paths:
       summary: 不在分组的用户
       tags:
       - 分组管理
+  /role/add:
+    post:
+      consumes:
+      - application/json
+      description: 新建角色记录
+      parameters:
+      - description: 添加角色记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RoleAddReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 新建角色记录
+      tags:
+      - 角色管理
+  /role/delete:
+    post:
+      consumes:
+      - application/json
+      description: 删除角色记录
+      parameters:
+      - description: 删除角色记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RoleDeleteReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除角色记录
+      tags:
+      - 角色管理
+  /role/getapilist:
+    get:
+      consumes:
+      - application/json
+      description: 获取接口列表
+      parameters:
+      - description: 角色ID
+        in: query
+        name: roleId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取接口列表
+      tags:
+      - 角色管理
+  /role/getmenulist:
+    get:
+      consumes:
+      - application/json
+      description: 获取菜单列表
+      parameters:
+      - description: 角色ID
+        in: query
+        name: roleId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取菜单列表
+      tags:
+      - 角色管理
+  /role/list:
+    get:
+      consumes:
+      - application/json
+      description: 获取角色记录列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取角色记录列表
+      tags:
+      - 角色管理
+  /role/update:
+    post:
+      consumes:
+      - application/json
+      description: 更新角色记录
+      parameters:
+      - description: 更新角色记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RoleUpdateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新角色记录
+      tags:
+      - 角色管理
+  /role/updateapis:
+    post:
+      consumes:
+      - application/json
+      description: 更新接口
+      parameters:
+      - description: 更新接口的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RoleUpdateApisReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新接口
+      tags:
+      - 角色管理
+  /role/updatemenus:
+    post:
+      consumes:
+      - application/json
+      description: 更新菜单
+      parameters:
+      - description: 更新菜单的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RoleUpdateMenusReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新菜单
+      tags:
+      - 角色管理
   /user/add:
     post:
       consumes:
