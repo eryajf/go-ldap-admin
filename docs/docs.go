@@ -321,7 +321,7 @@ const docTemplate = `{
                 "tags": [
                     "基础管理"
                 ],
-                "summary": "登录接口 (异常，缺少私钥)",
+                "summary": "登录接口 (手动加上: Bearer + token(密码加密接口))",
                 "parameters": [
                     {
                         "description": "用户登录信息账号和密码",

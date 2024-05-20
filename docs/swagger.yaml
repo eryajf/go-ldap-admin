@@ -842,7 +842,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.ResponseBody'
-      summary: 登录接口 (异常，缺少私钥)
+      summary: '登录接口 (手动加上: Bearer + token(密码加密接口))'
       tags:
       - 基础管理
   /base/logout:
