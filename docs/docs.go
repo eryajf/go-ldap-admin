@@ -929,6 +929,142 @@ const docTemplate = `{
                 }
             }
         },
+        "/log/operation/clean": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "操作日志管理"
+                ],
+                "summary": "清空操作日志记录",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/log/operation/delete": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "操作日志管理"
+                ],
+                "summary": "删除操作日志记录",
+                "parameters": [
+                    {
+                        "description": "删除日志的ID",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.OperationLogDeleteReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/log/operation/list": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "操作日志管理"
+                ],
+                "summary": "获取操作日志记录列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "username",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "IP地址",
+                        "name": "ip",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "路径",
+                        "name": "path",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "方法",
+                        "name": "method",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "状态码",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "pageNum",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页数量",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
         "/menu/access/tree": {
             "get": {
                 "security": [
@@ -2252,6 +2388,20 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 50,
                     "minLength": 1
+                }
+            }
+        },
+        "request.OperationLogDeleteReq": {
+            "type": "object",
+            "required": [
+                "operationLogIds"
+            ],
+            "properties": {
+                "operationLogIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },

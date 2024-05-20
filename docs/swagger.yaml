@@ -295,6 +295,15 @@ definitions:
       - path
       - title
     type: object
+  request.OperationLogDeleteReq:
+    properties:
+      operationLogIds:
+        items:
+          type: integer
+        type: array
+    required:
+      - operationLogIds
+    type: object
   request.RegisterAndLoginReq:
     properties:
       password:
@@ -1160,6 +1169,90 @@ paths:
       summary: 不在分组的用户
       tags:
       - 分组管理
+  /log/operation/clean:
+    delete:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 清空操作日志记录
+      tags:
+        - 操作日志管理
+  /log/operation/delete:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: 删除日志的ID
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/request.OperationLogDeleteReq'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 删除操作日志记录
+      tags:
+        - 操作日志管理
+  /log/operation/list:
+    get:
+      consumes:
+        - application/json
+      parameters:
+        - description: 用户名
+          in: query
+          name: username
+          type: string
+        - description: IP地址
+          in: query
+          name: ip
+          type: string
+        - description: 路径
+          in: query
+          name: path
+          type: string
+        - description: 方法
+          in: query
+          name: method
+          type: string
+        - description: 状态码
+          in: query
+          name: status
+          type: integer
+        - description: 页码
+          in: query
+          name: pageNum
+          type: integer
+        - description: 每页数量
+          in: query
+          name: pageSize
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 获取操作日志记录列表
+      tags:
+        - 操作日志管理
   /menu/access/tree:
     get:
       consumes:

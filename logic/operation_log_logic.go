@@ -83,5 +83,5 @@ func (l OperationLogLogic) Clean(c *gin.Context, req interface{}) (data interfac
 	if err != nil {
 		return err, nil
 	}
-	return "操作日志情况完成", nil
+	return "操作日志清空完成", nil
 }
