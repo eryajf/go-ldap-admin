@@ -14,6 +14,174 @@
     "host": "127.0.0.1:8888",
     "basePath": "/api",
     "paths": {
+        "/api/add": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "接口管理"
+                ],
+                "summary": "新建API接口",
+                "parameters": [
+                    {
+                        "description": "新建API",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ApiAddReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/delete": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "接口管理"
+                ],
+                "summary": "删除API接口",
+                "parameters": [
+                    {
+                        "description": "删除API",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ApiDeleteReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/list": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "接口管理"
+                ],
+                "summary": "获取API接口列表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tree": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "接口管理"
+                ],
+                "summary": "获取API接口树",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/update": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "接口管理"
+                ],
+                "summary": "更新API接口",
+                "parameters": [
+                    {
+                        "description": "更新API",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ApiUpdateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
         "/base/changePwd": {
             "post": {
                 "description": "使用邮箱验证码修改密码",
@@ -1677,6 +1845,81 @@
         }
     },
     "definitions": {
+        "request.ApiAddReq": {
+            "type": "object",
+            "required": [
+                "category",
+                "method",
+                "path"
+            ],
+            "properties": {
+                "category": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 1
+                },
+                "method": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 1
+                },
+                "path": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 1
+                },
+                "remark": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 0
+                }
+            }
+        },
+        "request.ApiDeleteReq": {
+            "type": "object",
+            "required": [
+                "apiIds"
+            ],
+            "properties": {
+                "apiIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "request.ApiUpdateReq": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "category": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 1
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "method": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 1
+                },
+                "path": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 1
+                },
+                "remark": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 0
+                }
+            }
+        },
         "request.BaseChangePwdReq": {
             "type": "object",
             "required": [

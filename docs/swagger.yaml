@@ -1,5 +1,60 @@
 basePath: /api
 definitions:
+  request.ApiAddReq:
+    properties:
+      category:
+        maxLength: 50
+        minLength: 1
+        type: string
+      method:
+        maxLength: 20
+        minLength: 1
+        type: string
+      path:
+        maxLength: 100
+        minLength: 1
+        type: string
+      remark:
+        maxLength: 100
+        minLength: 0
+        type: string
+    required:
+      - category
+      - method
+      - path
+    type: object
+  request.ApiDeleteReq:
+    properties:
+      apiIds:
+        items:
+          type: integer
+        type: array
+    required:
+      - apiIds
+    type: object
+  request.ApiUpdateReq:
+    properties:
+      category:
+        maxLength: 50
+        minLength: 1
+        type: string
+      id:
+        type: integer
+      method:
+        maxLength: 20
+        minLength: 1
+        type: string
+      path:
+        maxLength: 100
+        minLength: 1
+        type: string
+      remark:
+        maxLength: 100
+        minLength: 0
+        type: string
+    required:
+      - id
+    type: object
   request.BaseChangePwdReq:
     properties:
       code:
@@ -539,6 +594,107 @@ info:
   title: Go Ldap Admin
   version: "1.0"
 paths:
+  /api/add:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: 新建API
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/request.ApiAddReq'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 新建API接口
+      tags:
+        - 接口管理
+  /api/delete:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: 删除API
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/request.ApiDeleteReq'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 删除API接口
+      tags:
+        - 接口管理
+  /api/list:
+    get:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 获取API接口列表
+      tags:
+        - 接口管理
+  /api/tree:
+    get:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 获取API接口树
+      tags:
+        - 接口管理
+  /api/update:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: 更新API
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/request.ApiUpdateReq'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 更新API接口
+      tags:
+        - 接口管理
   /base/changePwd:
     post:
       consumes:
