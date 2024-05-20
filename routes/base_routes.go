@@ -7,7 +7,7 @@ import (
 )
 
 // LoginHandler
-// @Summary 登录接口 (异常，缺少私钥)
+// @Summary 登录接口 (手动加上: Bearer + token(密码加密接口))
 // @Description 用户登录
 // @Tags 基础管理
 // @Accept application/json
