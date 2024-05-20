@@ -76,6 +76,46 @@ definitions:
     required:
     - mail
     type: object
+  request.FieldRelationAddReq:
+    properties:
+      attributes:
+        additionalProperties:
+          type: string
+        type: object
+      flag:
+        maxLength: 20
+        minLength: 1
+        type: string
+    required:
+      - attributes
+      - flag
+    type: object
+  request.FieldRelationDeleteReq:
+    properties:
+      fieldRelationIds:
+        items:
+          type: integer
+        type: array
+    required:
+      - fieldRelationIds
+    type: object
+  request.FieldRelationUpdateReq:
+    properties:
+      attributes:
+        additionalProperties:
+          type: string
+        type: object
+      flag:
+        maxLength: 20
+        minLength: 1
+        type: string
+      id:
+        type: integer
+    required:
+      - attributes
+      - flag
+      - id
+    type: object
   request.GroupAddReq:
     properties:
       groupName:
@@ -876,6 +916,91 @@ paths:
       summary: 发送验证码
       tags:
       - 基础管理
+  /fieldrelation/add:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: 新建字段关系管理记录
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/request.FieldRelationAddReq'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 新建字段关系管理记录
+      tags:
+        - 字段关系管理
+  /fieldrelation/delete:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: 删除字段关系管理记录
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/request.FieldRelationDeleteReq'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 删除字段关系管理记录
+      tags:
+        - 字段关系管理
+  /fieldrelation/list:
+    get:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 获字段关系管理列表
+      tags:
+        - 字段关系管理
+  /fieldrelation/update:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: 更新字段关系管理记录
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/request.FieldRelationUpdateReq'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+        - ApiKeyAuth: [ ]
+      summary: 更新字段关系管理记录
+      tags:
+        - 字段关系管理
   /group/add:
     post:
       consumes:

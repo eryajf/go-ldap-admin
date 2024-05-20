@@ -452,6 +452,147 @@ const docTemplate = `{
                 }
             }
         },
+        "/fieldrelation/add": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "字段关系管理"
+                ],
+                "summary": "新建字段关系管理记录",
+                "parameters": [
+                    {
+                        "description": "新建字段关系管理记录",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.FieldRelationAddReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/fieldrelation/delete": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "字段关系管理"
+                ],
+                "summary": "删除字段关系管理记录",
+                "parameters": [
+                    {
+                        "description": "删除字段关系管理记录",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.FieldRelationDeleteReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/fieldrelation/list": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "字段关系管理"
+                ],
+                "summary": "获字段关系管理列表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/fieldrelation/update": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "字段关系管理"
+                ],
+                "summary": "更新字段关系管理记录",
+                "parameters": [
+                    {
+                        "description": "更新字段关系管理记录",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.FieldRelationUpdateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
         "/group/add": {
             "post": {
                 "security": [
@@ -2089,6 +2230,64 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 100,
                     "minLength": 0
+                }
+            }
+        },
+        "request.FieldRelationAddReq": {
+            "type": "object",
+            "required": [
+                "attributes",
+                "flag"
+            ],
+            "properties": {
+                "attributes": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "flag": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 1
+                }
+            }
+        },
+        "request.FieldRelationDeleteReq": {
+            "type": "object",
+            "required": [
+                "fieldRelationIds"
+            ],
+            "properties": {
+                "fieldRelationIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "request.FieldRelationUpdateReq": {
+            "type": "object",
+            "required": [
+                "attributes",
+                "flag",
+                "id"
+            ],
+            "properties": {
+                "attributes": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "flag": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 1
+                },
+                "id": {
+                    "type": "integer"
                 }
             }
         },
