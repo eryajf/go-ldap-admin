@@ -21,6 +21,79 @@ definitions:
     required:
     - mail
     type: object
+  request.GroupAddReq:
+    properties:
+      groupName:
+        maxLength: 128
+        minLength: 1
+        type: string
+      groupType:
+        maxLength: 20
+        minLength: 1
+        type: string
+      parentId:
+        description: 父级Id 大于等于0 必填
+        minimum: 0
+        type: integer
+      remark:
+        description: 分组的中文描述
+        maxLength: 128
+        minLength: 0
+        type: string
+    required:
+    - groupName
+    - groupType
+    type: object
+  request.GroupAddUserReq:
+    properties:
+      groupId:
+        type: integer
+      userIds:
+        items:
+          type: integer
+        type: array
+    required:
+    - groupId
+    - userIds
+    type: object
+  request.GroupDeleteReq:
+    properties:
+      groupIds:
+        items:
+          type: integer
+        type: array
+    required:
+    - groupIds
+    type: object
+  request.GroupRemoveUserReq:
+    properties:
+      groupId:
+        type: integer
+      userIds:
+        items:
+          type: integer
+        type: array
+    required:
+    - groupId
+    - userIds
+    type: object
+  request.GroupUpdateReq:
+    properties:
+      groupName:
+        maxLength: 128
+        minLength: 1
+        type: string
+      id:
+        type: integer
+      remark:
+        description: 分组的中文描述
+        maxLength: 128
+        minLength: 0
+        type: string
+    required:
+    - groupName
+    - id
+    type: object
   request.RegisterAndLoginReq:
     properties:
       password:
@@ -402,6 +475,299 @@ paths:
       summary: 发送验证码
       tags:
       - 基础管理
+  /group/add:
+    post:
+      consumes:
+      - application/json
+      description: 添加分组记录
+      parameters:
+      - description: 添加用户记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GroupAddReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 添加分组记录
+      tags:
+      - 分组管理
+  /group/adduser:
+    post:
+      consumes:
+      - application/json
+      description: 添加用户
+      parameters:
+      - description: 添加用户记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GroupAddUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 添加用户
+      tags:
+      - 分组管理
+  /group/delete:
+    post:
+      consumes:
+      - application/json
+      description: 删除分组记录
+      parameters:
+      - description: 删除用户记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GroupDeleteReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除分组记录
+      tags:
+      - 分组管理
+  /group/list:
+    get:
+      consumes:
+      - application/json
+      description: 获取分组记录列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取分组记录列表
+      tags:
+      - 分组管理
+  /group/removeuser:
+    post:
+      consumes:
+      - application/json
+      description: 移除用户
+      parameters:
+      - description: 移除用户记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GroupRemoveUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 移除用户
+      tags:
+      - 分组管理
+  /group/syncDingTalkDepts:
+    post:
+      consumes:
+      - application/json
+      description: 同步钉钉部门信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步钉钉部门信息
+      tags:
+      - 分组管理
+  /group/syncFeiShuDepts:
+    post:
+      consumes:
+      - application/json
+      description: 同步飞书部门信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步飞书部门信息
+      tags:
+      - 分组管理
+  /group/syncOpenLdapDepts:
+    post:
+      consumes:
+      - application/json
+      description: 同步原ldap部门信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步原ldap部门信息
+      tags:
+      - 分组管理
+  /group/syncSqlGroups:
+    post:
+      consumes:
+      - application/json
+      description: 同步Sql中的分组信息到ldap
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步Sql中的分组信息到ldap
+      tags:
+      - 分组管理
+  /group/syncWeComDepts:
+    post:
+      consumes:
+      - application/json
+      description: 同步企业微信部门信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 同步企业微信部门信息
+      tags:
+      - 分组管理
+  /group/tree:
+    get:
+      consumes:
+      - application/json
+      description: 获取分组接口树
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取分组接口树
+      tags:
+      - 分组管理
+  /group/update:
+    post:
+      consumes:
+      - application/json
+      description: 更新分组记录
+      parameters:
+      - description: 更新用户记录的结构体
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GroupUpdateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新分组记录
+      tags:
+      - 分组管理
+  /group/useringroup:
+    get:
+      consumes:
+      - application/json
+      description: 获取分组内用户
+      parameters:
+      - description: 分组ID
+        in: query
+        name: groupId
+        required: true
+        type: integer
+      - description: 昵称
+        in: query
+        name: nickname
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取分组内用户
+      tags:
+      - 分组管理
+  /group/usernoingroup:
+    get:
+      consumes:
+      - application/json
+      description: 不在分组的用户
+      parameters:
+      - description: 分组ID
+        in: query
+        name: groupId
+        required: true
+        type: integer
+      - description: 昵称
+        in: query
+        name: nickname
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseBody'
+      security:
+      - ApiKeyAuth: []
+      summary: 不在分组的用户
+      tags:
+      - 分组管理
   /user/add:
     post:
       consumes:

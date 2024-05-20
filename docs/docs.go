@@ -284,6 +284,483 @@ const docTemplate = `{
                 }
             }
         },
+        "/group/add": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "添加分组记录",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分组管理"
+                ],
+                "summary": "添加分组记录",
+                "parameters": [
+                    {
+                        "description": "添加用户记录的结构体",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.GroupAddReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/adduser": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "添加用户",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分组管理"
+                ],
+                "summary": "添加用户",
+                "parameters": [
+                    {
+                        "description": "添加用户记录的结构体",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.GroupAddUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/delete": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "删除分组记录",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分组管理"
+                ],
+                "summary": "删除分组记录",
+                "parameters": [
+                    {
+                        "description": "删除用户记录的结构体",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.GroupDeleteReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/list": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取分组记录列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分组管理"
+                ],
+                "summary": "获取分组记录列表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/removeuser": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "移除用户",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分组管理"
+                ],
+                "summary": "移除用户",
+                "parameters": [
+                    {
+                        "description": "移除用户记录的结构体",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.GroupRemoveUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/syncDingTalkDepts": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "同步钉钉部门信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分组管理"
+                ],
+                "summary": "同步钉钉部门信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/syncFeiShuDepts": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "同步飞书部门信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分组管理"
+                ],
+                "summary": "同步飞书部门信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/syncOpenLdapDepts": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "同步原ldap部门信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分组管理"
+                ],
+                "summary": "同步原ldap部门信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/syncSqlGroups": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "同步Sql中的分组信息到ldap",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分组管理"
+                ],
+                "summary": "同步Sql中的分组信息到ldap",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/syncWeComDepts": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "同步企业微信部门信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分组管理"
+                ],
+                "summary": "同步企业微信部门信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/tree": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取分组接口树",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分组管理"
+                ],
+                "summary": "获取分组接口树",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/update": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "更新分组记录",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分组管理"
+                ],
+                "summary": "更新分组记录",
+                "parameters": [
+                    {
+                        "description": "更新用户记录的结构体",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.GroupUpdateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/useringroup": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取分组内用户",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分组管理"
+                ],
+                "summary": "获取分组内用户",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "分组ID",
+                        "name": "groupId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "昵称",
+                        "name": "nickname",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/usernoingroup": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "不在分组的用户",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "分组管理"
+                ],
+                "summary": "不在分组的用户",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "分组ID",
+                        "name": "groupId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "昵称",
+                        "name": "nickname",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseBody"
+                        }
+                    }
+                }
+            }
+        },
         "/user/add": {
             "post": {
                 "security": [
@@ -758,6 +1235,109 @@ const docTemplate = `{
                 "mail": {
                     "type": "string",
                     "maxLength": 100,
+                    "minLength": 0
+                }
+            }
+        },
+        "request.GroupAddReq": {
+            "type": "object",
+            "required": [
+                "groupName",
+                "groupType"
+            ],
+            "properties": {
+                "groupName": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1
+                },
+                "groupType": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 1
+                },
+                "parentId": {
+                    "description": "父级Id 大于等于0 必填",
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "remark": {
+                    "description": "分组的中文描述",
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 0
+                }
+            }
+        },
+        "request.GroupAddUserReq": {
+            "type": "object",
+            "required": [
+                "groupId",
+                "userIds"
+            ],
+            "properties": {
+                "groupId": {
+                    "type": "integer"
+                },
+                "userIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "request.GroupDeleteReq": {
+            "type": "object",
+            "required": [
+                "groupIds"
+            ],
+            "properties": {
+                "groupIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "request.GroupRemoveUserReq": {
+            "type": "object",
+            "required": [
+                "groupId",
+                "userIds"
+            ],
+            "properties": {
+                "groupId": {
+                    "type": "integer"
+                },
+                "userIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "request.GroupUpdateReq": {
+            "type": "object",
+            "required": [
+                "groupName",
+                "id"
+            ],
+            "properties": {
+                "groupName": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "remark": {
+                    "description": "分组的中文描述",
+                    "type": "string",
+                    "maxLength": 128,
                     "minLength": 0
                 }
             }
