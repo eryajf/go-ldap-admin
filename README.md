@@ -59,6 +59,7 @@
 |   ![用户管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165623.png)   | ![分组管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165701.png) |
 | ![字段关系管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165853.png) | ![菜单管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165954.png) |
 |   ![接口管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_170015.png)   | ![操作日志](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_170035.png) |
+|   ![swag](https://cdn.jsdelivr.net/gh/eryajf/tu@main/img/image_20240521_213841.png)   | ![swag](https://cdn.jsdelivr.net/gh/eryajf/tu@main/img/image_20240521_214025.png) |
 
 ## 👨‍💻 项目地址
 
@@ -99,6 +100,7 @@
 
 - 另外感谢
   - [go-web-mini](https://github.com/gnimli/go-web-mini)：项目基于该项目重构而成，感谢作者的付出。
+  - 感谢 https://github.com/nangongchengfeng 提交的 [swagger](https://github.com/eryajf/go-ldap-admin/pull/345) 功能。
 
 ## 🤗 另外
 
