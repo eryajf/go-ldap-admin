@@ -100,7 +100,7 @@
 
 - 另外感谢
   - [go-web-mini](https://github.com/gnimli/go-web-mini)：项目基于该项目重构而成，感谢作者的付出。
-  - 感谢 https://github.com/nangongchengfeng 提交的 [swagger](https://github.com/eryajf/go-ldap-admin/pull/345) 功能。
+  - 感谢 [nangongchengfeng](https://github.com/nangongchengfeng) 提交的 [swagger](https://github.com/eryajf/go-ldap-admin/pull/345) 功能。
 
 ## 🤗 另外
 
