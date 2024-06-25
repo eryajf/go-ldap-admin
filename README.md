@@ -22,6 +22,7 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 **目录**
 
 - [ℹ️ 项目简介](#-%E9%A1%B9%E7%9B%AE%E7%AE%80%E4%BB%8B)
@@ -46,21 +47,23 @@
 
 ## 🏊 在线体验
 
-提供在线体验地址如下：
+~~提供在线体验地址如下：~~
 
-- 地址：[http://demo-go-ldap-admin.eryajf.net](http://demo-go-ldap-admin.eryajf.net)
-- 登陆信息：admin/123456
+- ~~地址：[http://demo-go-ldap-admin.eryajf.net](http://demo-go-ldap-admin.eryajf.net)~~
+- ~~登陆信息：admin/123456~~
 
-在线环境可能不稳，如果遇到访问异常，或者数据错乱，请联系我进行修复。请勿填写个人敏感信息。
+> ~~在线环境可能不稳，如果遇到访问异常，或者数据错乱，请联系我进行修复。请勿填写个人敏感信息。~~
+>
+> 因服务器到期，暂时不再提供 demo 环境。
 
 **页面功能概览：**
 
-|    ![登录页](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165411.png)    | ![首页](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165545.png)     |
-| :----------------------------------------------------------------------------------: | -------------------------------------------------------------------------------- |
-|   ![用户管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165623.png)   | ![分组管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165701.png) |
-| ![字段关系管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165853.png) | ![菜单管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165954.png) |
-|   ![接口管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_170015.png)   | ![操作日志](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_170035.png) |
-|   ![swag](https://cdn.jsdelivr.net/gh/eryajf/tu@main/img/image_20240521_213841.png)   | ![swag](https://cdn.jsdelivr.net/gh/eryajf/tu@main/img/image_20240521_214025.png) |
+|    ![登录页](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165411.png)    | ![首页](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165545.png)      |
+| :----------------------------------------------------------------------------------: | --------------------------------------------------------------------------------- |
+|   ![用户管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165623.png)   | ![分组管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165701.png)  |
+| ![字段关系管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165853.png) | ![菜单管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_165954.png)  |
+|   ![接口管理](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_170015.png)   | ![操作日志](https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20220724_170035.png)  |
+|  ![swag](https://cdn.jsdelivr.net/gh/eryajf/tu@main/img/image_20240521_213841.png)   | ![swag](https://cdn.jsdelivr.net/gh/eryajf/tu@main/img/image_20240521_214025.png) |
 
 ## 👨‍💻 项目地址
 
@@ -81,20 +84,20 @@
 
 > **说明：**
 >
-> - 本项目的部署与使用需要你对OpenLDAP有一定的掌握，如果想要配置IM同步，可能还需要一定的go基础来调试(如有异常时)。
+> - 本项目的部署与使用需要你对 OpenLDAP 有一定的掌握，如果想要配置 IM 同步，可能还需要一定的 go 基础来调试(如有异常时)。
 > - 文档已足够详尽，所有文档已讲过的，将不再提供免费的服务。如果你在安装部署时遇到问题，可通过[付费服务](http://ldapdoc.eryajf.net/pages/7eab1c/)寻求支持。
 
 ## 🤝 赞助商
 
 [![](https://raw.githubusercontent.com/eryajf/tu/main/img/image_20240531_205925.webp)](https://302.ai/)
 
-> [302.AI](https://302.ai) 是一个汇集全球顶级AI的自助平台，按需付费，零月费，零门槛使用各种类型AI。
-> - [点击注册](https://gpt302.saaslink.net/fGvlvo): 立即获得 1PTC(1PTC=1美金，约为7人民币)代币。
-> - 功能全面: 将最好用的AI集成到在平台之上，包括不限于AI聊天，图片生成，图片处理，视频生成，全方位覆盖。
-> - 简单易用: 提供机器人，工具和API多种使用方法，可以满足从小白到开发者多种角色的需求。
+> [302.AI](https://302.ai) 是一个汇集全球顶级 AI 的自助平台，按需付费，零月费，零门槛使用各种类型 AI。
+>
+> - [点击注册](https://gpt302.saaslink.net/fGvlvo): 立即获得 1PTC(1PTC=1 美金，约为 7 人民币)代币。
+> - 功能全面: 将最好用的 AI 集成到在平台之上，包括不限于 AI 聊天，图片生成，图片处理，视频生成，全方位覆盖。
+> - 简单易用: 提供机器人，工具和 API 多种使用方法，可以满足从小白到开发者多种角色的需求。
 > - 按需付费，零门槛: 不提供月付套餐，对产品不设任何门槛，按需付费，全部开放。充值余额永久有效。
-> - 管理者和使用者分离：管理者一键分享，使用者无需登录。使用者无需关心复杂的AI设置，让懂AI的人来配置，简化使用流程。
-
+> - 管理者和使用者分离：管理者一键分享，使用者无需登录。使用者无需关心复杂的 AI 设置，让懂 AI 的人来配置，简化使用流程。
 
 ## 🥰 感谢
 
