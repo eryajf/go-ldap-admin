@@ -22,6 +22,7 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 **目录**
 
 - [ℹ️ 项目简介](#-%E9%A1%B9%E7%9B%AE%E7%AE%80%E4%BB%8B)
@@ -88,9 +89,9 @@
 
 ## 🤝 赞助商
 
-[![](https://raw.githubusercontent.com/eryajf/tu/main/img/image_20240531_205925.webp)](https://302.ai/)
+[![](https://raw.githubusercontent.com/eryajf/tu/main/img/image_20240730_083723.webp)](https://302.ai/)
 
-> [302.AI](https://302.ai) 是一个汇集全球顶级 AI 的自助平台，按需付费，零月费，零门槛使用各种类型 AI。
+> [302.AI](https://302.ai) 是一个汇集全球顶级品牌的 AI 超市，按需付费，零月费，零门槛使用各种类型 AI。
 >
 > - [点击注册](https://gpt302.saaslink.net/fGvlvo): 立即获得 1PTC(1PTC=1 美金，约为 7 人民币)代币。
 > - 功能全面: 将最好用的 AI 集成到在平台之上，包括不限于 AI 聊天，图片生成，图片处理，视频生成，全方位覆盖。
