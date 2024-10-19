@@ -72,7 +72,7 @@ rate-limit:
 # email configuration
 email:
   port: '465'
-  user: 'Linuxlql@163.com'
+  user: 'eryajf@163.com'
   from: 'go-ldap-admin后台'
   host: 'smtp.163.com'
   # is-ssl: true
