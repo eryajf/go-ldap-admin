@@ -21,7 +21,7 @@ type OperationLogService struct{}
 func (s OperationLogService) SaveOperationLogChannel(olc <-chan *model.OperationLog) {
 	// 只会在线程开启的时候执行一次
 	Logs := make([]model.OperationLog, 0)
-	//5s 自动同步一次
+	// 5s 自动同步一次
 	duration := 5 * time.Second
 	timer := time.NewTimer(duration)
 	defer timer.Stop()
@@ -35,7 +35,7 @@ func (s OperationLogService) SaveOperationLogChannel(olc <-chan *model.Operation
 				Logs = make([]model.OperationLog, 0)
 				timer.Reset(duration) // 入库重置定时器
 			}
-		case <-timer.C: //5s 自动同步一次
+		case <-timer.C: // 5s 自动同步一次
 			if len(Logs) > 0 {
 				common.DB.Create(&Logs)
 				Logs = make([]model.OperationLog, 0)
@@ -102,5 +102,5 @@ func (s OperationLogService) Delete(operationLogIds []uint) error {
 
 // Clean 清空日志
 func (s OperationLogService) Clean() error {
-	return common.DB.Exec("TRUNCATE TABLE operation_logs").Error
+	return common.DB.Exec("DELETE FROM operation_logs").Error
 }
