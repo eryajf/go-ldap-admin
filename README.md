@@ -87,7 +87,7 @@
 
 ## 🤝 赞助商
 
-[![](https://raw.githubusercontent.com/eryajf/tu/main/img/image_20241113_230334.webp)](https://gpt302.saaslink.net/fGvlvo/)
+[![](https://cdn.jsdelivr.net/gh/eryajf/tu@main/img/image_20241231_214509.webp)](https://gpt302.saaslink.net/fGvlvo/)
 
 > [302.AI](https://gpt302.saaslink.net/fGvlvo) 是一个按需付费的一站式AI应用平台，开放平台，开源生态。
 >
